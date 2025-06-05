@@ -1,0 +1,130 @@
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #6C63FF 0%, #007BFF 100%);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    color: #222;
+}
+
+h1 {
+    color: #fff;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.15);
+    letter-spacing: 1px;
+}
+
+form {
+    background: rgba(255,255,255,0.95);
+    padding: 30px 25px;
+    border-radius: 12px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+    max-width: 500px;
+    margin: 30px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+input,
+textarea,
+select {
+    border: 1.5px solid #d1d5db;
+    border-radius: 6px;
+    padding: 12px;
+    font-size: 1rem;
+    background: #f9f9fb;
+    transition: border 0.2s, box-shadow 0.2s;
+    outline: none;
+    box-sizing: border-box;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: #6C63FF;
+    box-shadow: 0 0 0 2px #6C63FF33;
+}
+
+input[type="file"] {
+    padding: 8px;
+    background: #fff;
+    border: none;
+}
+
+input[type="text"],
+input[type="number"],
+textarea {
+    width: 100%;
+    margin: 0;
+}
+
+button {
+    background: linear-gradient(90deg, #6C63FF 60%, #007BFF 100%);
+    color: #fff;
+    padding: 12px 0;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(108,99,255,0.08);
+    transition: background 0.2s, transform 0.2s;
+}
+
+button:hover {
+    background: linear-gradient(90deg, #007BFF 60%, #6C63FF 100%);
+    transform: translateY(-2px) scale(1.03);
+}
+
+footer {
+    margin-top: 40px;
+    text-align: center;
+    color: #eee;
+    font-size: 1rem;
+    padding: 18px 0;
+    background: rgba(0,0,0,0.15);
+    border-top: 1px solid #fff2;
+}
+
+#video-generator-form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+#video-result {
+    margin-top: 20px;
+    padding: 16px;
+    background: #f3f6fd;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(108,99,255,0.06);
+}
+
+.services-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 18px;
+    margin-bottom: 30px;
+}
+
+.service-btn {
+    display: inline-block;
+    padding: 14px 28px;
+    font-size: 1.1rem;
+    color: #fff;
+    background: linear-gradient(90deg, #FF5722 60%, #FF9800 100%);
+    text-decoration: none;
+    border-radius: 30px;
+    box-shadow: 0 4px 12px rgba(255,87,34,0.13);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.service-btn:hover {
+    background: linear-gradient(90deg, #FF9800 60%, #FF5722 100%);
+    transform: translateY(-2px) scale(1.04);
+}

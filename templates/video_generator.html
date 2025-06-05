@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script>
+        async function generateVideo(event) {
+            event.preventDefault();
+            const form = document.getElementById('video-generator-form');
+            const formData = new FormData(form);
+
+            const response = await fetch('/generate-video', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            const videoResult = document.getElementById('video-result');
+
+            if (result.video_url) {
+                videoResult.innerHTML = `<video controls>
+                    <source src="${result.video_url}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>`;
+            } else {
+                videoResult.innerHTML = `<p>Error: ${result.error}</p>`;
+            }
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Video Generator</h1>
+    </header>
+    <main>
+        <form id="video-generator-form" method="POST" onsubmit="generateVideo(event)">
+            <label for="api-key">API Key:</label>
+            <input type="text" id="api-key" name="api_key" value="hidden" readonly>
+            
+            <label for="video-text">Text for Video:</label>
+            <textarea id="video-text" name="video_text" rows="5" required></textarea>
+            
+            <button type="submit">Generate Video</button>
+        </form>
+        <div id="video-result">
+            <!-- Video URL or preview will be displayed here -->
+        </div>
+    </main>
+</body>
+</html>
