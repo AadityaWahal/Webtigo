@@ -14,8 +14,6 @@ const path = require('path');
 const cors = require('cors');
 const { exec } = require('child_process');
 const gTTS = require('gtts');
-const nunjucks = require('nunjucks');
-const serverless = require('serverless-http');
 
 dotenv.config();
 
@@ -24,14 +22,6 @@ app.use(cors());
 app.use(express.static('static'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
-// Nunjucks setup
-nunjucks.configure('templates', {
-    autoescape: true,
-    express: app,
-    watch: true
-});
-app.set('view engine', 'njk');
 
 // Ensure directories exist
 fs.ensureDirSync('static/mp3');
@@ -46,14 +36,15 @@ const upload = multer({ dest: 'static/images/uploads/' });
 const pdfUpload = multer({ dest: 'static/' });
 const videoUpload = multer({ dest: 'static/videos/' });
 
-// Home and static pages (use res.render for Nunjucks)
-app.get('/', (req, res) => res.render('index.html'));
-app.get('/tts', (req, res) => res.render('tts.html'));
-app.get('/image-compressor', (req, res) => res.render('image_compressor.html'));
-app.get('/qr-code', (req, res) => res.render('qr_code.html'));
-app.get('/pdf-service', (req, res) => res.render('pdf_service.html'));
-app.get('/image-resizer', (req, res) => res.render('image_resizer.html'));
-app.get('/video-generator', (req, res) => res.render('video_generator.html'));
+// Home and static pages (serve static HTML files)
+const templatesDir = path.join(__dirname, '../templates');
+app.get('/', (req, res) => res.sendFile(path.join(templatesDir, 'index.html')));
+app.get('/tts', (req, res) => res.sendFile(path.join(templatesDir, 'tts.html')));
+app.get('/image-compressor', (req, res) => res.sendFile(path.join(templatesDir, 'image_compressor.html')));
+app.get('/qr-code', (req, res) => res.sendFile(path.join(templatesDir, 'qr_code.html')));
+app.get('/pdf-service', (req, res) => res.sendFile(path.join(templatesDir, 'pdf_service.html')));
+app.get('/image-resizer', (req, res) => res.sendFile(path.join(templatesDir, 'image_resizer.html')));
+app.get('/video-generator', (req, res) => res.sendFile(path.join(templatesDir, 'video_generator.html')));
 
 // Image Compressor
 app.post('/compress-image', upload.single('image'), async (req, res) => {
@@ -178,5 +169,3 @@ app.get('/sitemap.xml', (req, res) =>
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-module.exports = serverless(app);
