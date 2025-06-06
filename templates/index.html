@@ -1,71 +1,161 @@
-{% extends "base.html" %}
-{% block content %}
-
-<h1>Welcome to the Utility Website</h1>
-<p>Your one-stop solution for various utilities like text-to-speech, image compression, QR code generation, PDF services, and image resizing.</p>
-
-<div class="services-container">
-    <a href="/tts" class="service-btn">Text-to-Speech</a>
-    <a href="/image-compressor" class="service-btn">Image Compressor</a>
-    <a href="/qr-code" class="service-btn">QR Code Generator</a>
-    <a href="/pdf-service" class="service-btn">PDF Service</a>
-    <a href="/image-resizer" class="service-btn">Image Resizer</a>
-</div>
-
-<style>
-    h1 {
-        font-size: 3rem;
-        margin-bottom: 18px;
-        text-shadow: 2px 2px 12px rgba(0,0,0,0.18);
-        color: #fff;
-        letter-spacing: 1px;
-        text-align: center;
-    }
-
-    p {
-        font-size: 1.25rem;
-        margin-bottom: 36px;
-        color: rgba(255,255,255,0.93);
-        text-align: center;
-    }
-
-    .services-container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 26px;
-        margin-bottom: 30px;
-        background: rgba(255,255,255,0.13);
-        border-radius: 18px;
-        box-shadow: 0 8px 32px rgba(31,38,135,0.13);
-        padding: 32px 18px;
-        backdrop-filter: blur(6px);
-        border: 1.5px solid rgba(255,255,255,0.22);
-        max-width: 700px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .service-btn {
-        display: inline-block;
-        padding: 18px 36px;
-        font-size: 1.18rem;
-        color: #fff;
-        background: linear-gradient(90deg, #FF5722 60%, #FF9800 100%);
-        text-decoration: none;
-        border-radius: 30px;
-        box-shadow: 0 4px 12px rgba(255,87,34,0.13);
-        font-weight: 500;
-        letter-spacing: 0.5px;
-        transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-        margin: 0 4px;
-    }
-
-    .service-btn:hover {
-        background: linear-gradient(90deg, #FF9800 60%, #FF5722 100%);
-        transform: translateY(-2px) scale(1.04);
-        box-shadow: 0 8px 24px rgba(255,152,0,0.18);
-    }
-</style>
-
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Utility Website</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PLZJDTT3PX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-PLZJDTT3PX');
+    </script>
+    <meta name="google-site-verification" content="Gk-7350xltisPdpbrr_LEOlwsC8P2wapgivz_7Uhuu0" />
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #6C63FF 0%, #007BFF 100%);
+            color: #222;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10);
+            padding: 18px 0 14px 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 28px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        header a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.15rem;
+            padding: 8px 22px;
+            border-radius: 30px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+        }
+        header a:hover, header a.active {
+            background: linear-gradient(90deg, #6C63FF 60%, #007BFF 100%);
+            color: #fff;
+            box-shadow: 0 2px 12px rgba(108,99,255,0.10);
+        }
+        main {
+            flex: 1;
+            padding: 32px 12px 24px 12px;
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        footer {
+            background: rgba(255, 255, 255, 0.13);
+            backdrop-filter: blur(6px);
+            color: #fff;
+            padding: 18px 0 12px 0;
+            text-align: center;
+            font-size: 1.05rem;
+            margin-top: auto;
+            border-top: 1px solid #fff2;
+            box-shadow: 0 -2px 12px rgba(108,99,255,0.07);
+        }
+        footer a {
+            color: #FFCCBC;
+            text-decoration: none;
+            transition: text-decoration 0.2s;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/" class="active">Home</a>
+        <a href="/tts">Text-to-Speech</a>
+        <a href="/image-compressor">Image Compressor</a>
+        <a href="/qr-code">QR Code Generator</a>
+        <a href="/pdf-service">PDF Service</a>
+        <a href="/image-resizer">Image Resizer</a>
+    </header>
+    <main>
+        <h1>Welcome to the Utility Website</h1>
+        <p>Your one-stop solution for various utilities like text-to-speech, image compression, QR code generation, PDF services, and image resizing.</p>
+        <div class="services-container">
+            <a href="/tts" class="service-btn">Text-to-Speech</a>
+            <a href="/image-compressor" class="service-btn">Image Compressor</a>
+            <a href="/qr-code" class="service-btn">QR Code Generator</a>
+            <a href="/pdf-service" class="service-btn">PDF Service</a>
+            <a href="/image-resizer" class="service-btn">Image Resizer</a>
+        </div>
+        <style>
+            h1 {
+                font-size: 3rem;
+                margin-bottom: 18px;
+                text-shadow: 2px 2px 12px rgba(0,0,0,0.18);
+                color: #fff;
+                letter-spacing: 1px;
+                text-align: center;
+            }
+            p {
+                font-size: 1.25rem;
+                margin-bottom: 36px;
+                color: rgba(255,255,255,0.93);
+                text-align: center;
+            }
+            .services-container {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 26px;
+                margin-bottom: 30px;
+                background: rgba(255,255,255,0.13);
+                border-radius: 18px;
+                box-shadow: 0 8px 32px rgba(31,38,135,0.13);
+                padding: 32px 18px;
+                backdrop-filter: blur(6px);
+                border: 1.5px solid rgba(255,255,255,0.22);
+                max-width: 700px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .service-btn {
+                display: inline-block;
+                padding: 18px 36px;
+                font-size: 1.18rem;
+                color: #fff;
+                background: linear-gradient(90deg, #FF5722 60%, #FF9800 100%);
+                text-decoration: none;
+                border-radius: 30px;
+                box-shadow: 0 4px 12px rgba(255,87,34,0.13);
+                font-weight: 500;
+                letter-spacing: 0.5px;
+                transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+                margin: 0 4px;
+            }
+            .service-btn:hover {
+                background: linear-gradient(90deg, #FF9800 60%, #FF5722 100%);
+                transform: translateY(-2px) scale(1.04);
+                box-shadow: 0 8px 24px rgba(255,152,0,0.18);
+            }
+        </style>
+    </main>
+    <footer>
+        <p>&copy; 2025 Utility Website. All rights reserved.</p>
+    </footer>
+    <script src="/static/main.js"></script>
+</body>
+</html>

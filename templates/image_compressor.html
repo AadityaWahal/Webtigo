@@ -1,183 +1,223 @@
-{% extends "base.html" %}
-{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Image Compressor | Utility Website</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PLZJDTT3PX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-PLZJDTT3PX');
+    </script>
+    <meta name="google-site-verification" content="Gk-7350xltisPdpbrr_LEOlwsC8P2wapgivz_7Uhuu0" />
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #6C63FF 0%, #007BFF 100%); color: #222; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; }
+        header { background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(8px); box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10); padding: 18px 0 14px 0; width: 100%; display: flex; justify-content: center; align-items: center; gap: 28px; position: sticky; top: 0; z-index: 1000; }
+        header a { color: #fff; text-decoration: none; font-size: 1.15rem; padding: 8px 22px; border-radius: 30px; font-weight: 500; letter-spacing: 0.5px; transition: background 0.2s, color 0.2s, box-shadow 0.2s; }
+        header a:hover, header a.active { background: linear-gradient(90deg, #6C63FF 60%, #007BFF 100%); color: #fff; box-shadow: 0 2px 12px rgba(108,99,255,0.10); }
+        main { flex: 1; padding: 32px 12px 24px 12px; max-width: 900px; margin: 0 auto; width: 100%; }
+        footer { background: rgba(255, 255, 255, 0.13); backdrop-filter: blur(6px); color: #fff; padding: 18px 0 12px 0; text-align: center; font-size: 1.05rem; margin-top: auto; border-top: 1px solid #fff2; box-shadow: 0 -2px 12px rgba(108,99,255,0.07); }
+        footer a { color: #FFCCBC; text-decoration: none; transition: text-decoration 0.2s; }
+        footer a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/">Home</a>
+        <a href="/tts">Text-to-Speech</a>
+        <a href="/image-compressor">Image Compressor</a>
+        <a href="/qr-code">QR Code Generator</a>
+        <a href="/pdf-service">PDF Service</a>
+        <a href="/image-resizer">Image Resizer</a>
+    </header>
+    <main>
+        <h1>Image Compressor</h1>
+        <p>Reduce the size of your images while maintaining quality. Upload an image, set the target size, and download the compressed image.</p>
 
-<h1>Image Compressor</h1>
-<p>Reduce the size of your images while maintaining quality. Upload an image, set the target size, and download the compressed image.</p>
+        <div class="compressor-container">
+            <form id="compressForm" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="image">Upload Image:</label>
+                    <input type="file" id="image" name="image" accept="image/*" required>
+                </div>
 
-<div class="compressor-container">
-    <form id="compressForm" enctype="multipart/form-data">
-        <div class="form-group">
-            <label for="image">Upload Image:</label>
-            <input type="file" id="image" name="image" accept="image/*" required>
+                <div class="form-group">
+                    <label for="size_kb">Target Size (KB):</label>
+                    <input type="number" id="size_kb" name="size_kb" placeholder="Enter target size in KB" required>
+                </div>
+
+                <button type="button" onclick="compressImage()">Compress Image</button>
+            </form>
+
+            <div id="previewContainer" style="display: none;">
+                <h2>Compressed Image</h2>
+                <img id="compressedImage" src="#" alt="Compressed Image">
+                <a id="downloadLink" class="download-btn" href="#" download="compressed_image.jpg">Download Compressed Image</a>
+            </div>
         </div>
 
-        <div class="form-group">
-            <label for="size_kb">Target Size (KB):</label>
-            <input type="number" id="size_kb" name="size_kb" placeholder="Enter target size in KB" required>
-        </div>
+        <style>
+            h1 {
+                font-size: 2.5rem;
+                margin-bottom: 10px;
+                text-shadow: 2px 2px 8px rgba(0,0,0,0.18);
+                color: #fff;
+                letter-spacing: 1px;
+            }
 
-        <button type="button" onclick="compressImage()">Compress Image</button>
-    </form>
+            p {
+                font-size: 1.15rem;
+                margin-bottom: 28px;
+                color: rgba(255,255,255,0.93);
+                text-align: center;
+            }
 
-    <div id="previewContainer" style="display: none;">
-        <h2>Compressed Image</h2>
-        <img id="compressedImage" src="#" alt="Compressed Image">
-        <a id="downloadLink" class="download-btn" href="#" download="compressed_image.jpg">Download Compressed Image</a>
-    </div>
-</div>
+            .compressor-container {
+                background: rgba(255,255,255,0.18);
+                padding: 32px 28px 28px 28px;
+                border-radius: 18px;
+                box-shadow: 0 8px 32px rgba(31,38,135,0.13);
+                width: 100%;
+                max-width: 420px;
+                margin: 0 auto;
+                margin-bottom: 32px;
+                backdrop-filter: blur(6px);
+                border: 1.5px solid rgba(255,255,255,0.22);
+            }
 
-<style>
-    h1 {
-        font-size: 2.5rem;
-        margin-bottom: 10px;
-        text-shadow: 2px 2px 8px rgba(0,0,0,0.18);
-        color: #fff;
-        letter-spacing: 1px;
-    }
+            .form-group {
+                margin-bottom: 18px;
+                text-align: left;
+            }
 
-    p {
-        font-size: 1.15rem;
-        margin-bottom: 28px;
-        color: rgba(255,255,255,0.93);
-        text-align: center;
-    }
+            label {
+                display: block;
+                font-weight: 600;
+                margin-bottom: 7px;
+                color: #6C63FF;
+                letter-spacing: 0.3px;
+            }
 
-    .compressor-container {
-        background: rgba(255,255,255,0.18);
-        padding: 32px 28px 28px 28px;
-        border-radius: 18px;
-        box-shadow: 0 8px 32px rgba(31,38,135,0.13);
-        width: 100%;
-        max-width: 420px;
-        margin: 0 auto;
-        margin-bottom: 32px;
-        backdrop-filter: blur(6px);
-        border: 1.5px solid rgba(255,255,255,0.22);
-    }
+            input[type="file"] {
+                background: #fff;
+                border: none;
+                padding: 8px;
+                border-radius: 6px;
+                font-size: 1rem;
+                margin-bottom: 8px;
+            }
 
-    .form-group {
-        margin-bottom: 18px;
-        text-align: left;
-    }
+            input[type="number"] {
+                width: 100%;
+                border: 1.5px solid #d1d5db;
+                border-radius: 6px;
+                padding: 12px;
+                font-size: 1rem;
+                background: #f9f9fb;
+                transition: border 0.2s, box-shadow 0.2s;
+                outline: none;
+                box-sizing: border-box;
+            }
 
-    label {
-        display: block;
-        font-weight: 600;
-        margin-bottom: 7px;
-        color: #6C63FF;
-        letter-spacing: 0.3px;
-    }
+            input[type="number"]:focus {
+                border-color: #6C63FF;
+                box-shadow: 0 0 0 2px #6C63FF33;
+            }
 
-    input[type="file"] {
-        background: #fff;
-        border: none;
-        padding: 8px;
-        border-radius: 6px;
-        font-size: 1rem;
-        margin-bottom: 8px;
-    }
+            button {
+                background: linear-gradient(90deg, #6C63FF 60%, #007BFF 100%);
+                color: #fff;
+                padding: 13px 0;
+                border: none;
+                border-radius: 7px;
+                font-size: 1.15rem;
+                font-weight: 600;
+                cursor: pointer;
+                box-shadow: 0 2px 8px rgba(108,99,255,0.09);
+                transition: background 0.2s, transform 0.2s;
+                margin-top: 8px;
+                width: 100%;
+            }
 
-    input[type="number"] {
-        width: 100%;
-        border: 1.5px solid #d1d5db;
-        border-radius: 6px;
-        padding: 12px;
-        font-size: 1rem;
-        background: #f9f9fb;
-        transition: border 0.2s, box-shadow 0.2s;
-        outline: none;
-        box-sizing: border-box;
-    }
+            button:hover {
+                background: linear-gradient(90deg, #007BFF 60%, #6C63FF 100%);
+                transform: translateY(-2px) scale(1.03);
+            }
 
-    input[type="number"]:focus {
-        border-color: #6C63FF;
-        box-shadow: 0 0 0 2px #6C63FF33;
-    }
+            #previewContainer {
+                margin-top: 28px;
+                text-align: center;
+                background: rgba(255,255,255,0.13);
+                border-radius: 12px;
+                padding: 18px 10px 12px 10px;
+                box-shadow: 0 2px 8px rgba(108,99,255,0.06);
+                border: 1px solid rgba(108,99,255,0.08);
+            }
 
-    button {
-        background: linear-gradient(90deg, #6C63FF 60%, #007BFF 100%);
-        color: #fff;
-        padding: 13px 0;
-        border: none;
-        border-radius: 7px;
-        font-size: 1.15rem;
-        font-weight: 600;
-        cursor: pointer;
-        box-shadow: 0 2px 8px rgba(108,99,255,0.09);
-        transition: background 0.2s, transform 0.2s;
-        margin-top: 8px;
-        width: 100%;
-    }
+            #previewContainer h2 {
+                color: #6C63FF;
+                margin-bottom: 12px;
+                font-size: 1.3rem;
+            }
 
-    button:hover {
-        background: linear-gradient(90deg, #007BFF 60%, #6C63FF 100%);
-        transform: translateY(-2px) scale(1.03);
-    }
+            img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 10px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.13);
+                margin-bottom: 10px;
+            }
 
-    #previewContainer {
-        margin-top: 28px;
-        text-align: center;
-        background: rgba(255,255,255,0.13);
-        border-radius: 12px;
-        padding: 18px 10px 12px 10px;
-        box-shadow: 0 2px 8px rgba(108,99,255,0.06);
-        border: 1px solid rgba(108,99,255,0.08);
-    }
+            .download-btn {
+                display: inline-block;
+                margin-top: 10px;
+                padding: 11px 24px;
+                font-size: 1rem;
+                color: #fff;
+                background: linear-gradient(90deg, #007BFF 60%, #6C63FF 100%);
+                text-decoration: none;
+                border-radius: 6px;
+                font-weight: 500;
+                transition: background 0.2s, transform 0.2s;
+                box-shadow: 0 2px 8px rgba(108,99,255,0.09);
+            }
 
-    #previewContainer h2 {
-        color: #6C63FF;
-        margin-bottom: 12px;
-        font-size: 1.3rem;
-    }
+            .download-btn:hover {
+                background: linear-gradient(90deg, #6C63FF 60%, #007BFF 100%);
+                transform: translateY(-2px) scale(1.04);
+            }
+        </style>
 
-    img {
-        max-width: 100%;
-        height: auto;
-        border-radius: 10px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.13);
-        margin-bottom: 10px;
-    }
+        <script>
+            function compressImage() {
+                const form = document.getElementById('compressForm');
+                const formData = new FormData(form);
 
-    .download-btn {
-        display: inline-block;
-        margin-top: 10px;
-        padding: 11px 24px;
-        font-size: 1rem;
-        color: #fff;
-        background: linear-gradient(90deg, #007BFF 60%, #6C63FF 100%);
-        text-decoration: none;
-        border-radius: 6px;
-        font-weight: 500;
-        transition: background 0.2s, transform 0.2s;
-        box-shadow: 0 2px 8px rgba(108,99,255,0.09);
-    }
+                fetch('/compress-image', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const previewContainer = document.getElementById('previewContainer');
+                    const compressedImage = document.getElementById('compressedImage');
+                    const downloadLink = document.getElementById('downloadLink');
 
-    .download-btn:hover {
-        background: linear-gradient(90deg, #6C63FF 60%, #007BFF 100%);
-        transform: translateY(-2px) scale(1.04);
-    }
-</style>
-
-<script>
-    function compressImage() {
-        const form = document.getElementById('compressForm');
-        const formData = new FormData(form);
-
-        fetch('/compress-image', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            const previewContainer = document.getElementById('previewContainer');
-            const compressedImage = document.getElementById('compressedImage');
-            const downloadLink = document.getElementById('downloadLink');
-
-            compressedImage.src = data.compressed_image_url;
-            downloadLink.href = data.compressed_image_url;
-            previewContainer.style.display = 'block';
-        })
-        .catch(error => console.error('Error:', error));
-    }
-</script>
-{% endblock %}
+                    compressedImage.src = data.compressed_image_url;
+                    downloadLink.href = data.compressed_image_url;
+                    previewContainer.style.display = 'block';
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        </script>
+    </main>
+    <footer>
+        <p>&copy; 2025 Utility Website. All rights reserved.</p>
+    </footer>
+    <script src="/static/main.js"></script>
+</body>
+</html>
