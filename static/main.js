@@ -1,17 +1,20 @@
 // main.js
 // Highlights the active navigation link based on the current URL path
+// Updated to work with both /tts.html and /static/tts.html
+
 document.addEventListener('DOMContentLoaded', function() {
     const navLinks = document.querySelectorAll('header a');
-    const path = window.location.pathname;
+    let path = window.location.pathname;
+    // Normalize /static/tts.html to /tts.html for matching
+    if (path.startsWith('/static/')) {
+        path = path.replace('/static', '');
+    }
     navLinks.forEach(link => {
-        // Remove any existing 'active' class
         link.classList.remove('active');
-        // If the link's href matches the current path, add 'active'
         if (link.getAttribute('href') === path) {
             link.classList.add('active');
         }
-        // Special case for home page
-        if (path === '/' && link.getAttribute('href') === '/') {
+        if ((path === '/' || path === '/index.html') && link.getAttribute('href') === '/index.html') {
             link.classList.add('active');
         }
     });

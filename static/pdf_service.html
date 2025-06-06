@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>PDF Service | Utility Website</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PLZJDTT3PX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-PLZJDTT3PX');
+    </script>
+    <meta name="google-site-verification" content="Gk-7350xltisPdpbrr_LEOlwsC8P2wapgivz_7Uhuu0" />
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #6C63FF 0%, #007BFF 100%); color: #222; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; }
+        header { background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(8px); box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10); padding: 18px 0 14px 0; width: 100%; display: flex; justify-content: center; align-items: center; gap: 28px; position: sticky; top: 0; z-index: 1000; }
+        header a { color: #fff; text-decoration: none; font-size: 1.15rem; padding: 8px 22px; border-radius: 30px; font-weight: 500; letter-spacing: 0.5px; transition: background 0.2s, color 0.2s, box-shadow 0.2s; }
+        header a:hover, header a.active { background: linear-gradient(90deg, #6C63FF 60%, #007BFF 100%); color: #fff; box-shadow: 0 2px 12px rgba(108,99,255,0.10); }
+        main { flex: 1; padding: 32px 12px 24px 12px; max-width: 900px; margin: 0 auto; width: 100%; }
+        footer { background: rgba(255, 255, 255, 0.13); backdrop-filter: blur(6px); color: #fff; padding: 18px 0 12px 0; text-align: center; font-size: 1.05rem; margin-top: auto; border-top: 1px solid #fff2; box-shadow: 0 -2px 12px rgba(108,99,255,0.07); }
+        footer a { color: #FFCCBC; text-decoration: none; transition: text-decoration 0.2s; }
+        footer a:hover { text-decoration: underline; }
+
+        h1 {
+            margin-top: 20px;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            color: #6C63FF;
+            margin-bottom: 12px;
+            font-size: 1.3rem;
+            text-align: center;
+        }
+
+        form {
+            background: rgba(255,255,255,0.18);
+            padding: 32px 28px 28px 28px;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(31,38,135,0.13);
+            width: 100%;
+            max-width: 420px;
+            margin: 0 auto 32px auto;
+            backdrop-filter: blur(6px);
+            border: 1.5px solid rgba(255,255,255,0.22);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+
+        input[type="file"] {
+            background: #fff;
+            border: none;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 1rem;
+            margin-bottom: 8px;
+            width: 100%;
+        }
+
+        button {
+            background: linear-gradient(90deg, #6C63FF 60%, #007BFF 100%);
+            color: #fff;
+            padding: 13px 0;
+            border: none;
+            border-radius: 7px;
+            font-size: 1.15rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(108,99,255,0.09);
+            transition: background 0.2s, transform 0.2s;
+            margin-top: 8px;
+            width: 100%;
+        }
+
+        button:hover {
+            background: linear-gradient(90deg, #007BFF 60%, #6C63FF 100%);
+            transform: translateY(-2px) scale(1.03);
+        }
+
+        .preview-container {
+            margin-top: 28px;
+            text-align: center;
+            background: rgba(255,255,255,0.13);
+            border-radius: 12px;
+            padding: 18px 10px 12px 10px;
+            box-shadow: 0 2px 8px rgba(108,99,255,0.06);
+            border: 1px solid rgba(108,99,255,0.08);
+            display: none;
+            max-width: 420px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .download-btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 11px 24px;
+            font-size: 1rem;
+            color: #fff;
+            background: linear-gradient(90deg, #007BFF 60%, #6C63FF 100%);
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: background 0.2s, transform 0.2s;
+            box-shadow: 0 2px 8px rgba(108,99,255,0.09);
+        }
+
+        .download-btn:hover {
+            background: linear-gradient(90deg, #6C63FF 60%, #007BFF 100%);
+            transform: translateY(-2px) scale(1.04);
+        }
+
+        .image-preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 18px;
+            justify-content: center;
+        }
+        .image-preview-box {
+            position: relative;
+            display: inline-block;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(108,99,255,0.09);
+            background: #fff;
+        }
+        .image-preview-box img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            display: block;
+        }
+        .page-number {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            background: #6C63FF;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+        }
+
+        .image-preview-box.dragging {
+            opacity: 0.5;
+            border: 2px dashed #6C63FF;
+        }
+
+        #pdfImages {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/index.html">Home</a>
+        <a href="/tts.html">Text-to-Speech</a>
+        <a href="/image_compressor.html">Image Compressor</a>
+        <a href="/qr_code.html">QR Code Generator</a>
+        <a href="/pdf_service.html" class="active">PDF Service</a>
+        <a href="/image_resizer.html">Image Resizer</a>
+    </header>
+    <main>
+        <h1>PDF Service</h1>
+        <form id="createPdfForm" enctype="multipart/form-data">
+            <h2>Create PDF from Images</h2>
+            <input type="file" id="images" name="images" accept="image/*" multiple required onchange="showImagePreviews()"><br>
+            <div id="imagePreviewContainer" class="image-preview-container"></div>
+            <button type="button" onclick="createPdf()">Create PDF</button>
+        </form>
+
+        <div class="preview-container" id="previewContainer">
+            <h2>Result</h2>
+            <a id="downloadLink" class="download-btn" href="#" download>Download PDF</a>
+        </div>
+
+        <hr style="margin: 40px 0 30px 0; border: none; border-top: 1.5px solid #eee;">
+
+        <form id="splitPdfForm" enctype="multipart/form-data">
+            <h2>Convert PDF to Images</h2>
+            <input type="file" id="pdfFile" name="pdf" accept="application/pdf" required>
+            <button type="button" onclick="splitPdf()">Convert PDF</button>
+        </form>
+
+        <div class="preview-container" id="pdfImagesContainer" style="display:none;">
+            <h2>Extracted Images</h2>
+            <div id="pdfImages"></div>
+        </div>
+
+        <script>
+            let draggedIdx = null;
+
+            function createPdf() {
+                const form = document.getElementById('createPdfForm');
+                const input = document.getElementById('images');
+                // Create a new FormData with the reordered files
+                const container = document.getElementById('imagePreviewContainer');
+                const boxes = Array.from(container.children);
+                const files = Array.from(input.files);
+                // Get the new order of files based on the preview boxes
+                const orderedFiles = boxes.map(box => files[box.dataset.idx]);
+
+                const formData = new FormData();
+                orderedFiles.forEach(file => formData.append('images', file));
+
+                fetch('/create-pdf', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const previewContainer = document.getElementById('previewContainer');
+                    const downloadLink = document.getElementById('downloadLink');
+                    downloadLink.href = data.pdf_url;
+                    downloadLink.textContent = 'Download PDF';
+                    previewContainer.style.display = 'block';
+                })
+                .catch(error => console.error('Error:', error));
+            }
+
+            function showImagePreviews() {
+                const input = document.getElementById('images');
+                const container = document.getElementById('imagePreviewContainer');
+                container.innerHTML = '';
+                if (input.files) {
+                    Array.from(input.files).forEach((file, idx) => {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            const box = document.createElement('div');
+                            box.className = 'image-preview-box';
+                            box.draggable = true;
+                            box.dataset.idx = idx;
+                            box.innerHTML = `
+                                <span class="page-number">${idx + 1}</span>
+                                <img src="${e.target.result}" alt="Page ${idx + 1}">
+                            `;
+                            // Drag events
+                            box.addEventListener('dragstart', (ev) => {
+                                draggedIdx = idx;
+                                box.classList.add('dragging');
+                            });
+                            box.addEventListener('dragend', (ev) => {
+                                draggedIdx = null;
+                                box.classList.remove('dragging');
+                                updatePageNumbers();
+                            });
+                            box.addEventListener('dragover', (ev) => {
+                                ev.preventDefault();
+                            });
+                            box.addEventListener('drop', (ev) => {
+                                ev.preventDefault();
+                                if (draggedIdx === null || draggedIdx === idx) return;
+                                reorderPreviews(draggedIdx, idx);
+                                updatePageNumbers();
+                            });
+                            container.appendChild(box);
+                        };
+                        reader.readAsDataURL(file);
+                    });
+                }
+            }
+
+            function reorderPreviews(fromIdx, toIdx) {
+                const container = document.getElementById('imagePreviewContainer');
+                const boxes = Array.from(container.children);
+                const moved = boxes[fromIdx];
+                if (fromIdx < toIdx) {
+                    container.insertBefore(moved, boxes[toIdx].nextSibling);
+                } else {
+                    container.insertBefore(moved, boxes[toIdx]);
+                }
+                // Update data-idx attributes
+                Array.from(container.children).forEach((box, i) => box.dataset.idx = i);
+            }
+
+            function updatePageNumbers() {
+                const boxes = document.querySelectorAll('.image-preview-box');
+                boxes.forEach((box, i) => {
+                    box.querySelector('.page-number').textContent = i + 1;
+                });
+            }
+
+            function splitPdf() {
+                const form = document.getElementById('splitPdfForm');
+                const formData = new FormData(form);
+
+                fetch('/split-pdf', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('pdfImagesContainer');
+                    const imagesDiv = document.getElementById('pdfImages');
+                    imagesDiv.innerHTML = '';
+                    if (data.image_urls && data.image_urls.length > 0) {
+                        data.image_urls.forEach((url, idx) => {
+                            const img = document.createElement('img');
+                            img.src = url;
+                            img.alt = `Page ${idx + 1}`;
+                            img.style.maxWidth = '180px';
+                            img.style.margin = '10px';
+                            img.style.borderRadius = '8px';
+                            img.style.boxShadow = '0 2px 8px rgba(108,99,255,0.09)';
+                            imagesDiv.appendChild(img);
+                        });
+                        container.style.display = 'block';
+                    } else {
+                        imagesDiv.innerHTML = '<p>No images found in PDF.</p>';
+                        container.style.display = 'block';
+                    }
+                })
+                .catch(error => {
+                    alert('Failed to convert PDF.');
+                    console.error('Error:', error);
+                });
+            }
+        </script>
+    </main>
+    <footer>
+        <p>&copy; 2025 Utility Website. All rights reserved.</p>
+    </footer>
+    <script src="/static/main.js"></script>
+</body>
+</html>

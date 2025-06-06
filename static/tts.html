@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Text-to-Speech | Utility Website</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PLZJDTT3PX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-PLZJDTT3PX');
+    </script>
+    <meta name="google-site-verification" content="Gk-7350xltisPdpbrr_LEOlwsC8P2wapgivz_7Uhuu0" />
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #6C63FF 0%, #007BFF 100%); color: #222; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; }
+        header { background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(8px); box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10); padding: 18px 0 14px 0; width: 100%; display: flex; justify-content: center; align-items: center; gap: 28px; position: sticky; top: 0; z-index: 1000; }
+        header a { color: #fff; text-decoration: none; font-size: 1.15rem; padding: 8px 22px; border-radius: 30px; font-weight: 500; letter-spacing: 0.5px; transition: background 0.2s, color 0.2s, box-shadow 0.2s; }
+        header a:hover, header a.active { background: linear-gradient(90deg, #6C63FF 60%, #007BFF 100%); color: #fff; box-shadow: 0 2px 12px rgba(108,99,255,0.10); }
+        main { flex: 1; padding: 32px 12px 24px 12px; max-width: 900px; margin: 0 auto; width: 100%; }
+        footer { background: rgba(255, 255, 255, 0.13); backdrop-filter: blur(6px); color: #fff; padding: 18px 0 12px 0; text-align: center; font-size: 1.05rem; margin-top: auto; border-top: 1px solid #fff2; box-shadow: 0 -2px 12px rgba(108,99,255,0.07); }
+        footer a { color: #FFCCBC; text-decoration: none; transition: text-decoration 0.2s; }
+        footer a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/index.html">Home</a>
+        <a href="/tts.html" class="active">Text-to-Speech</a>
+        <a href="/image_compressor.html">Image Compressor</a>
+        <a href="/qr_code.html">QR Code Generator</a>
+        <a href="/pdf_service.html">PDF Service</a>
+        <a href="/image_resizer.html">Image Resizer</a>
+    </header>
+    <main>
+        <h1>Free Text-to-Speech Tool - No Login Required</h1>
+        <p>Convert your text into speech with ease. Choose the speed and voice type, then generate and download the audio file.</p>
+        <p>Our free Text-to-Speech tool allows you to convert text into natural-sounding speech without requiring a login. Generate audio files instantly and download them for free.</p>
+
+        <div class="tts-container">
+            <form id="ttsForm" enctype="multipart/form-data" onsubmit="event.preventDefault(); generateSpeech();">
+                <div class="form-group">
+                    <label for="text">Text:</label>
+                    <textarea id="text" name="text" required placeholder="Enter your text here..."></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="speed">Speed:</label>
+                        <select id="speed" name="speed">
+                            <option value="normal">Normal</option>
+                            <option value="slow">Slow</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="accent">Accent:</label>
+                        <select id="accent" name="accent">
+                            <option value="en">English (US)</option>
+                            <option value="en-uk">English (UK)</option>
+                            <option value="fr">French</option>
+                            <option value="es">Spanish</option>
+                            <option value="de">German</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit">Generate Speech</button>
+            </form>
+
+            <div id="previewContainer" style="display: none;">
+                <h2>Audio Preview</h2>
+                <audio id="audioPreview" controls></audio>
+                <a id="downloadLink" class="download-btn" href="#" download="output.mp3">Download Audio</a>
+            </div>
+        </div>
+
+        <style>
+            h1 {
+                font-size: 2.5rem;
+                margin-bottom: 10px;
+                text-shadow: 2px 2px 8px rgba(0,0,0,0.18);
+                color: #fff;
+                letter-spacing: 1px;
+                text-align: center;
+            }
+
+            p {
+                font-size: 1.15rem;
+                margin-bottom: 18px;
+                color: rgba(255,255,255,0.93);
+                text-align: center;
+            }
+
+            .tts-container {
+                background: rgba(255,255,255,0.18);
+                padding: 32px 28px 28px 28px;
+                border-radius: 18px;
+                box-shadow: 0 8px 32px rgba(31,38,135,0.13);
+                width: 100%;
+                max-width: 500px;
+                margin: 0 auto 32px auto;
+                backdrop-filter: blur(6px);
+                border: 1.5px solid rgba(255,255,255,0.22);
+            }
+
+            .form-group {
+                margin-bottom: 18px;
+                text-align: left;
+            }
+
+            label {
+                display: block;
+                font-weight: 600;
+                margin-bottom: 7px;
+                color: #6C63FF;
+                letter-spacing: 0.3px;
+            }
+
+            textarea {
+                width: 100%;
+                padding: 12px;
+                font-size: 1rem;
+                border: 1.5px solid #d1d5db;
+                border-radius: 6px;
+                margin-bottom: 8px;
+                background: #f9f9fb;
+                resize: vertical;
+                min-height: 80px;
+                transition: border 0.2s, box-shadow 0.2s;
+                outline: none;
+                box-sizing: border-box;
+            }
+
+            textarea:focus {
+                border-color: #6C63FF;
+                box-shadow: 0 0 0 2px #6C63FF33;
+            }
+
+            .form-row {
+                display: flex;
+                gap: 14px;
+                margin-bottom: 18px;
+                flex-wrap: wrap;
+            }
+
+            .form-row .form-group {
+                flex: 1 1 120px;
+                min-width: 120px;
+                margin-bottom: 0;
+            }
+
+            select {
+                width: 100%;
+                padding: 10px;
+                font-size: 1rem;
+                border: 1.5px solid #d1d5db;
+                border-radius: 6px;
+                background: #f9f9fb;
+                transition: border 0.2s, box-shadow 0.2s;
+                outline: none;
+                box-sizing: border-box;
+            }
+
+            select:focus {
+                border-color: #6C63FF;
+                box-shadow: 0 0 0 2px #6C63FF33;
+            }
+
+            button {
+                width: 100%;
+                padding: 13px 0;
+                font-size: 1.15rem;
+                background: linear-gradient(90deg, #6C63FF 60%, #007BFF 100%);
+                color: #fff;
+                border: none;
+                border-radius: 7px;
+                font-weight: 600;
+                cursor: pointer;
+                box-shadow: 0 2px 8px rgba(108,99,255,0.09);
+                transition: background 0.2s, transform 0.2s;
+                margin-top: 8px;
+            }
+
+            button:hover {
+                background: linear-gradient(90deg, #007BFF 60%, #6C63FF 100%);
+                transform: translateY(-2px) scale(1.03);
+            }
+
+            #previewContainer {
+                margin-top: 28px;
+                text-align: center;
+                background: rgba(255,255,255,0.13);
+                border-radius: 12px;
+                padding: 18px 10px 12px 10px;
+                box-shadow: 0 2px 8px rgba(108,99,255,0.06);
+                border: 1px solid rgba(108,99,255,0.08);
+            }
+
+            #previewContainer h2 {
+                color: #6C63FF;
+                margin-bottom: 12px;
+                font-size: 1.3rem;
+            }
+
+            audio {
+                margin-top: 10px;
+                width: 100%;
+                border-radius: 6px;
+                background: #f9f9fb;
+            }
+
+            .download-btn {
+                display: inline-block;
+                margin-top: 10px;
+                padding: 11px 24px;
+                font-size: 1rem;
+                color: #fff;
+                background: linear-gradient(90deg, #007BFF 60%, #6C63FF 100%);
+                text-decoration: none;
+                border-radius: 6px;
+                font-weight: 500;
+                transition: background 0.2s, transform 0.2s;
+                box-shadow: 0 2px 8px rgba(108,99,255,0.09);
+            }
+
+            .download-btn:hover {
+                background: linear-gradient(90deg, #6C63FF 60%, #007BFF 100%);
+                transform: translateY(-2px) scale(1.04);
+            }
+        </style>
+
+        <script>
+            function generateSpeech() {
+                const form = document.getElementById('ttsForm');
+                const formData = new FormData(form);
+
+                fetch('/speak', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const audio = document.getElementById('audioPreview');
+                    const previewContainer = document.getElementById('previewContainer');
+                    const downloadLink = document.getElementById('downloadLink');
+
+                    audio.src = data.audio_url;
+                    previewContainer.style.display = 'block';
+                    downloadLink.href = data.audio_url;
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        </script>
+    </main>
+    <footer>
+        <p>&copy; 2025 Utility Website. All rights reserved.</p>
+    </footer>
+    <script src="/static/main.js"></script>
+</body>
+</html>

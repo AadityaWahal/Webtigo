@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Video Generator | Utility Website</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PLZJDTT3PX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-PLZJDTT3PX');
+    </script>
+    <meta name="google-site-verification" content="Gk-7350xltisPdpbrr_LEOlwsC8P2wapgivz_7Uhuu0" />
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #6C63FF 0%, #007BFF 100%); color: #222; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; }
+        header { background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(8px); box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10); padding: 18px 0 14px 0; width: 100%; display: flex; justify-content: center; align-items: center; gap: 28px; position: sticky; top: 0; z-index: 1000; }
+        header a { color: #fff; text-decoration: none; font-size: 1.15rem; padding: 8px 22px; border-radius: 30px; font-weight: 500; letter-spacing: 0.5px; transition: background 0.2s, color 0.2s, box-shadow 0.2s; }
+        header a:hover, header a.active { background: linear-gradient(90deg, #6C63FF 60%, #007BFF 100%); color: #fff; box-shadow: 0 2px 12px rgba(108,99,255,0.10); }
+        main { flex: 1; padding: 32px 12px 24px 12px; max-width: 900px; margin: 0 auto; width: 100%; }
+        footer { background: rgba(255, 255, 255, 0.13); backdrop-filter: blur(6px); color: #fff; padding: 18px 0 12px 0; text-align: center; font-size: 1.05rem; margin-top: auto; border-top: 1px solid #fff2; box-shadow: 0 -2px 12px rgba(108,99,255,0.07); }
+        footer a { color: #FFCCBC; text-decoration: none; transition: text-decoration 0.2s; }
+        footer a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/index.html">Home</a>
+        <a href="/tts.html">Text-to-Speech</a>
+        <a href="/image_compressor.html">Image Compressor</a>
+        <a href="/qr_code.html">QR Code Generator</a>
+        <a href="/pdf_service.html">PDF Service</a>
+        <a href="/image_resizer.html">Image Resizer</a>
+    </header>
+    <main>
+        <h1>Video Generator</h1>
+        <form id="video-generator-form" method="POST" onsubmit="generateVideo(event)">
+            <label for="api-key">API Key:</label>
+            <input type="text" id="api-key" name="api_key" value="hidden" readonly>
+            
+            <label for="video-text">Text for Video:</label>
+            <textarea id="video-text" name="video_text" rows="5" required></textarea>
+            
+            <button type="submit">Generate Video</button>
+        </form>
+        <div id="video-result">
+            <!-- Video URL or preview will be displayed here -->
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2025 Utility Website. All rights reserved.</p>
+    </footer>
+    <script src="/static/main.js"></script>
+</body>
+</html>
