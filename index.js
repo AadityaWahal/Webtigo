@@ -43,6 +43,7 @@ app.use('/pdf', express.static(path.join(__dirname, 'static/pdf')));
 app.use('/pdf_pages', express.static(path.join(__dirname, 'static/pdf_pages')));
 app.use('/videos', express.static(path.join(__dirname, 'static/videos')));
 app.use('/favicon.ico', express.static(path.join(__dirname, 'static/favicon.ico')));
+app.use('/main.js', express.static(path.join(__dirname, 'static/main.js')));
 
 // Serve static HTML files
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'static/index.html')));

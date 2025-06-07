@@ -16,6 +16,7 @@
     { "src": "/pdf_pages/(.*)", "dest": "/static/pdf_pages/$1" },
     { "src": "/videos/(.*)", "dest": "/static/videos/$1" },
     { "src": "/(.*\\.html)", "dest": "/static/$1" },
-    { "src": "/", "dest": "/static/index.html" }
+    { "src": "/", "dest": "/static/index.html" },
+    { "src": "/main.js", "dest": "/static/main.js" }
   ]
 }
