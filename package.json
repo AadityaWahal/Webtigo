@@ -19,6 +19,6 @@
   },
   "main": "api/index.js",
   "scripts": {
-    "start": "node api/index.js"
+    "start": "index.js"
   }
 }
