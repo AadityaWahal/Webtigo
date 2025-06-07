@@ -7,6 +7,7 @@
     }
   ],
   "routes": [
+    { "src": "/api/(.*)", "dest": "index.js" },
     { "src": "/", "dest": "/static/index.html" },
     { "src": "/(.*\\.html)", "dest": "/static/$1" },
     { "src": "/css/(.*)", "dest": "/static/css/$1" },
@@ -14,7 +15,6 @@
     { "src": "/mp3/(.*)", "dest": "/static/mp3/$1" },
     { "src": "/pdf/(.*)", "dest": "/static/pdf/$1" },
     { "src": "/pdf_pages/(.*)", "dest": "/static/pdf_pages/$1" },
-    { "src": "/videos/(.*)", "dest": "/static/videos/$1" },
-    { "src": "/(.*)", "dest": "index.js" }
+    { "src": "/videos/(.*)", "dest": "/static/videos/$1" }
   ]
 }
