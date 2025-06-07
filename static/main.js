@@ -11,10 +11,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     navLinks.forEach(link => {
         link.classList.remove('active');
-        if (link.getAttribute('href') === path) {
-            link.classList.add('active');
+        // Normalize both href and path for matching
+        let href = link.getAttribute('href');
+        if (href.startsWith('/static/')) {
+            href = href.replace('/static', '');
         }
-        if ((path === '/' || path === '/index.html') && link.getAttribute('href') === '/index.html') {
+        if (href === path || (path === '/' && href === '/index.html')) {
             link.classList.add('active');
         }
     });
