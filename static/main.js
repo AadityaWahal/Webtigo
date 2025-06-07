@@ -16,7 +16,8 @@ document.addEventListener('DOMContentLoaded', function() {
         if (href.startsWith('/static/')) {
             href = href.replace('/static', '');
         }
-        if (href === path || (path === '/' && href === '/index.html')) {
+        // Also match /static/index.html as home
+        if (href === path || (path === '/' && (href === '/static/index.html' || href === '/index.html'))) {
             link.classList.add('active');
         }
     });
