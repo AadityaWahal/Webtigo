@@ -8,6 +8,7 @@
   ],
   "routes": [
     { "src": "/api/(.*)", "dest": "index.js" },
+    { "src": "/favicon.ico", "dest": "/static/favicon.ico" },
     { "src": "/", "dest": "/static/index.html" },
     { "src": "/(.*\\.html)", "dest": "/static/$1" },
     { "src": "/css/(.*)", "dest": "/static/css/$1" },
