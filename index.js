@@ -22,13 +22,13 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Ensure directories exist
-fs.ensureDirSync('static/mp3');
-fs.ensureDirSync('static/images/uploads');
-fs.ensureDirSync('static/images/processed');
-fs.ensureDirSync('static/pdf');
-fs.ensureDirSync('static/videos');
-fs.ensureDirSync('static/pdf_pages');
+// REMOVE these lines for Vercel serverless compatibility
+// fs.ensureDirSync('static/mp3');
+// fs.ensureDirSync('static/images/uploads');
+// fs.ensureDirSync('static/images/processed');
+// fs.ensureDirSync('static/pdf');
+// fs.ensureDirSync('static/videos');
+// fs.ensureDirSync('static/pdf_pages');
 
 // Multer setup for file uploads
 const upload = multer({ dest: 'static/images/uploads/' });
@@ -39,8 +39,8 @@ const videoUpload = multer({ dest: 'static/videos/' });
 app.post('/compress-image', upload.single('image'), async (req, res) => {
     const targetSizeKB = parseInt(req.body.size_kb, 10);
     const inputPath = req.file.path;
-    const uniqueFilename = `${uuid()}_${req.file.originalname}`;
-    const outputPath = `static/images/processed/compressed_${uniqueFilename}`;
+    const uniqueFilename = `compressed_${uuid()}_${req.file.originalname}`;
+    const outputPath = path.join('/tmp', uniqueFilename);
     let quality = 95;
     let buffer = await fs.readFile(inputPath);
 
@@ -50,7 +50,9 @@ app.post('/compress-image', upload.single('image'), async (req, res) => {
     }
     await fs.writeFile(outputPath, buffer);
     await fs.remove(inputPath);
-    res.json({ compressed_image_url: `/images/processed/compressed_${uniqueFilename}` });
+    res.setHeader('Content-Type', 'image/jpeg');
+    res.setHeader('Content-Disposition', `attachment; filename="${uniqueFilename}"`);
+    res.send(buffer);
 });
 
 // Text-to-Speech
@@ -59,11 +61,18 @@ app.post('/speak', upload.none(), async (req, res) => {
     const lang = accent || 'en';
     const slow = speed === 'slow';
     const filename = `${uuid()}.mp3`;
-    const outputPath = `static/mp3/${filename}`;
+    const outputPath = path.join('/tmp', filename); // Use /tmp for serverless
     const tts = new gTTS(text, lang, slow);
-    tts.save(outputPath, err => {
+    tts.save(outputPath, async err => {
         if (err) return res.status(500).json({ error: 'TTS failed' });
-        res.json({ audio_url: `/mp3/${filename}` });
+        try {
+            const data = await fs.readFile(outputPath);
+            res.setHeader('Content-Type', 'audio/mpeg');
+            res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+            res.status(200).send(data);
+        } catch (e) {
+            res.status(500).json({ error: 'Failed to read mp3' });
+        }
     });
 });
 
@@ -71,9 +80,12 @@ app.post('/speak', upload.none(), async (req, res) => {
 app.post('/generate-qr', upload.none(), async (req, res) => {
     const { data } = req.body;
     const uniqueFilename = `${uuid()}.png`;
-    const outputPath = `static/images/processed/${uniqueFilename}`;
+    const outputPath = path.join('/tmp', uniqueFilename);
     await QRCode.toFile(outputPath, data, { width: 300 });
-    res.json({ qr_code_url: `/images/processed/${uniqueFilename}` });
+    const qrBuffer = await fs.readFile(outputPath);
+    res.setHeader('Content-Type', 'image/png');
+    res.setHeader('Content-Disposition', `attachment; filename="${uniqueFilename}"`);
+    res.send(qrBuffer);
 });
 
 // Create PDF from images
@@ -93,15 +105,17 @@ app.post('/create-pdf', upload.array('images'), async (req, res) => {
     }
     const pdfBytes = await pdfDoc.save();
     const filename = `${uuid()}.pdf`;
-    const outputPath = `static/pdf/${filename}`;
+    const outputPath = path.join('/tmp', filename);
     await fs.writeFile(outputPath, pdfBytes);
-    res.json({ pdf_url: `/pdf/${filename}` });
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.send(pdfBytes);
 });
 
 // Split PDF to images (requires 'pdftoppm' installed)
 app.post('/split-pdf', pdfUpload.single('pdf'), async (req, res) => {
     const pdfPath = req.file.path;
-    const outputDir = 'static/pdf_pages';
+    const outputDir = path.join('/tmp', `pdf_pages_${uuid()}`);
     await fs.ensureDir(outputDir);
     const baseName = `page-${uuid()}`;
     const cmd = `pdftoppm -jpeg -r 200 "${pdfPath}" "${outputDir}/${baseName}"`;
@@ -109,25 +123,33 @@ app.post('/split-pdf', pdfUpload.single('pdf'), async (req, res) => {
         await fs.remove(pdfPath);
         if (err) return res.status(500).json({ error: 'PDF split failed' });
         const files = await fs.readdir(outputDir);
-        const imageUrls = files.filter(f => f.startsWith(baseName)).map(f => `/pdf_pages/${f}`);
-        res.json({ image_urls: imageUrls });
+        const imageFiles = files.filter(f => f.startsWith(baseName));
+        const images = [];
+        for (const f of imageFiles) {
+            const imgBuffer = await fs.readFile(path.join(outputDir, f));
+            images.push({ filename: f, buffer: imgBuffer.toString('base64') });
+        }
+        res.json({ images });
     });
 });
 
 // Image Resizer (fixed 300x300 for demo)
 app.post('/resize-image', upload.single('image'), async (req, res) => {
-    const uniqueFilename = `${uuid()}_${req.file.originalname}`;
-    const outputPath = `static/images/processed/resized_${uniqueFilename}`;
+    const uniqueFilename = `resized_${uuid()}_${req.file.originalname}`;
+    const outputPath = path.join('/tmp', uniqueFilename);
     await sharp(req.file.path).resize(300, 300).toFile(outputPath);
+    const resizedBuffer = await fs.readFile(outputPath);
     await fs.remove(req.file.path);
-    res.json({ resized_image_url: `/images/processed/resized_${uniqueFilename}` });
+    res.setHeader('Content-Type', 'image/jpeg');
+    res.setHeader('Content-Disposition', `attachment; filename="${uniqueFilename}"`);
+    res.send(resizedBuffer);
 });
 
 // Video Generator (RunwayML API)
 app.post('/generate-video', upload.none(), async (req, res) => {
     const text = req.body.video_text;
     const uniqueFilename = `${uuid()}.mp4`;
-    const outputPath = `static/videos/${uniqueFilename}`;
+    const outputPath = path.join('/tmp', uniqueFilename);
     const apiUrl = "https://api.runwayml.com/v1/generate";
     const headers = {
         'Authorization': `Bearer ${process.env.API_KEY}`,
@@ -142,7 +164,9 @@ app.post('/generate-video', upload.none(), async (req, res) => {
     try {
         const response = await axios.post(apiUrl, payload, { headers, responseType: 'arraybuffer' });
         await fs.writeFile(outputPath, response.data);
-        res.json({ video_url: `/videos/${uniqueFilename}` });
+        res.setHeader('Content-Type', 'video/mp4');
+        res.setHeader('Content-Disposition', `attachment; filename="${uniqueFilename}"`);
+        res.send(response.data);
     } catch (e) {
         res.status(500).json({ error: `Failed to connect to the API: ${e.message}` });
     }
