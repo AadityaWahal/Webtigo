@@ -19,7 +19,6 @@ dotenv.config();
 
 const app = express();
 app.use(cors());
-app.use(express.static('static'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -35,17 +34,6 @@ fs.ensureDirSync('static/pdf_pages');
 const upload = multer({ dest: 'static/images/uploads/' });
 const pdfUpload = multer({ dest: 'static/' });
 const videoUpload = multer({ dest: 'static/videos/' });
-
-// Home and static pages (serve static HTML files)
-const staticDir = path.join(__dirname, 'static');
-app.get('/', (req, res) => res.sendFile(path.join(staticDir, 'index.html')));
-app.get('/index.html', (req, res) => res.sendFile(path.join(staticDir, 'index.html')));
-app.get('/tts.html', (req, res) => res.sendFile(path.join(staticDir, 'tts.html')));
-app.get('/image_compressor.html', (req, res) => res.sendFile(path.join(staticDir, 'image_compressor.html')));
-app.get('/qr_code.html', (req, res) => res.sendFile(path.join(staticDir, 'qr_code.html')));
-app.get('/pdf_service.html', (req, res) => res.sendFile(path.join(staticDir, 'pdf_service.html')));
-app.get('/image_resizer.html', (req, res) => res.sendFile(path.join(staticDir, 'image_resizer.html')));
-app.get('/video_generator.html', (req, res) => res.sendFile(path.join(staticDir, 'video_generator.html')));
 
 // Image Compressor
 app.post('/compress-image', upload.single('image'), async (req, res) => {
