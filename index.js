@@ -179,5 +179,8 @@ app.get('/google6cda3ef54c5c2da9.html', (req, res) =>
 app.get('/sitemap.xml', (req, res) =>
     res.sendFile(path.join(__dirname, 'static/sitemap.xml'))
 );
+app.get('/favicon.ico', (req, res) => {
+    res.status(204).end(); // No Content, avoids 404 in logs
+});
 
 module.exports = app;
