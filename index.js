@@ -37,14 +37,15 @@ const pdfUpload = multer({ dest: 'static/' });
 const videoUpload = multer({ dest: 'static/videos/' });
 
 // Home and static pages (serve static HTML files)
-const templatesDir = path.join(__dirname, '../templates');
-app.get('/', (req, res) => res.sendFile(path.join(templatesDir, 'index.html')));
-app.get('/tts', (req, res) => res.sendFile(path.join(templatesDir, 'tts.html')));
-app.get('/image-compressor', (req, res) => res.sendFile(path.join(templatesDir, 'image_compressor.html')));
-app.get('/qr-code', (req, res) => res.sendFile(path.join(templatesDir, 'qr_code.html')));
-app.get('/pdf-service', (req, res) => res.sendFile(path.join(templatesDir, 'pdf_service.html')));
-app.get('/image-resizer', (req, res) => res.sendFile(path.join(templatesDir, 'image_resizer.html')));
-app.get('/video-generator', (req, res) => res.sendFile(path.join(templatesDir, 'video_generator.html')));
+const staticDir = path.join(__dirname, 'static');
+app.get('/', (req, res) => res.sendFile(path.join(staticDir, 'index.html')));
+app.get('/index.html', (req, res) => res.sendFile(path.join(staticDir, 'index.html')));
+app.get('/tts.html', (req, res) => res.sendFile(path.join(staticDir, 'tts.html')));
+app.get('/image_compressor.html', (req, res) => res.sendFile(path.join(staticDir, 'image_compressor.html')));
+app.get('/qr_code.html', (req, res) => res.sendFile(path.join(staticDir, 'qr_code.html')));
+app.get('/pdf_service.html', (req, res) => res.sendFile(path.join(staticDir, 'pdf_service.html')));
+app.get('/image_resizer.html', (req, res) => res.sendFile(path.join(staticDir, 'image_resizer.html')));
+app.get('/video_generator.html', (req, res) => res.sendFile(path.join(staticDir, 'video_generator.html')));
 
 // Image Compressor
 app.post('/compress-image', upload.single('image'), async (req, res) => {

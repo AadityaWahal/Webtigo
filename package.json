@@ -16,5 +16,9 @@
     "qrcode": "^1.5.4",
     "sharp": "^0.34.2",
     "uuid": "^11.1.0"
+  },
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
   }
 }
