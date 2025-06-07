@@ -7,8 +7,8 @@
     }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "index.js" },
     { "src": "/favicon.ico", "dest": "/static/favicon.ico" },
+    { "src": "/main.js", "dest": "/static/main.js" },
     { "src": "/css/(.*)", "dest": "/static/css/$1" },
     { "src": "/images/(.*)", "dest": "/static/images/$1" },
     { "src": "/mp3/(.*)", "dest": "/static/mp3/$1" },
@@ -17,6 +17,6 @@
     { "src": "/videos/(.*)", "dest": "/static/videos/$1" },
     { "src": "/(.*\\.html)", "dest": "/static/$1" },
     { "src": "/", "dest": "/static/index.html" },
-    { "src": "/main.js", "dest": "/static/main.js" }
+    { "src": "/api/(.*)", "dest": "index.js" }
   ]
 }
