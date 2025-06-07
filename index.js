@@ -35,6 +35,29 @@ const upload = multer({ dest: '/tmp' });
 const pdfUpload = multer({ dest: '/tmp' });
 const videoUpload = multer({ dest: '/tmp' });
 
+// Serve static files
+app.use('/css', express.static(path.join(__dirname, 'static/css')));
+app.use('/images', express.static(path.join(__dirname, 'static/images')));
+app.use('/mp3', express.static(path.join(__dirname, 'static/mp3')));
+app.use('/pdf', express.static(path.join(__dirname, 'static/pdf')));
+app.use('/pdf_pages', express.static(path.join(__dirname, 'static/pdf_pages')));
+app.use('/videos', express.static(path.join(__dirname, 'static/videos')));
+app.use('/favicon.ico', express.static(path.join(__dirname, 'static/favicon.ico')));
+
+// Serve static HTML files
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'static/index.html')));
+app.get('/:page.html', (req, res) => {
+    const page = req.params.page;
+    const filePath = path.join(__dirname, 'static', `${page}.html`);
+    fs.pathExists(filePath).then(exists => {
+        if (exists) {
+            res.sendFile(filePath);
+        } else {
+            res.status(404).send('Not Found');
+        }
+    });
+});
+
 // Image Compressor
 app.post('/compress-image', upload.single('image'), async (req, res) => {
     const targetSizeKB = parseInt(req.body.size_kb, 10);
