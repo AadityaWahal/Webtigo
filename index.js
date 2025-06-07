@@ -31,9 +31,9 @@ app.use(express.json());
 // fs.ensureDirSync('static/pdf_pages');
 
 // Multer setup for file uploads
-const upload = multer({ dest: 'static/images/uploads/' });
-const pdfUpload = multer({ dest: 'static/' });
-const videoUpload = multer({ dest: 'static/videos/' });
+const upload = multer({ dest: '/tmp' });
+const pdfUpload = multer({ dest: '/tmp' });
+const videoUpload = multer({ dest: '/tmp' });
 
 // Image Compressor
 app.post('/compress-image', upload.single('image'), async (req, res) => {
