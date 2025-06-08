@@ -7,6 +7,16 @@
     }
   ],
   "routes": [
-    { "src": "/(.*)", "dest": "/index.js" }
+    { "src": "/css/(.*)", "dest": "/static/css/$1" },
+    { "src": "/images/(.*)", "dest": "/static/images/$1" },
+    { "src": "/mp3/(.*)", "dest": "/static/mp3/$1" },
+    { "src": "/pdf/(.*)", "dest": "/static/pdf/$1" },
+    { "src": "/pdf_pages/(.*)", "dest": "/static/pdf_pages/$1" },
+    { "src": "/videos/(.*)", "dest": "/static/videos/$1" },
+    { "src": "/main.js", "dest": "/public/main.js" },
+    { "src": "/favicon.ico", "dest": "/public/favicon.ico" },
+    { "src": "/sitemap.xml", "dest": "/public/sitemap.xml" },
+    { "src": "/(api/.*)", "dest": "/index.js" },
+    { "src": "/(.*)", "dest": "/public/$1" }
   ]
 }
