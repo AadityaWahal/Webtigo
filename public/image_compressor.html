@@ -201,17 +201,15 @@
                     method: 'POST',
                     body: formData
                 })
-                .then(response => response.json())
-                .then(data => {
-                    const previewContainer = document.getElementById('previewContainer');
-                    const compressedImage = document.getElementById('compressedImage');
-                    const downloadLink = document.getElementById('downloadLink');
-
-                    compressedImage.src = data.compressed_image_url;
-                    downloadLink.href = data.compressed_image_url;
-                    previewContainer.style.display = 'block';
+                .then(response => response.blob()) // handle binary response
+                .then(blob => {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'compressed.jpg';
+                    a.click();
                 })
-                .catch(error => console.error('Error:', error));
+                .catch(err => console.error('Compression failed', err));
             }
         </script>
     </main>
