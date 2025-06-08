@@ -10,9 +10,7 @@
     
     { "src": "/static/(.*)", "dest": "/static/$1" },
     { "src": "/public/(.*)", "dest": "/public/$1" },
-
     { "src": "/favicon.ico", "dest": "/public/favicon.ico" },
-    { "src": "/sitemap.xml", "dest": "/public/sitemap.xml" },
 
     { "src": "/(.*)", "dest": "index.js" }
   ]
