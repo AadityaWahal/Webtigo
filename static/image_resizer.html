@@ -220,53 +220,5 @@
         <p>&copy; 2025 Utility Website. All rights reserved.</p>
     </footer>
     <script src="/main.js"></script>
-    <script>
-        function showOriginalPreview() {
-            const fileInput = document.getElementById('image');
-            const originalImage = document.getElementById('originalImage');
-
-            if (fileInput.files && fileInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    originalImage.src = e.target.result;
-                    originalImage.style.display = 'block';
-                };
-                reader.readAsDataURL(fileInput.files[0]);
-            }
-        }
-
-        function applyPreset() {
-            const preset = document.getElementById('preset').value;
-            const [width, height] = preset.split('x');
-            if (width && height) {
-                document.getElementById('width').value = width;
-                document.getElementById('height').value = height;
-            } else {
-                document.getElementById('width').value = '';
-                document.getElementById('height').value = '';
-            }
-        }
-
-        function resizeImage() {
-            const form = document.getElementById('resizeForm');
-            const formData = new FormData(form);
-
-            fetch('/resize-image', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                const previewContainer = document.getElementById('previewContainer');
-                const resizedImage = document.getElementById('resizedImage');
-                const downloadLink = document.getElementById('downloadLink');
-
-                resizedImage.src = data.resized_image_url;
-                downloadLink.href = data.resized_image_url;
-                previewContainer.style.display = 'block';
-            })
-            .catch(error => console.error('Error:', error));
-        }
-    </script>
 </body>
 </html>

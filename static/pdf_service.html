@@ -226,9 +226,11 @@
                 .then(response => response.json())
                 .then(data => {
                     const previewContainer = document.getElementById('previewContainer');
+                    const pdfPreview = document.getElementById('pdfPreview');
                     const downloadLink = document.getElementById('downloadLink');
+
+                    pdfPreview.src = data.pdf_url;
                     downloadLink.href = data.pdf_url;
-                    downloadLink.textContent = 'Download PDF';
                     previewContainer.style.display = 'block';
                 })
                 .catch(error => console.error('Error:', error));
