@@ -4,37 +4,44 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-<!-- updated 2025-06-08 -->
+<!-- updated 2025-06-08 for https://webtigo.vercel.app/ -->
+
 
 <url>
-  <loc>https://webtigo.com/</loc>
+  <loc>https://webtigo.vercel.app/</loc>
   <lastmod>2025-06-08T00:00:00+00:00</lastmod>
   <priority>1.00</priority>
 </url>
 <url>
-  <loc>https://webtigo.com/tts</loc>
+  <loc>https://webtigo.vercel.app/index.html</loc>
   <lastmod>2025-06-08T00:00:00+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://webtigo.com/image-compressor</loc>
+  <loc>https://webtigo.vercel.app/tts.html</loc>
   <lastmod>2025-06-08T00:00:00+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://webtigo.com/qr-code</loc>
+  <loc>https://webtigo.vercel.app/image_compressor.html</loc>
   <lastmod>2025-06-08T00:00:00+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://webtigo.com/pdf-service</loc>
+  <loc>https://webtigo.vercel.app/qr_code.html</loc>
   <lastmod>2025-06-08T00:00:00+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://webtigo.com/image-resizer</loc>
+  <loc>https://webtigo.vercel.app/pdf_service.html</loc>
   <lastmod>2025-06-08T00:00:00+00:00</lastmod>
   <priority>0.80</priority>
 </url>
+<url>
+  <loc>https://webtigo.vercel.app/image_resizer.html</loc>
+  <lastmod>2025-06-08T00:00:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+
 
 </urlset>

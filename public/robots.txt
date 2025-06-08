@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://webtigo.vercel.app/sitemap.xml
