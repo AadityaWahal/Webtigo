@@ -5,11 +5,17 @@
 document.addEventListener('DOMContentLoaded', function() {
     const navLinks = document.querySelectorAll('header a');
     let path = window.location.pathname;
-    // No normalization needed, as all links and routes use /static/
+    // Normalize /static/tts.html to /tts.html for matching
+    if (path.startsWith('/static/')) {
+        path = path.replace('/static', '');
+    }
     navLinks.forEach(link => {
         link.classList.remove('active');
         let href = link.getAttribute('href');
-        if (href === path || (path === '/static/' && (href === '/static/index.html'))) {
+        if (href.startsWith('/static/')) {
+            href = href.replace('/static', '');
+        }
+        if (href === path || (path === '/' && (href === '/index.html'))) {
             link.classList.add('active');
         }
     });
