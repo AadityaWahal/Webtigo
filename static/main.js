@@ -5,19 +5,11 @@
 document.addEventListener('DOMContentLoaded', function() {
     const navLinks = document.querySelectorAll('header a');
     let path = window.location.pathname;
-    // Normalize /static/tts.html to /tts.html for matching
-    if (path.startsWith('/static/')) {
-        path = path.replace('/static', '');
-    }
+    // No normalization needed, as all links and routes use /static/
     navLinks.forEach(link => {
         link.classList.remove('active');
-        // Normalize both href and path for matching
         let href = link.getAttribute('href');
-        if (href.startsWith('/static/')) {
-            href = href.replace('/static', '');
-        }
-        // Also match /static/index.html as home
-        if (href === path || (path === '/' && (href === '/static/index.html' || href === '/index.html'))) {
+        if (href === path || (path === '/static/' && (href === '/static/index.html'))) {
             link.classList.add('active');
         }
     });
