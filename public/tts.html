@@ -23,6 +23,293 @@
         footer { background: rgba(255, 255, 255, 0.13); backdrop-filter: blur(6px); color: #fff; padding: 18px 0 12px 0; text-align: center; font-size: 1.05rem; margin-top: auto; border-top: 1px solid #fff2; box-shadow: 0 -2px 12px rgba(108,99,255,0.07); }
         footer a { color: #FFCCBC; text-decoration: none; transition: text-decoration 0.2s; }
         footer a:hover { text-decoration: underline; }
+
+        @media (max-width: 900px) {
+            .hero h1 {
+                font-size: 2.1rem !important;
+            }
+            .tagline {
+                font-size: 1.08rem;
+            }
+            .services-container {
+                max-width: 98vw;
+            }
+        }
+        @media (max-width: 600px) {
+            .services-container {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 18px 6px;
+                gap: 16px;
+            }
+            .service-btn {
+                min-width: 0;
+                width: 100%;
+                justify-content: flex-start;
+                font-size: 1.05rem;
+                padding: 14px 16px;
+            }
+            .hero {
+                padding: 24px 0 10px 0;
+            }
+            .logo {
+                width: 64px;
+                height: 64px;
+                margin-bottom: 10px;
+            }
+            .logo svg {
+                width: 38px;
+                height: 38px;
+            }
+            header {
+                flex-wrap: wrap;
+                gap: 8px;
+                padding: 10px 0 8px 0;
+            }
+            header a {
+                font-size: 0.98rem;
+                padding: 7px 10px;
+            }
+            main {
+                padding: 0 2vw 18px 2vw;
+            }
+        }
+        @media (max-width: 400px) {
+            .hero h1 {
+                font-size: 1.3rem !important;
+            }
+            .tagline {
+                font-size: 0.95rem;
+            }
+            .logo {
+                width: 44px;
+                height: 44px;
+            }
+            .logo svg {
+                width: 24px;
+                height: 24px;
+            }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.18);
+            color: #fff;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+
+        p {
+            font-size: 1.15rem;
+            margin-bottom: 18px;
+            color: rgba(255,255,255,0.93);
+            text-align: center;
+        }
+
+        .tts-container {
+            background: rgba(255,255,255,0.18);
+            padding: 32px 28px 28px 28px;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(31,38,135,0.13);
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto 32px auto;
+            backdrop-filter: blur(6px);
+            border: 1.5px solid rgba(255,255,255,0.22);
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 7px;
+            color: #6C63FF;
+            letter-spacing: 0.3px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border: 1.5px solid #d1d5db;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            background: #f9f9fb;
+            resize: vertical;
+            min-height: 80px;
+            transition: border 0.2s, box-shadow 0.2s;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        textarea:focus {
+            border-color: #6C63FF;
+            box-shadow: 0 0 0 2px #6C63FF33;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 14px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        .form-row .form-group {
+            flex: 1 1 120px;
+            min-width: 120px;
+            margin-bottom: 0;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem;
+            border: 1.5px solid #d1d5db;
+            border-radius: 6px;
+            background: #f9f9fb;
+            transition: border 0.2s, box-shadow 0.2s;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        select:focus {
+            border-color: #6C63FF;
+            box-shadow: 0 0 0 2px #6C63FF33;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px 0;
+            font-size: 1.15rem;
+            background: linear-gradient(90deg, #6C63FF 60%, #007BFF 100%);
+            color: #fff;
+            border: none;
+            border-radius: 7px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(108,99,255,0.09);
+            transition: background 0.2s, transform 0.2s;
+            margin-top: 8px;
+        }
+
+        button:hover {
+            background: linear-gradient(90deg, #007BFF 60%, #6C63FF 100%);
+            transform: translateY(-2px) scale(1.03);
+        }
+
+        #previewContainer {
+            margin-top: 28px;
+            text-align: center;
+            background: rgba(255,255,255,0.13);
+            border-radius: 12px;
+            padding: 18px 10px 12px 10px;
+            box-shadow: 0 2px 8px rgba(108,99,255,0.06);
+            border: 1px solid rgba(108,99,255,0.08);
+        }
+
+        #previewContainer h2 {
+            color: #6C63FF;
+            margin-bottom: 12px;
+            font-size: 1.3rem;
+        }
+
+        audio {
+            margin-top: 10px;
+            width: 100%;
+            border-radius: 6px;
+            background: #f9f9fb;
+        }
+
+        .download-btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 11px 24px;
+            font-size: 1rem;
+            color: #fff;
+            background: linear-gradient(90deg, #007BFF 60%, #6C63FF 100%);
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: background 0.2s, transform 0.2s;
+            box-shadow: 0 2px 8px rgba(108,99,255,0.09);
+        }
+
+        .download-btn:hover {
+            background: linear-gradient(90deg, #6C63FF 60%, #007BFF 100%);
+            transform: translateY(-2px) scale(1.04);
+        }
+
+        @media (max-width: 900px) {
+            .hero h1 {
+                font-size: 2.1rem !important;
+            }
+            .tagline {
+                font-size: 1.08rem;
+            }
+            .services-container {
+                max-width: 98vw;
+            }
+        }
+        @media (max-width: 600px) {
+            .services-container {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 18px 6px;
+                gap: 16px;
+            }
+            .service-btn {
+                min-width: 0;
+                width: 100%;
+                justify-content: flex-start;
+                font-size: 1.05rem;
+                padding: 14px 16px;
+            }
+            .hero {
+                padding: 24px 0 10px 0;
+            }
+            .logo {
+                width: 64px;
+                height: 64px;
+                margin-bottom: 10px;
+            }
+            .logo svg {
+                width: 38px;
+                height: 38px;
+            }
+            header {
+                flex-wrap: wrap;
+                gap: 8px;
+                padding: 10px 0 8px 0;
+            }
+            header a {
+                font-size: 0.98rem;
+                padding: 7px 10px;
+            }
+            main {
+                padding: 0 2vw 18px 2vw;
+            }
+        }
+        @media (max-width: 400px) {
+            .hero h1 {
+                font-size: 1.3rem !important;
+            }
+            .tagline {
+                font-size: 0.95rem;
+            }
+            .logo {
+                width: 44px;
+                height: 44px;
+            }
+            .logo svg {
+                width: 24px;
+                height: 24px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -75,161 +362,6 @@
                 <a id="downloadLink" class="download-btn" href="#" download="output.mp3">Download Audio</a>
             </div>
         </div>
-
-        <style>
-            h1 {
-                font-size: 2.5rem;
-                margin-bottom: 10px;
-                text-shadow: 2px 2px 8px rgba(0,0,0,0.18);
-                color: #fff;
-                letter-spacing: 1px;
-                text-align: center;
-            }
-
-            p {
-                font-size: 1.15rem;
-                margin-bottom: 18px;
-                color: rgba(255,255,255,0.93);
-                text-align: center;
-            }
-
-            .tts-container {
-                background: rgba(255,255,255,0.18);
-                padding: 32px 28px 28px 28px;
-                border-radius: 18px;
-                box-shadow: 0 8px 32px rgba(31,38,135,0.13);
-                width: 100%;
-                max-width: 500px;
-                margin: 0 auto 32px auto;
-                backdrop-filter: blur(6px);
-                border: 1.5px solid rgba(255,255,255,0.22);
-            }
-
-            .form-group {
-                margin-bottom: 18px;
-                text-align: left;
-            }
-
-            label {
-                display: block;
-                font-weight: 600;
-                margin-bottom: 7px;
-                color: #6C63FF;
-                letter-spacing: 0.3px;
-            }
-
-            textarea {
-                width: 100%;
-                padding: 12px;
-                font-size: 1rem;
-                border: 1.5px solid #d1d5db;
-                border-radius: 6px;
-                margin-bottom: 8px;
-                background: #f9f9fb;
-                resize: vertical;
-                min-height: 80px;
-                transition: border 0.2s, box-shadow 0.2s;
-                outline: none;
-                box-sizing: border-box;
-            }
-
-            textarea:focus {
-                border-color: #6C63FF;
-                box-shadow: 0 0 0 2px #6C63FF33;
-            }
-
-            .form-row {
-                display: flex;
-                gap: 14px;
-                margin-bottom: 18px;
-                flex-wrap: wrap;
-            }
-
-            .form-row .form-group {
-                flex: 1 1 120px;
-                min-width: 120px;
-                margin-bottom: 0;
-            }
-
-            select {
-                width: 100%;
-                padding: 10px;
-                font-size: 1rem;
-                border: 1.5px solid #d1d5db;
-                border-radius: 6px;
-                background: #f9f9fb;
-                transition: border 0.2s, box-shadow 0.2s;
-                outline: none;
-                box-sizing: border-box;
-            }
-
-            select:focus {
-                border-color: #6C63FF;
-                box-shadow: 0 0 0 2px #6C63FF33;
-            }
-
-            button {
-                width: 100%;
-                padding: 13px 0;
-                font-size: 1.15rem;
-                background: linear-gradient(90deg, #6C63FF 60%, #007BFF 100%);
-                color: #fff;
-                border: none;
-                border-radius: 7px;
-                font-weight: 600;
-                cursor: pointer;
-                box-shadow: 0 2px 8px rgba(108,99,255,0.09);
-                transition: background 0.2s, transform 0.2s;
-                margin-top: 8px;
-            }
-
-            button:hover {
-                background: linear-gradient(90deg, #007BFF 60%, #6C63FF 100%);
-                transform: translateY(-2px) scale(1.03);
-            }
-
-            #previewContainer {
-                margin-top: 28px;
-                text-align: center;
-                background: rgba(255,255,255,0.13);
-                border-radius: 12px;
-                padding: 18px 10px 12px 10px;
-                box-shadow: 0 2px 8px rgba(108,99,255,0.06);
-                border: 1px solid rgba(108,99,255,0.08);
-            }
-
-            #previewContainer h2 {
-                color: #6C63FF;
-                margin-bottom: 12px;
-                font-size: 1.3rem;
-            }
-
-            audio {
-                margin-top: 10px;
-                width: 100%;
-                border-radius: 6px;
-                background: #f9f9fb;
-            }
-
-            .download-btn {
-                display: inline-block;
-                margin-top: 10px;
-                padding: 11px 24px;
-                font-size: 1rem;
-                color: #fff;
-                background: linear-gradient(90deg, #007BFF 60%, #6C63FF 100%);
-                text-decoration: none;
-                border-radius: 6px;
-                font-weight: 500;
-                transition: background 0.2s, transform 0.2s;
-                box-shadow: 0 2px 8px rgba(108,99,255,0.09);
-            }
-
-            .download-btn:hover {
-                background: linear-gradient(90deg, #6C63FF 60%, #007BFF 100%);
-                transform: translateY(-2px) scale(1.04);
-            }
-        </style>
 
         <script>
             function generateSpeech() {
