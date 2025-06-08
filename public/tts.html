@@ -240,17 +240,15 @@
                     method: 'POST',
                     body: formData
                 })
-                .then(response => response.json())
-                .then(data => {
-                    const audio = document.getElementById('audioPreview');
-                    const previewContainer = document.getElementById('previewContainer');
-                    const downloadLink = document.getElementById('downloadLink');
-
-                    audio.src = data.audio_url;
-                    previewContainer.style.display = 'block';
-                    downloadLink.href = data.audio_url;
+                .then(response => response.blob())
+                .then(blob => {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'tts.mp3';
+                    a.click();
                 })
-                .catch(error => console.error('Error:', error));
+                .catch(err => console.error('TTS failed', err));
             }
         </script>
     </main>

@@ -133,17 +133,15 @@
             method: 'POST',
             body: formData
         })
-        .then(response => response.json())
-        .then(data => {
-            const previewContainer = document.getElementById('previewContainer');
-            const qrCodeImage = document.getElementById('qrCodeImage');
-            const downloadLink = document.getElementById('downloadLink');
-
-            qrCodeImage.src = data.qr_code_url;
-            downloadLink.href = data.qr_code_url;
-            previewContainer.style.display = 'block';
+        .then(response => response.blob())
+        .then(blob => {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'qr_code.png';
+            a.click();
         })
-        .catch(error => console.error('Error:', error));
+        .catch(err => console.error('QR generation failed', err));
     }
 </script>
     </main>

@@ -220,5 +220,25 @@
         <p>&copy; 2025 Utility Website. All rights reserved.</p>
     </footer>
     <script src="/main.js"></script>
+    <script>
+        function resizeImage() {
+            const form = document.getElementById('resizeForm');
+            const formData = new FormData(form);
+
+            fetch('/resize-image', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.blob())
+            .then(blob => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'resized.jpg';
+                a.click();
+            })
+            .catch(err => console.error('Resize failed', err));
+        }
+    </script>
 </body>
 </html>

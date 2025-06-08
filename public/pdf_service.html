@@ -209,11 +209,9 @@
             function createPdf() {
                 const form = document.getElementById('createPdfForm');
                 const input = document.getElementById('images');
-                // Create a new FormData with the reordered files
                 const container = document.getElementById('imagePreviewContainer');
                 const boxes = Array.from(container.children);
                 const files = Array.from(input.files);
-                // Get the new order of files based on the preview boxes
                 const orderedFiles = boxes.map(box => files[box.dataset.idx]);
 
                 const formData = new FormData();
@@ -223,17 +221,15 @@
                     method: 'POST',
                     body: formData
                 })
-                .then(response => response.json())
-                .then(data => {
-                    const previewContainer = document.getElementById('previewContainer');
-                    const pdfPreview = document.getElementById('pdfPreview');
-                    const downloadLink = document.getElementById('downloadLink');
-
-                    pdfPreview.src = data.pdf_url;
-                    downloadLink.href = data.pdf_url;
-                    previewContainer.style.display = 'block';
+                .then(response => response.blob())
+                .then(blob => {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'created.pdf';
+                    a.click();
                 })
-                .catch(error => console.error('Error:', error));
+                .catch(err => console.error('PDF creation failed', err));
             }
 
             function showImagePreviews() {
@@ -306,32 +302,15 @@
                     method: 'POST',
                     body: formData
                 })
-                .then(response => response.json())
-                .then(data => {
-                    const container = document.getElementById('pdfImagesContainer');
-                    const imagesDiv = document.getElementById('pdfImages');
-                    imagesDiv.innerHTML = '';
-                    if (data.image_urls && data.image_urls.length > 0) {
-                        data.image_urls.forEach((url, idx) => {
-                            const img = document.createElement('img');
-                            img.src = url;
-                            img.alt = `Page ${idx + 1}`;
-                            img.style.maxWidth = '180px';
-                            img.style.margin = '10px';
-                            img.style.borderRadius = '8px';
-                            img.style.boxShadow = '0 2px 8px rgba(108,99,255,0.09)';
-                            imagesDiv.appendChild(img);
-                        });
-                        container.style.display = 'block';
-                    } else {
-                        imagesDiv.innerHTML = '<p>No images found in PDF.</p>';
-                        container.style.display = 'block';
-                    }
+                .then(response => response.blob())
+                .then(blob => {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'pdf_images.zip';
+                    a.click();
                 })
-                .catch(error => {
-                    alert('Failed to convert PDF.');
-                    console.error('Error:', error);
-                });
+                .catch(err => console.error('PDF split failed', err));
             }
         </script>
     </main>
