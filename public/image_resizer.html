@@ -160,10 +160,11 @@
 
         @media (max-width: 900px) {
             h1 {
-                font-size: 2.1rem !important;
+                font-size: 1.5rem !important;
+                word-break: break-word;
             }
             p {
-                font-size: 1rem;
+                font-size: 0.98rem;
             }
             .resizer-container {
                 padding: 24px 20px 20px 20px;
@@ -186,17 +187,45 @@
         }
 
         @media (max-width: 600px) {
+            html, body {
+                font-size: 14px;
+            }
+            .services-container {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 10px 2px;
+                gap: 10px;
+            }
+            .service-btn {
+                min-width: 0;
+                width: 100%;
+                justify-content: flex-start;
+                font-size: 0.98rem;
+                padding: 10px 8px;
+            }
+            .hero {
+                padding: 12px 0 6px 0;
+            }
+            .logo {
+                width: 40px;
+                height: 40px;
+                margin-bottom: 6px;
+            }
+            .logo svg {
+                width: 22px;
+                height: 22px;
+            }
             header {
                 flex-wrap: wrap;
-                gap: 8px;
-                padding: 10px 0 8px 0;
+                gap: 4px;
+                padding: 6px 0 4px 0;
             }
             header a {
-                font-size: 0.98rem;
-                padding: 7px 10px;
+                font-size: 0.85rem;
+                padding: 5px 6px;
             }
             main {
-                padding: 0 2vw 18px 2vw;
+                padding: 0 1vw 8px 1vw;
             }
             .resizer-container {
                 padding: 18px 14px 16px 14px;
@@ -225,6 +254,9 @@
         }
 
         @media (max-width: 400px) {
+            html, body {
+                font-size: 12px;
+            }
             h1 {
                 font-size: 1.5rem;
             }
