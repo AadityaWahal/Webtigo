@@ -194,9 +194,10 @@ app.post('/generate-video', upload.none(), async (req, res) => {
 app.get('/google6cda3ef54c5c2da9.html', (req, res) =>
     res.sendFile(path.join(__dirname, 'public/google6cda3ef54c5c2da9.html'))
 );
-app.get('/sitemap.xml', (req, res) =>
-    res.sendFile(path.join(__dirname, 'public/sitemap.xml'))
-);
+app.get('/sitemap.xml', (req, res) => {
+  res.setHeader('Content-Type', 'application/xml');
+  res.sendFile(path.join(__dirname, 'public', 'sitemap.xml'));
+});
 app.get('/favicon.ico', (req, res) => {
     res.status(204).end(); // No Content, avoids 404 in logs
 });
