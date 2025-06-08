@@ -35,21 +35,15 @@ const upload = multer({ dest: '/tmp' });
 const pdfUpload = multer({ dest: '/tmp' });
 const videoUpload = multer({ dest: '/tmp' });
 
-// Serve static files
-app.use('/css', express.static(path.join(__dirname, 'static/css')));
-app.use('/images', express.static(path.join(__dirname, 'static/images')));
-app.use('/mp3', express.static(path.join(__dirname, 'static/mp3')));
-app.use('/pdf', express.static(path.join(__dirname, 'static/pdf')));
-app.use('/pdf_pages', express.static(path.join(__dirname, 'static/pdf_pages')));
-app.use('/videos', express.static(path.join(__dirname, 'static/videos')));
-app.use('/favicon.ico', express.static(path.join(__dirname, 'static/favicon.ico')));
-app.use('/main.js', express.static(path.join(__dirname, 'static/main.js')));
+// Serve all static files from the static directory at /static
+app.use('/static', express.static(path.join(__dirname, 'static')));
 
-// Serve static HTML files
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'static/index.html')));
+// Serve static HTML files from public/
+app.use(express.static(path.join(__dirname, 'public')));
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public/index.html')));
 app.get('/:page.html', (req, res) => {
     const page = req.params.page;
-    const filePath = path.join(__dirname, 'static', `${page}.html`);
+    const filePath = path.join(__dirname, 'public', `${page}.html`);
     fs.pathExists(filePath).then(exists => {
         if (exists) {
             res.sendFile(filePath);
@@ -198,10 +192,10 @@ app.post('/generate-video', upload.none(), async (req, res) => {
 
 // Serve static files for verification and sitemap
 app.get('/google6cda3ef54c5c2da9.html', (req, res) =>
-    res.sendFile(path.join(__dirname, 'static/google6cda3ef54c5c2da9.html'))
+    res.sendFile(path.join(__dirname, 'public/google6cda3ef54c5c2da9.html'))
 );
 app.get('/sitemap.xml', (req, res) =>
-    res.sendFile(path.join(__dirname, 'static/sitemap.xml'))
+    res.sendFile(path.join(__dirname, 'public/sitemap.xml'))
 );
 app.get('/favicon.ico', (req, res) => {
     res.status(204).end(); // No Content, avoids 404 in logs

@@ -17,7 +17,7 @@
     "sharp": "^0.34.2",
     "uuid": "^11.1.0"
   },
-  "main": "api/index.js",
+  "main": "index.js",
   "scripts": {
     "start": "index.js"
   }
