@@ -42,7 +42,7 @@
             <form id="compressForm" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="image">Upload Image:</label>
-                    <input type="file" id="image" name="image" accept="image/*" required>
+                    <input type="file" id="image" name="image" accept="image/*" required onchange="showOriginalPreview()">
                 </div>
 
                 <div class="form-group">
@@ -56,7 +56,14 @@
             <div id="previewContainer" style="display: none;">
                 <h2>Compressed Image</h2>
                 <img id="compressedImage" src="#" alt="Compressed Image">
+                <p id="compressedSize" style="color: #6C63FF; font-weight: 500;"></p>
                 <a id="downloadLink" class="download-btn" href="#" download="compressed_image.jpg">Download Compressed Image</a>
+            </div>
+
+            <div id="originalPreviewContainer" style="display: none; margin-top: 24px;">
+                <h2>Original Image</h2>
+                <img id="originalImage" src="#" alt="Original Image">
+                <p id="originalSize" style="color: #6C63FF; font-weight: 500;"></p>
             </div>
         </div>
 
@@ -193,6 +200,24 @@
         </style>
 
         <script>
+            function showOriginalPreview() {
+                const input = document.getElementById('image');
+                const originalImage = document.getElementById('originalImage');
+                const originalSize = document.getElementById('originalSize');
+                if (input.files && input.files[0]) {
+                    const file = input.files[0];
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        originalImage.src = e.target.result;
+                        originalSize.textContent = `Original Size: ${(file.size / 1024).toFixed(2)} KB`;
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    originalImage.src = '#';
+                    originalSize.textContent = '';
+                }
+            }
+
             function compressImage() {
                 const form = document.getElementById('compressForm');
                 const formData = new FormData(form);
@@ -201,13 +226,21 @@
                     method: 'POST',
                     body: formData
                 })
-                .then(response => response.blob()) // handle binary response
+                .then(response => response.blob())
                 .then(blob => {
                     const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'compressed.jpg';
-                    a.click();
+                    const previewContainer = document.getElementById('previewContainer');
+                    const compressedImage = document.getElementById('compressedImage');
+                    const downloadLink = document.getElementById('downloadLink');
+                    const compressedSize = document.getElementById('compressedSize');
+                    compressedImage.src = url;
+                    downloadLink.href = url;
+                    compressedSize.textContent = `Compressed Size: ${(blob.size / 1024).toFixed(2)} KB`;
+                    previewContainer.style.display = 'block';
+
+                    // Show original preview container
+                    const originalPreviewContainer = document.getElementById('originalPreviewContainer');
+                    originalPreviewContainer.style.display = 'block';
                 })
                 .catch(err => console.error('Compression failed', err));
             }

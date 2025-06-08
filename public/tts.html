@@ -243,10 +243,13 @@
                 .then(response => response.blob())
                 .then(blob => {
                     const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'tts.mp3';
-                    a.click();
+                    // Show audio preview and enable download link
+                    const previewContainer = document.getElementById('previewContainer');
+                    const audioPreview = document.getElementById('audioPreview');
+                    const downloadLink = document.getElementById('downloadLink');
+                    audioPreview.src = url;
+                    downloadLink.href = url;
+                    previewContainer.style.display = 'block';
                 })
                 .catch(err => console.error('TTS failed', err));
             }
