@@ -24,6 +24,14 @@
         footer a { color: #FFCCBC; text-decoration: none; transition: text-decoration 0.2s; }
         footer a:hover { text-decoration: underline; }
 
+        html, body {
+            max-width: 100vw;
+            overflow-x: hidden;
+        }
+        main, .container, .services-container {
+            max-width: 100vw;
+            box-sizing: border-box;
+        }
         @media (max-width: 900px) {
             .hero h1 {
                 font-size: 1.5rem !important;
@@ -39,12 +47,15 @@
         @media (max-width: 600px) {
             html, body {
                 font-size: 14px;
+                max-width: 100vw;
+                overflow-x: hidden;
             }
             .services-container {
                 flex-direction: column;
                 align-items: stretch;
                 padding: 10px 2px;
                 gap: 10px;
+                max-width: 100vw;
             }
             .service-btn {
                 min-width: 0;
@@ -76,11 +87,14 @@
             }
             main {
                 padding: 0 1vw 8px 1vw;
+                max-width: 100vw;
             }
         }
         @media (max-width: 400px) {
             html, body {
                 font-size: 12px;
+                max-width: 100vw;
+                overflow-x: hidden;
             }
             .hero h1 {
                 font-size: 1.05rem !important;
@@ -266,12 +280,15 @@
         @media (max-width: 600px) {
             html, body {
                 font-size: 14px;
+                max-width: 100vw;
+                overflow-x: hidden;
             }
             .services-container {
                 flex-direction: column;
                 align-items: stretch;
                 padding: 10px 2px;
                 gap: 10px;
+                max-width: 100vw;
             }
             .service-btn {
                 min-width: 0;
@@ -303,11 +320,14 @@
             }
             main {
                 padding: 0 1vw 8px 1vw;
+                max-width: 100vw;
             }
         }
         @media (max-width: 400px) {
             html, body {
                 font-size: 12px;
+                max-width: 100vw;
+                overflow-x: hidden;
             }
             .hero h1 {
                 font-size: 1.05rem !important;

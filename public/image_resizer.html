@@ -158,43 +158,38 @@
             transform: translateY(-2px) scale(1.04);
         }
 
+        html, body {
+            max-width: 100vw;
+            overflow-x: hidden;
+        }
+        main, .container, .services-container {
+            max-width: 100vw;
+            box-sizing: border-box;
+        }
         @media (max-width: 900px) {
-            h1 {
+            .hero h1 {
                 font-size: 1.5rem !important;
                 word-break: break-word;
             }
-            p {
+            .tagline {
                 font-size: 0.98rem;
             }
-            .resizer-container {
-                padding: 24px 20px 20px 20px;
-                border-radius: 15px;
-            }
-            label {
-                font-size: 0.9rem;
-            }
-            input[type="number"], select {
-                padding: 10px;
-                font-size: 0.9rem;
-            }
-            button {
-                padding: 12px 0;
-                font-size: 1rem;
-            }
-            #previewContainer h2 {
-                font-size: 1.2rem;
+            .services-container {
+                max-width: 99vw;
             }
         }
-
         @media (max-width: 600px) {
             html, body {
                 font-size: 14px;
+                max-width: 100vw;
+                overflow-x: hidden;
             }
             .services-container {
                 flex-direction: column;
                 align-items: stretch;
                 padding: 10px 2px;
                 gap: 10px;
+                max-width: 100vw;
             }
             .service-btn {
                 min-width: 0;
@@ -226,60 +221,28 @@
             }
             main {
                 padding: 0 1vw 8px 1vw;
-            }
-            .resizer-container {
-                padding: 18px 14px 16px 14px;
-                border-radius: 12px;
-            }
-            h1 {
-                font-size: 1.8rem;
-            }
-            p {
-                font-size: 1rem;
-            }
-            label {
-                font-size: 0.9rem;
-            }
-            input[type="number"], select {
-                padding: 10px;
-                font-size: 0.9rem;
-            }
-            button {
-                padding: 10px 0;
-                font-size: 0.9rem;
-            }
-            #previewContainer h2 {
-                font-size: 1.1rem;
+                max-width: 100vw;
             }
         }
-
         @media (max-width: 400px) {
             html, body {
                 font-size: 12px;
+                max-width: 100vw;
+                overflow-x: hidden;
             }
-            h1 {
-                font-size: 1.5rem;
+            .hero h1 {
+                font-size: 1.05rem !important;
             }
-            p {
-                font-size: 0.9rem;
+            .tagline {
+                font-size: 0.78rem;
             }
-            .resizer-container {
-                padding: 16px 12px 14px 12px;
-                border-radius: 10px;
+            .logo {
+                width: 28px;
+                height: 28px;
             }
-            label {
-                font-size: 0.85rem;
-            }
-            input[type="number"], select {
-                padding: 8px;
-                font-size: 0.85rem;
-            }
-            button {
-                padding: 8px 0;
-                font-size: 0.85rem;
-            }
-            #previewContainer h2 {
-                font-size: 1rem;
+            .logo svg {
+                width: 14px;
+                height: 14px;
             }
         }
     </style>
