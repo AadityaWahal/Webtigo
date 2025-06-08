@@ -221,6 +221,20 @@
     </footer>
     <script src="/main.js"></script>
     <script>
+        function showOriginalPreview() {
+            const input = document.getElementById('image');
+            const originalImage = document.getElementById('originalImage');
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    originalImage.src = e.target.result;
+                };
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                originalImage.src = '#';
+            }
+        }
+
         function resizeImage() {
             const form = document.getElementById('resizeForm');
             const formData = new FormData(form);
@@ -232,10 +246,12 @@
             .then(response => response.blob())
             .then(blob => {
                 const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'resized.jpg';
-                a.click();
+                const previewContainer = document.getElementById('previewContainer');
+                const resizedImage = document.getElementById('resizedImage');
+                const downloadLink = document.getElementById('downloadLink');
+                resizedImage.src = url;
+                downloadLink.href = url;
+                previewContainer.style.display = 'block';
             })
             .catch(err => console.error('Resize failed', err));
         }
