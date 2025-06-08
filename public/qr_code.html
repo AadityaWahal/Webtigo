@@ -136,10 +136,13 @@
         .then(response => response.blob())
         .then(blob => {
             const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'qr_code.png';
-            a.click();
+            // Show preview
+            const previewContainer = document.getElementById('previewContainer');
+            const qrCodeImage = document.getElementById('qrCodeImage');
+            const downloadLink = document.getElementById('downloadLink');
+            qrCodeImage.src = url;
+            downloadLink.href = url;
+            previewContainer.style.display = 'block';
         })
         .catch(err => console.error('QR generation failed', err));
     }
