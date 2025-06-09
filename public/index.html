@@ -27,6 +27,7 @@
     <meta name="twitter:description" content="Text-to-speech, image tools, QR codes, PDFs, and more. Free, fast, and privacy-friendly.">
     <meta name="twitter:image" content="https://webtigo.com/static/images/webtigo-og.png">
     <link rel="stylesheet" href="/static/css/styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
     <style>
         html, body {
             height: 100%;
@@ -269,8 +270,8 @@
         <a href="/image_resizer.html">Image Resizer</a>
     </header>
     <main>
-        <section class="hero">
-            <div class="logo">
+        <section class="hero" data-aos="fade-up">
+            <div class="logo" data-aos="zoom-in">
                 <!-- Simple SVG logo for Webtigo -->
                 <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <circle cx="32" cy="32" r="32" fill="#fff" fill-opacity="0.13"/>
@@ -278,21 +279,23 @@
                   <circle cx="32" cy="36" r="4" fill="#FF9800"/>
                 </svg>
             </div>
-            <h1 style="font-size:3rem;margin-bottom:10px;text-shadow:2px 2px 12px rgba(0,0,0,0.18);color:#fff;letter-spacing:1px;text-align:center;">Welcome to <span style="color:#FF9800;">Webtigo</span></h1>
-            <div class="tagline">Your one-stop solution for smart online utilities.<br>Text-to-speech, image tools, QR codes, PDFs, and more!</div>
+            <h1 style="font-size:3rem;margin-bottom:10px;text-shadow:2px 2px 12px rgba(0,0,0,0.18);color:#fff;letter-spacing:1px;text-align:center;" data-aos="fade-up">Welcome to <span style="color:#FF9800;">Webtigo</span></h1>
+            <div class="tagline" data-aos="fade-up" data-aos-delay="100">Your one-stop solution for smart online utilities.<br>Text-to-speech, image tools, QR codes, PDFs, and more!</div>
             <svg class="wave" viewBox="0 0 1440 90" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill="#fff" fill-opacity="0.13" d="M0,60 C360,120 1080,0 1440,60 L1440,90 L0,90 Z"></path></svg>
         </section>
         <div class="services-container">
-            <a href="/tts.html" class="service-btn"><svg viewBox="0 0 24 24"><path d="M12 3v18m0 0l-4-4m4 4l4-4"/></svg>Text-to-Speech</a>
-            <a href="/image_compressor.html" class="service-btn"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M4 17l5-5 4 4 5-5"/></svg>Image Compressor</a>
-            <a href="/qr_code.html" class="service-btn"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>QR Code Generator</a>
-            <a href="/pdf_service.html" class="service-btn"><svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/><polyline points="14 2 14 8 20 8"/></svg>PDF Service</a>
-            <a href="/image_resizer.html" class="service-btn"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><path d="M14 3h7v7"/><path d="M3 14v7h7"/></svg>Image Resizer</a>
+            <a href="/tts.html" class="service-btn" data-aos="fade-up" data-aos-delay="100"><svg viewBox="0 0 24 24"><path d="M12 3v18m0 0l-4-4m4 4l4-4"/></svg>Text-to-Speech</a>
+            <a href="/image_compressor.html" class="service-btn" data-aos="fade-up" data-aos-delay="200"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M4 17l5-5 4 4 5-5"/></svg>Image Compressor</a>
+            <a href="/qr_code.html" class="service-btn" data-aos="fade-up" data-aos-delay="300"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>QR Code Generator</a>
+            <a href="/pdf_service.html" class="service-btn" data-aos="fade-up" data-aos-delay="400"><svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/><polyline points="14 2 14 8 20 8"/></svg>PDF Service</a>
+            <a href="/image_resizer.html" class="service-btn" data-aos="fade-up" data-aos-delay="500"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><path d="M14 3h7v7"/><path d="M3 14v7h7"/></svg>Image Resizer</a>
         </div>
     </main>
     <footer>
         <p>&copy; 2025 Webtigo. All rights reserved.</p>
     </footer>
     <script src="/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>AOS.init();</script>
 </body>
 </html>
