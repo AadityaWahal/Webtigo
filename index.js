@@ -202,4 +202,12 @@ app.get('/favicon.ico', (req, res) => {
     res.status(204).end(); // No Content, avoids 404 in logs
 });
 
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/static', express.static(path.join(__dirname, 'static')));
+
+// Add this middleware to serve CSS files
+app.get('/static/css/styles.css', (req, res) => {
+    res.sendFile(path.join(__dirname, 'static/css/styles.css'));
+});
+
 module.exports = app;
