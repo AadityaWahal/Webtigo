@@ -29,7 +29,6 @@
     <link rel="stylesheet" href="/styles.css">
     <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
-    <script>AOS.init();</script>
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <style>
         body { font-family: 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #6C63FF 0%, #007BFF 100%); color: #222; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; }
@@ -442,5 +441,8 @@
         <p>&copy; 2025 Webtigo. All rights reserved.</p>
     </footer>
     <script src="/main.js"></script>
+    <script>
+      if (window.AOS) AOS.init();
+    </script>
 </body>
 </html>
