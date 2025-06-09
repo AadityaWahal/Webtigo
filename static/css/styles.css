@@ -5,6 +5,7 @@ body {
     padding: 0;
     min-height: 100vh;
     color: #222;
+    font-size: 16px;
 }
 
 h1 {
@@ -71,6 +72,8 @@ button {
     cursor: pointer;
     box-shadow: 0 2px 8px rgba(108,99,255,0.08);
     transition: background 0.2s, transform 0.2s;
+    min-width: 48px;
+    min-height: 48px;
 }
 
 button:hover {
@@ -122,6 +125,8 @@ footer {
     font-weight: 500;
     letter-spacing: 0.5px;
     transition: background 0.2s, transform 0.2s;
+    min-width: 48px;
+    min-height: 48px;
 }
 
 .service-btn:hover {
@@ -181,4 +186,13 @@ form,
   box-sizing: border-box;
   margin-left: auto;
   margin-right: auto;
+}
+
+@media (max-width: 600px) {
+  button, .service-btn, .button {
+    font-size: 1rem;
+    padding: 12px 0;
+    min-width: 48px;
+    min-height: 48px;
+  }
 }
