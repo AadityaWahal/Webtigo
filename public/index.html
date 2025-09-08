@@ -272,12 +272,12 @@
     <main class="container">
         <section class="hero" data-aos="fade-up">
             <div class="logo" data-aos="zoom-in">
-                <!-- Simple SVG logo for Webtigo -->
-                <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="32" cy="32" r="32" fill="#fff" fill-opacity="0.13"/>
-                  <path d="M18 44L32 20L46 44" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                  <circle cx="32" cy="36" r="4" fill="#FF9800"/>
-                </svg>
+                                <video id="logoVideo" src="/PixVerse_V5_Image_Text_360P_BrandIdentity_____.mp4" autoplay muted playsinline style="width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;"></video>
+                                <svg id="svgLogo" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;transition:opacity 1s;pointer-events:none;">
+                                    <circle cx="32" cy="32" r="32" fill="#fff" fill-opacity="0.13"/>
+                                    <path d="M18 44L32 20L46 44" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <circle cx="32" cy="36" r="4" fill="#FF9800"/>
+                                </svg>
             </div>
             <h1 style="font-size:3rem;margin-bottom:10px;text-shadow:2px 2px 12px rgba(0,0,0,0.18);color:#fff;letter-spacing:1px;text-align:center;" data-aos="fade-up">Welcome to <span style="color:#FF9800;">Webtigo</span></h1>
             <div class="tagline" data-aos="fade-up" data-aos-delay="100">Your one-stop solution for smart online utilities.<br>Text-to-speech, image tools, QR codes, PDFs, and more!</div>
@@ -296,6 +296,22 @@
         <p>&copy; 2025 Webtigo. All rights reserved.</p>
     </footer>
     <script src="/main.js"></script>
+        <script>
+            // Logo video fade out and SVG fade in
+            window.addEventListener('DOMContentLoaded', function() {
+                var video = document.getElementById('logoVideo');
+                var svg = document.getElementById('svgLogo');
+                if (video && svg) {
+                    video.addEventListener('ended', function() {
+                        video.style.transition = 'opacity 1s';
+                        video.style.opacity = 0.2;
+                        setTimeout(function() {
+                            svg.style.opacity = 1;
+                        }, 800);
+                    });
+                }
+            });
+        </script>
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
     <script>AOS.init();</script>
 </body>
