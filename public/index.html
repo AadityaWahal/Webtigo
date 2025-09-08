@@ -299,17 +299,17 @@
         <script>
             // Logo video fade out and SVG fade in
             window.addEventListener('DOMContentLoaded', function() {
-                var video = document.getElementById('logoVideo');
-                var svg = document.getElementById('svgLogo');
-                if (video && svg) {
-                    video.addEventListener('ended', function() {
-                        video.style.transition = 'opacity 1s';
-                        video.style.opacity = 0.2;
-                        setTimeout(function() {
-                            svg.style.opacity = 1;
-                        }, 800);
-                    });
-                }
+                        var video = document.getElementById('logoVideo');
+                        var svg = document.getElementById('svgLogo');
+                        if (video && svg) {
+                            video.addEventListener('ended', function() {
+                                video.style.transition = 'opacity 1s';
+                                video.style.opacity = 0;
+                                setTimeout(function() {
+                                    svg.style.opacity = 1;
+                                }, 800);
+                            });
+                        }
             });
         </script>
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
