@@ -58,6 +58,14 @@
             status.textContent = `Playing ${freq} Hz`;
         };
 
+        freqInput.addEventListener('input', function() {
+            const freq = parseFloat(freqInput.value);
+            if (osc) {
+                osc.frequency.setValueAtTime(freq, ctx.currentTime);
+                status.textContent = `Playing ${freq} Hz`;
+            }
+        });
+
         stopBtn.onclick = function() {
             if (osc) {
                 osc.stop();
