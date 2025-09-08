@@ -45,13 +45,13 @@
         <div style="text-align:left;max-width:350px;margin:0 auto;">
             <h3 style="margin-bottom:8px;">🔹 Suggested “Special Frequencies”</h3>
             <ul style="margin-top:0;line-height:1.7;">
-                <li><b>440 Hz</b> – Standard music tuning (A4)</li>
-                <li><b>432 Hz</b> – “Natural harmony” frequency</li>
-                <li><b>528 Hz</b> – “Love / healing” tone</li>
-                <li><b>850 Hz</b> – Approximate glass-breaking resonance</li>
-                <li><b>1000 Hz</b> – Test tone</li>
-                <li><b>60 Hz</b> – Electric hum (appliances)</li>
-                <li><b>8 Hz</b> – Schumann resonance (Earth’s background)</li>
+                <li><b>440 Hz</b> – Standard music tuning (A4) <button class="play-suggested" data-freq="440">Play</button></li>
+                <li><b>432 Hz</b> – “Natural harmony” frequency <button class="play-suggested" data-freq="432">Play</button></li>
+                <li><b>528 Hz</b> – “Love / healing” tone <button class="play-suggested" data-freq="528">Play</button></li>
+                <li><b>850 Hz</b> – Approximate glass-breaking resonance <button class="play-suggested" data-freq="850">Play</button></li>
+                <li><b>1000 Hz</b> – Test tone <button class="play-suggested" data-freq="1000">Play</button></li>
+                <li><b>60 Hz</b> – Electric hum (appliances) <button class="play-suggested" data-freq="60">Play</button></li>
+                <li><b>8 Hz</b> – Schumann resonance (Earth’s background) <button class="play-suggested" data-freq="8">Play</button></li>
             </ul>
             <h3 style="margin:24px 0 8px 0;">🥂 Frequencies That Can Break Glass</h3>
             <div style="font-size:0.98em;color:#444;">
@@ -65,6 +65,25 @@
         </div>
     </div>
     <script>
+        // Add event listeners for suggested frequency play buttons
+        function playSuggestedFrequency(freq) {
+            freqInput.value = freq;
+            freqSlider.value = freq;
+            // If already playing, just update frequency
+            if (osc) {
+                osc.frequency.setValueAtTime(freq, ctx.currentTime);
+                status.textContent = `Playing ${freq} Hz`;
+            } else {
+                playBtn.onclick();
+            }
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.play-suggested').forEach(function(btn) {
+                btn.addEventListener('click', function(e) {
+                    playSuggestedFrequency(this.getAttribute('data-freq'));
+                });
+            });
+        });
     let ctx, osc;
     const playBtn = document.getElementById('playBtn');
     const stopBtn = document.getElementById('stopBtn');
