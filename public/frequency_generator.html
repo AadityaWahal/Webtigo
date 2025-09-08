@@ -41,15 +41,42 @@
         <button id="playBtn">Play</button>
         <button id="stopBtn" disabled>Stop</button>
         <p id="status"></p>
+        <hr style="margin:32px 0 18px 0;">
+        <div style="text-align:left;max-width:350px;margin:0 auto;">
+            <h3 style="margin-bottom:8px;">🔹 Suggested “Special Frequencies”</h3>
+            <ul style="margin-top:0;line-height:1.7;">
+                <li><b>440 Hz</b> – Standard music tuning (A4)</li>
+                <li><b>432 Hz</b> – “Natural harmony” frequency</li>
+                <li><b>528 Hz</b> – “Love / healing” tone</li>
+                <li><b>850 Hz</b> – Approximate glass-breaking resonance</li>
+                <li><b>1000 Hz</b> – Test tone</li>
+                <li><b>60 Hz</b> – Electric hum (appliances)</li>
+                <li><b>8 Hz</b> – Schumann resonance (Earth’s background)</li>
+            </ul>
+            <h3 style="margin:24px 0 8px 0;">🥂 Frequencies That Can Break Glass</h3>
+            <div style="font-size:0.98em;color:#444;">
+                Breaking glass with sound isn’t about just one magic frequency — it depends on the resonant frequency of the specific glass object (its natural vibration point).<br><br>
+                <b>Most wine glasses:</b> 500 Hz – 1000 Hz<br>
+                <b>Many demos:</b> 556 Hz to 850 Hz (thin wine glasses)<br>
+                <b>Famous example:</b> Crystal glass broke at about 556 Hz (very loud!)<br><br>
+                <b>⚠️ Important:</b> To actually shatter glass, you’d need very high volume (amplitude) plus an exact match of the glass’s resonance — normal speakers and safe listening volumes won’t do it.<br>
+                <span style="color:#c00;font-weight:bold;">On this website, you can simulate the sound but it won’t break glass on your device (safe!).</span>
+            </div>
+        </div>
     </div>
     <script>
-        let ctx, osc;
-        const playBtn = document.getElementById('playBtn');
-        const stopBtn = document.getElementById('stopBtn');
-        const freqInput = document.getElementById('frequency');
-        const status = document.getElementById('status');
+    let ctx, osc;
+    const playBtn = document.getElementById('playBtn');
+    const stopBtn = document.getElementById('stopBtn');
+    const freqInput = document.getElementById('frequency');
+    const status = document.getElementById('status');
+    let warningShown = false;
 
         playBtn.onclick = function() {
+            if (!warningShown) {
+                alert('⚠️ Use at your own risk. Please keep volume low to avoid hearing damage, especially with headphones or hearing aids.');
+                warningShown = true;
+            }
             const freq = parseFloat(freqInput.value);
             if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
             osc = ctx.createOscillator();
