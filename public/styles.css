@@ -189,10 +189,84 @@ form,
 }
 
 @media (max-width: 600px) {
-  button, .service-btn, .button {
+  html {
+    font-size: 15px;
+  }
+  body {
+    padding: 0 4px;
+  }
+  h1, h2, h3 {
+    font-size: 1.3em;
+    word-break: break-word;
+  }
+  .container, .main-content, .card, form, #video-generator-form {
+    padding: 0.5rem;
+    max-width: 100vw;
+    box-sizing: border-box;
+  }
+  .services-container {
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .service-btn, button, .button {
     font-size: 1rem;
     padding: 12px 0;
-    min-width: 48px;
-    min-height: 48px;
+    min-width: 44px;
+    min-height: 44px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  input[type="text"], input[type="number"], input[type="email"], input[type="file"], select, textarea {
+    font-size: 1em;
+    padding: 10px 8px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  nav, .nav-menu {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: stretch;
+  }
+  .logo {
+    margin-bottom: 10px;
+    max-width: 90vw;
+    height: auto;
+  }
+  footer {
+    font-size: 0.95em;
+    padding: 10px 2px;
+    text-align: center;
+  }
+  .item {
+    min-width: 140px;
+    flex: 1 1 100%;
+  }
+  .card {
+    margin-bottom: 12px;
+  }
+  .special-frequencies, .info-section, .suggestion-section {
+    padding: 0.5rem;
+    font-size: 1em;
+  }
+  .slider {
+    width: 100%;
+    margin: 10px 0;
+  }
+}
+
+@media (max-width: 400px) {
+  html {
+    font-size: 13px;
+  }
+  .logo {
+    max-width: 98vw;
+  }
+  h1, h2, h3 {
+    font-size: 1.1em;
+  }
+  .service-btn, button, .button {
+    font-size: 0.95rem;
+    padding: 10px 0;
   }
 }
