@@ -62,15 +62,14 @@
         }
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
-            background: linear-gradient(135deg, #4a2b6e 0%, #2b1f41 100%); /* Darker purple gradient */
-            color: #fff; /* White text for better contrast */
+            background: linear-gradient(135deg, #6C63FF 0%, #007BFF 100%);
+            color: #222;
             margin: 0;
             padding: 0;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             min-height: 100dvh;
-            overflow-x: hidden; /* Prevent horizontal scroll on mobile */
         }
         .hero {
             display: flex;
@@ -84,7 +83,7 @@
             width: 90px;
             height: 90px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #FF9800 0%, #FF5722 100%); /* Orange gradient */
+            background: linear-gradient(135deg, #FF9800 0%, #FF5722 100%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -95,7 +94,6 @@
             width: 54px;
             height: 54px;
             display: block;
-            fill: #fff; /* Ensure SVG is white */
         }
         .tagline {
             font-size: 1.35rem;
@@ -106,9 +104,9 @@
             text-shadow: 1px 1px 8px rgba(0,0,0,0.13);
         }
         header {
-            background: rgba(255, 255, 255, 0.1); /* Lighter translucent background */
+            background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(8px);
-            box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.15); /* Softer shadow */
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10);
             padding: 18px 0 14px 0;
             width: 100%;
             display: flex;
@@ -134,7 +132,7 @@
             color: #fff;
             box-shadow: 0 2px 12px rgba(108,99,255,0.10);
         }
-        /* Style for the Premium link */
+        /* New style for the Premium link */
         header a.premium-link {
             background: linear-gradient(90deg, #8A2BE2 0%, #4B0082 100%); /* Purple gradient */
             box-shadow: 0 2px 12px rgba(138,43,226,0.15);
@@ -146,56 +144,55 @@
         main {
             flex: 1 0 auto;
             padding: 0 12px 24px 12px;
-            max-width: 900px; /* Keep consistent width for main content */
+            max-width: 900px;
             margin: 0 auto;
             width: 100%;
             display: flex;
             flex-direction: column;
-            align-items: center; /* Center content horizontally */
         }
         .services-container {
-            display: grid; /* Use CSS Grid for a more structured layout */
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive grid */
-            gap: 20px; /* Reduced gap */
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 26px;
             margin-bottom: 30px;
-            background: rgba(255,255,255,0.1); /* Lighter translucent background */
+            background: rgba(255,255,255,0.13);
             border-radius: 18px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.15); /* Softer shadow */
-            padding: 32px; /* Increased padding */
+            box-shadow: 0 8px 32px rgba(31,38,135,0.13);
+            padding: 32px 18px;
             backdrop-filter: blur(6px);
-            border: 1.5px solid rgba(255,255,255,0.15); /* Lighter border */
+            border: 1.5px solid rgba(255,255,255,0.22);
             max-width: 700px;
-            width: 100%; /* Ensure it takes full width within main */
-            box-sizing: border-box; /* Include padding in width */
+            margin-left: auto;
+            margin-right: auto;
         }
         .service-btn {
             display: flex;
-            flex-direction: column; /* Stack icon and text */
             align-items: center;
-            justify-content: center;
-            gap: 8px; /* Reduced gap */
-            padding: 20px 10px; /* Adjusted padding */
-            font-size: 1.1rem; /* Slightly smaller font for button text */
+            gap: 12px;
+            padding: 18px 36px;
+            font-size: 1.18rem;
             color: #fff;
-            background: linear-gradient(90deg, #E65100 0%, #FFB300 100%); /* Orange gradient */
+            background: linear-gradient(90deg, #FF5722 60%, #FF9800 100%);
             text-decoration: none;
-            border-radius: 12px; /* Less rounded corners */
-            box-shadow: 0 4px 12px rgba(255,87,34,0.2); /* Stronger shadow */
+            border-radius: 30px;
+            box-shadow: 0 4px 12px rgba(255,87,34,0.13);
             font-weight: 500;
             letter-spacing: 0.5px;
             transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-            text-align: center; /* Center text */
+            margin: 0 4px;
+            min-width: 210px;
+            justify-content: center;
         }
         .service-btn:hover {
-            background: linear-gradient(90deg, #FFB300 0%, #E65100 100%); /* Inverted hover gradient */
-            transform: translateY(-3px) scale(1.03); /* More pronounced hover effect */
-            box-shadow: 0 8px 20px rgba(255,152,0,0.3);
+            background: linear-gradient(90deg, #FF9800 60%, #FF5722 100%);
+            transform: translateY(-2px) scale(1.04);
+            box-shadow: 0 8px 24px rgba(255,152,0,0.18);
         }
         .service-btn svg {
-            width: 32px; /* Larger icons */
-            height: 32px;
+            width: 24px;
+            height: 24px;
             fill: #fff;
-            margin-bottom: 5px; /* Space between icon and text */
         }
         .wave {
             position: absolute;
@@ -204,29 +201,28 @@
             bottom: -1px;
             width: 100%;
             z-index: 0;
-            opacity: 0.15; /* Subtler wave */
         }
         footer {
-            background: rgba(255, 255, 255, 0.1); /* Lighter translucent background */
+            background: rgba(255, 255, 255, 0.13);
             backdrop-filter: blur(6px);
             color: #fff;
             padding: 18px 0 12px 0;
             text-align: center;
             font-size: 1.05rem;
-            border-top: 1px solid rgba(255,255,255,0.15); /* Lighter border */
-            box-shadow: 0 -2px 12px rgba(0,0,0,0.1);
+            border-top: 1px solid #fff2;
+            box-shadow: 0 -2px 12px rgba(108,99,255,0.07);
             margin-top: 0;
             flex-shrink: 0;
         }
         footer a {
-            color: #FFCCBC; /* Orange tone for footer links */
+            color: #FFCCBC;
             text-decoration: none;
             transition: text-decoration 0.2s;
         }
         footer a:hover {
             text-decoration: underline;
         }
-        /* Style for the Premium link in the footer */
+        /* New style for the Premium link in the footer */
         footer a.premium-link {
             color: #DDA0DD; /* Lighter purple for footer */
         }
@@ -234,177 +230,46 @@
             color: #EE82EE;
         }
 
-        /* Responsive adjustments for the layout */
-        .hero-content {
-            display: flex;
-            flex-direction: row; /* Default to row */
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            max-width: 900px;
-            margin-bottom: 30px;
-            gap: 40px;
-        }
-        .main-text {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start; /* Align text to the left */
-            text-align: left;
-            max-width: 500px;
-        }
-        .main-text h1 {
-            font-size: 3.5rem; /* Larger H1 */
-            margin-bottom: 10px;
-            color: #fff;
-        }
-        .main-text .tagline {
-            font-size: 1.4rem; /* Larger tagline */
-            text-align: left;
-            margin-bottom: 0;
-        }
-        .visual-elements {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-        }
-        .visual-elements .logo {
-            margin-bottom: 0; /* No extra margin */
-        }
-        .brand-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #007BFF 0%, #6C63FF 100%); /* Blue gradient */
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 20px rgba(0,123,255,0.2);
-        }
-        .brand-icon svg {
-            width: 45px;
-            height: 45px;
-            fill: #fff;
-        }
-
-        /* Mobile Phone Mockup */
-        .mobile-mockup {
-            width: 200px; /* Size of the phone mockup */
-            height: 380px;
-            background: #333; /* Dark background for the phone body */
-            border-radius: 30px;
-            border: 8px solid #000;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-            position: relative;
-            overflow: hidden;
-        }
-        .mobile-screen {
-            width: calc(100% - 4px); /* Slightly smaller than mockup to simulate screen bezel */
-            height: calc(100% - 4px);
-            background: #f0f0f0; /* Screen background */
-            border-radius: 20px;
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            padding: 10px;
-            box-sizing: border-box;
-            background: linear-gradient(135deg, #6C63FF 0%, #007BFF 100%); /* Same as body gradient */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-        }
-        .mobile-screen .header-bar {
-            width: 90%;
-            height: 10px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 5px;
-            margin-bottom: 5px;
-        }
-        .mobile-screen .mini-logo {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #FF9800 0%, #FF5722 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 5px;
-        }
-        .mobile-screen .mini-logo svg {
-            width: 18px;
-            height: 18px;
-            fill: #fff;
-        }
-        .mobile-screen .mini-btn {
-            width: 80%;
-            padding: 8px 0;
-            background: linear-gradient(90deg, #E65100 0%, #FFB300 100%);
-            border-radius: 8px;
-            color: #fff;
-            font-size: 0.7rem;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-        .mobile-screen .mini-btn.premium {
-            background: linear-gradient(90deg, #8A2BE2 0%, #4B0082 100%);
-        }
-        .mobile-screen .mini-footer {
-            width: 90%;
-            padding: 5px 0;
-            background: rgba(255,255,255,0.1);
-            border-radius: 5px;
-            color: #fff;
-            font-size: 0.6rem;
-            text-align: center;
-            margin-top: auto; /* Push to bottom */
-        }
-        .mobile-screen .mini-footer .mini-premium-link {
-            color: #DDA0DD;
-            text-decoration: none;
-            font-size: 0.6rem;
-        }
-
-
         @media (max-width: 900px) {
-            .hero-content {
-                flex-direction: column; /* Stack on smaller screens */
-                gap: 20px;
+            .hero h1 {
+                font-size: 1.5rem !important;
+                word-break: break-word;
             }
-            .main-text {
-                align-items: center;
-                text-align: center;
-            }
-            .main-text h1 {
-                font-size: 2.5rem;
-            }
-            .main-text .tagline {
-                font-size: 1.1rem;
-            }
-            .visual-elements {
-                flex-direction: row; /* Keep elements in a row for visual interest */
-                gap: 20px;
-            }
-            .mobile-mockup {
-                width: 160px;
-                height: 300px;
+            .tagline {
+                font-size: 0.98rem;
             }
             .services-container {
-                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Adjust grid for smaller screens */
-                padding: 20px;
-            }
-            .service-btn {
-                font-size: 1rem;
-                padding: 15px 8px;
-            }
-            .service-btn svg {
-                width: 28px;
-                height: 28px;
+                max-width: 99vw;
             }
         }
         @media (max-width: 600px) {
             html, body {
                 font-size: 14px;
+            }
+            .services-container {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 10px 2px;
+                gap: 10px;
+            }
+            .service-btn {
+                min-width: 0;
+                width: 100%;
+                justify-content: flex-start;
+                font-size: 0.98rem;
+                padding: 10px 8px;
+            }
+            .hero {
+                padding: 12px 0 6px 0;
+            }
+            .logo {
+                width: 40px;
+                height: 40px;
+                margin-bottom: 6px;
+            }
+            .logo svg {
+                width: 22px;
+                height: 22px;
             }
             header {
                 flex-wrap: wrap;
@@ -418,64 +283,24 @@
             main {
                 padding: 0 1vw 8px 1vw;
             }
-            .hero h1 {
-                font-size: 1.8rem !important; /* Smaller on very small screens */
-            }
-            .tagline {
-                font-size: 0.9rem;
-            }
-            .logo {
-                width: 40px;
-                height: 40px;
-                margin-bottom: 6px;
-            }
-            .logo svg {
-                width: 22px;
-                height: 22px;
-            }
-            .services-container {
-                grid-template-columns: 1fr; /* Single column on very small screens */
-                padding: 15px;
-                max-width: 95vw;
-            }
-            .service-btn {
-                min-width: unset;
-                width: 100%;
-                font-size: 0.9rem;
-                padding: 12px 6px;
-                flex-direction: row; /* Align icon and text in a row on mobile buttons */
-                justify-content: flex-start;
-                gap: 10px;
-            }
-            .service-btn svg {
-                margin-bottom: 0;
-            }
-            .visual-elements {
-                flex-direction: column; /* Stack all visual elements on very small screens */
-                gap: 15px;
-            }
-            .mobile-mockup {
-                width: 140px;
-                height: 260px;
-            }
-            .brand-icon {
-                width: 60px;
-                height: 60px;
-            }
-            .brand-icon svg {
-                width: 35px;
-                height: 35px;
-            }
         }
         @media (max-width: 400px) {
             html, body {
                 font-size: 12px;
             }
-            .main-text h1 {
-                font-size: 1.5rem !important;
+            .hero h1 {
+                font-size: 1.05rem !important;
             }
             .tagline {
                 font-size: 0.78rem;
+            }
+            .logo {
+                width: 28px;
+                height: 28px;
+            }
+            .logo svg {
+                width: 14px;
+                height: 14px;
             }
         }
     </style>
@@ -489,77 +314,52 @@
     <a href="/pdf_service.html">PDF Service</a>
     <a href="/image_resizer.html">Image Resizer</a>
     <a href="/frequency_generator.html">Frequency Generator</a>
-    <a href="/premium.html" class="premium-link">Premium</a>
+    <a href="/premium.html" class="premium-link">Premium</a> <!-- Added Premium link with class -->
     </header>
     <main class="container">
         <section class="hero" data-aos="fade-up">
-            <div class="hero-content">
-                <div class="main-text">
-                    <h1 data-aos="fade-up">Welcome to <span style="color:#FFB300;">Webtigo</span></h1>
-                    <div class="tagline" data-aos="fade-up" data-aos-delay="100">Your one-stop solution for smart online utilities.<br>Text-to-speech, image tools, QR codes, PDFs, and more!</div>
-                </div>
-                <div class="visual-elements">
-                    <div class="logo" data-aos="zoom-in">
-                                        <video id="logoVideo" src="/PixVerse_V5_Image_Text_360P_BrandIdentity_____.mp4" autoplay muted playsinline style="width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;"></video>
-                                        <svg id="svgLogo" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;transition:opacity 1s;pointer-events:none;">
-                                            <circle cx="32" cy="32" r="32" fill="#fff" fill-opacity="0.13"/>
-                                            <path d="M18 44L32 20L46 44" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                                            <circle cx="32" cy="36" r="4" fill="#FF9800"/>
-                                        </svg>
-                    </div>
-                    <div class="brand-icon" data-aos="zoom-in" data-aos-delay="200">
-                        <!-- Example of another brand-specific icon -->
-                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="white">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2h1v1.93l-.93.07zM17.93 13H15v-1c0-1.1-.9-2-2-2h-1V4.07c3.95.49 7 3.85 7 7.93 0 .62-.08 1.21-.21 1.79L15 9v-1c0-1.1-.9-2-2-2h-1V4.07c3.95.49 7 3.85 7 7.93 0 .62-.08 1.21-.21 1.79zM12 20.07l.93-.07V18h-1c-1.1 0-2-.9-2-2v-1l-7.79 3.07c.13.58.21 1.17.21 1.79 0 4.08 3.05 7.39 7 7.93zM4.07 11H7v1c0 1.1.9 2 2 2h1v1.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79z"/>
-                        </svg>
-                    </div>
-                </div>
+            <div class="logo" data-aos="zoom-in">
+                                <video id="logoVideo" src="/PixVerse_V5_Image_Text_360P_BrandIdentity_____.mp4" autoplay muted playsinline style="width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;"></video>
+                                <svg id="svgLogo" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;transition:opacity 1s;pointer-events:none;">
+                                    <circle cx="32" cy="32" r="32" fill="#fff" fill-opacity="0.13"/>
+                                    <path d="M18 44L32 20L46 44" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <circle cx="32" cy="36" r="4" fill="#FF9800"/>
+                                </svg>
             </div>
+            <h1 style="font-size:3rem;margin-bottom:10px;text-shadow:2px 2px 12px rgba(0,0,0,0.18);color:#fff;letter-spacing:1px;text-align:center;" data-aos="fade-up">Welcome to <span style="color:#FF9800;">Webtigo</span></h1>
+            <div class="tagline" data-aos="fade-up" data-aos-delay="100">Your one-stop solution for smart online utilities.<br>Text-to-speech, image tools, QR codes, PDFs, and more!</div>
             <svg class="wave" viewBox="0 0 1440 90" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill="#fff" fill-opacity="0.13" d="M0,60 C360,120 1080,0 1440,60 L1440,90 L0,90 Z"></path></svg>
         </section>
-
         <div class="services-container">
-            <a href="/tts.html" class="service-btn" data-aos="fade-up" data-aos-delay="100">
-                <svg viewBox="0 0 24 24"><path d="M12 3v18m0 0l-4-4m4 4l4-4"/></svg>Text-to-Speech
-            </a>
-            <a href="/image_compressor.html" class="service-btn" data-aos="fade-up" data-aos-delay="200">
-                <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M4 17l5-5 4 4 5-5"/></svg>Image Compressor
-            </a>
-            <a href="/qr_code.html" class="service-btn" data-aos="fade-up" data-aos-delay="300">
-                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>QR Code Generator
-            </a>
-            <a href="/pdf_service.html" class="service-btn" data-aos="fade-up" data-aos-delay="400">
-                <svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/><polyline points="14 2 14 8 20 8"/></svg>PDF Service
-            </a>
-            <a href="/image_resizer.html" class="service-btn" data-aos="fade-up" data-aos-delay="500">
-                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><path d="M14 3h7v7"/><path d="M3 14v7h7"/></svg>Image Resizer
-            </a>
-            <a href="/frequency_generator.html" class="service-btn" data-aos="fade-up" data-aos-delay="600">
-                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/><path d="M2 12a10 10 0 0 1 20 0" stroke="currentColor" stroke-width="2" fill="none"/><line x1="12" y1="12" x2="20" y2="12" stroke="currentColor" stroke-width="2"/></svg>Frequency Generator
-            </a>
-        </div>
-
-        <!-- Mobile Phone Mockup Section -->
-        <div class="mobile-mockup" data-aos="fade-left" data-aos-delay="700">
-            <div class="mobile-screen">
-                <div class="header-bar"></div>
-                <div class="mini-logo">
-                    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="32" cy="32" r="32" fill="#fff" fill-opacity="0.13"/>
-                        <path d="M18 44L32 20L46 44" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                        <circle cx="32" cy="36" r="4" fill="#FF9800"/>
-                    </svg>
-                </div>
-                <div class="mini-btn">Text-to-Speech</div>
-                <div class="mini-btn">Image Compressor</div>
-                <div class="mini-btn">QR Code Generator</div>
-                <div class="mini-btn">PDF Service</div>
-                <div class="mini-btn">Image Resizer</div>
-                <div class="mini-btn">Frequency Generator</div>
-                <div class="mini-btn premium">Premium</div>
-                <div class="mini-footer">© 2025 Webtigo <a href="/premium.html" class="mini-premium-link">Premium</a></div>
-            </div>
+            <a href="/tts.html" class="service-btn" data-aos="fade-up" data-aos-delay="100"><svg viewBox="0 0 24 24"><path d="M12 3v18m0 0l-4-4m4 4l4-4"/></svg>Text-to-Speech</a>
+            <a href="/image_compressor.html" class="service-btn" data-aos="fade-up" data-aos-delay="200"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M4 17l5-5 4 4 5-5"/></svg>Image Compressor</a>
+            <a href="/qr_code.html" class="service-btn" data-aos="fade-up" data-aos-delay="300"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>QR Code Generator</a>
+            <a href="/pdf_service.html" class="service-btn" data-aos="fade-up" data-aos-delay="400"><svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/><polyline points="14 2 14 8 20 8"/></svg>PDF Service</a>
+            <a href="/image_resizer.html" class="service-btn" data-aos="fade-up" data-aos-delay="500"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><path d="M14 3h7v7"/><path d="M3 14v7h7"/></svg>Image Resizer</a>
+    <a href="/frequency_generator.html" class="service-btn" data-aos="fade-up" data-aos-delay="600"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/><path d="M2 12a10 10 0 0 1 20 0" stroke="currentColor" stroke-width="2" fill="none"/><line x1="12" y1="12" x2="20" y2="12" stroke="currentColor" stroke-width="2"/></svg>Frequency Generator</a>
         </div>
     </main>
     <footer>
-        <p>&copy; 2025 Webt
+        <p>&copy; 2025 Webtigo. All rights reserved. <a href="/premium.html" class="premium-link">Premium</a></p> <!-- Added Premium link to footer -->
+    </footer>
+    <script src="/main.js"></script>
+        <script>
+            // Logo video fade out and SVG fade in
+            window.addEventListener('DOMContentLoaded', function() {
+                        var video = document.getElementById('logoVideo');
+                        var svg = document.getElementById('svgLogo');
+                        if (video && svg) {
+                            video.addEventListener('ended', function() {
+                                video.style.transition = 'opacity 1s';
+                                video.style.opacity = 0;
+                                setTimeout(function() {
+                                    svg.style.opacity = 1;
+                                }, 800);
+                            });
+                        }
+            });
+        </script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>AOS.init();</script>
+</body>
+</html>
