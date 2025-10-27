@@ -50,7 +50,8 @@
                 { "@type": "ListItem", "position": 4, "name": "Image Resizer", "item": "https://webtigo.vercel.app/image_resizer.html" },
                 { "@type": "ListItem", "position": 5, "name": "PDF Service", "item": "https://webtigo.vercel.app/pdf_service.html" },
                 { "@type": "ListItem", "position": 6, "name": "QR Code Generator", "item": "https://webtigo.vercel.app/qr_code.html" },
-                { "@type": "ListItem", "position": 7, "name": "Frequency Generator", "item": "https://webtigo.vercel.app/frequency_generator.html" }
+                { "@type": "ListItem", "position": 7, "name": "Frequency Generator", "item": "https://webtigo.vercel.app/frequency_generator.html" },
+                { "@type": "ListItem", "position": 8, "name": "Premium", "item": "https://webtigo.vercel.app/premium.html" }
             ]
         }
         </script>
@@ -130,6 +131,15 @@
             background: linear-gradient(90deg, #6C63FF 60%, #007BFF 100%);
             color: #fff;
             box-shadow: 0 2px 12px rgba(108,99,255,0.10);
+        }
+        /* New style for the Premium link */
+        header a.premium-link {
+            background: linear-gradient(90deg, #8A2BE2 0%, #4B0082 100%); /* Purple gradient */
+            box-shadow: 0 2px 12px rgba(138,43,226,0.15);
+        }
+        header a.premium-link:hover {
+            background: linear-gradient(90deg, #4B0082 0%, #8A2BE2 100%);
+            box-shadow: 0 4px 16px rgba(138,43,226,0.25);
         }
         main {
             flex: 1 0 auto;
@@ -212,6 +222,14 @@
         footer a:hover {
             text-decoration: underline;
         }
+        /* New style for the Premium link in the footer */
+        footer a.premium-link {
+            color: #DDA0DD; /* Lighter purple for footer */
+        }
+        footer a.premium-link:hover {
+            color: #EE82EE;
+        }
+
         @media (max-width: 900px) {
             .hero h1 {
                 font-size: 1.5rem !important;
@@ -296,6 +314,7 @@
     <a href="/pdf_service.html">PDF Service</a>
     <a href="/image_resizer.html">Image Resizer</a>
     <a href="/frequency_generator.html">Frequency Generator</a>
+    <a href="/premium.html" class="premium-link">Premium</a> <!-- Added Premium link with class -->
     </header>
     <main class="container">
         <section class="hero" data-aos="fade-up">
@@ -321,7 +340,7 @@
         </div>
     </main>
     <footer>
-        <p>&copy; 2025 Webtigo. All rights reserved.</p>
+        <p>&copy; 2025 Webtigo. All rights reserved. <a href="/premium.html" class="premium-link">Premium</a></p> <!-- Added Premium link to footer -->
     </footer>
     <script src="/main.js"></script>
         <script>
