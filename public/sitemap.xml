@@ -45,5 +45,9 @@
   <lastmod>2025-09-08T00:00:00+00:00</lastmod>
   <priority>0.80</priority>
 </url>
-
+<url>
+  <loc>https://webtigo-premium.vercel.app/</loc>
+  <lastmod>2025-11-11T00:00:00+00:00</lastmod>
+  <priority>0.90</priority>
+</url>
 </urlset>
