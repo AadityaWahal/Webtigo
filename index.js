@@ -13,7 +13,8 @@ const fs = require('fs-extra');
 const path = require('path');
 const cors = require('cors');
 const { exec } = require('child_process');
-const gTTS = require('gtts');
+const googleTTS = require('google-tts-api');
+const { clerkMiddleware, requireAuth } = require('@clerk/express');
 
 dotenv.config();
 
@@ -21,6 +22,9 @@ const app = express();
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+// Initialize Clerk Middleware
+app.use(clerkMiddleware());
 
 // REMOVE these lines for Vercel serverless compatibility
 // fs.ensureDirSync('static/mp3');
@@ -75,23 +79,26 @@ app.post('/compress-image', upload.single('image'), async (req, res) => {
 
 // Text-to-Speech
 app.post('/speak', upload.none(), async (req, res) => {
-    const { text, speed, gender, accent } = req.body;
+    const { text, speed, accent } = req.body;
     const lang = accent || 'en';
     const slow = speed === 'slow';
-    const filename = `${uuid()}.mp3`;
-    const outputPath = path.join('/tmp', filename); // Use /tmp for serverless
-    const tts = new gTTS(text, lang, slow);
-    tts.save(outputPath, async err => {
-        if (err) return res.status(500).json({ error: 'TTS failed' });
-        try {
-            const data = await fs.readFile(outputPath);
-            res.setHeader('Content-Type', 'audio/mpeg');
-            res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-            res.status(200).send(data);
-        } catch (e) {
-            res.status(500).json({ error: 'Failed to read mp3' });
-        }
-    });
+    
+    try {
+        const base64 = await googleTTS.getAudioBase64(text, {
+            lang: lang,
+            slow: slow,
+            host: 'https://translate.google.com',
+            timeout: 10000,
+        });
+        const buffer = Buffer.from(base64, 'base64');
+        const filename = `${uuid()}.mp3`;
+        res.setHeader('Content-Type', 'audio/mpeg');
+        res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+        res.status(200).send(buffer);
+    } catch (e) {
+        console.error(e);
+        res.status(500).json({ error: 'TTS failed' });
+    }
 });
 
 // QR Code Generator
@@ -190,6 +197,28 @@ app.post('/generate-video', upload.none(), async (req, res) => {
     }
 });
 
+// Protected Dashboard Route
+app.get('/dashboard', requireAuth(), (req, res) => {
+    res.send(`
+      <h1>Webtigo Dashboard</h1>
+      <p>Welcome, User ID: ${req.auth.userId}</p>
+      <a href="/">Back Home</a>
+    `);
+});
+
+// Error handling for Clerk authentication
+app.use((err, req, res, next) => {
+  if (err.message === 'Unauthenticated') {
+    res.status(401).send(`
+      <h1>401 - Unauthorized</h1>
+      <p>You must be logged in to view this page.</p>
+      <a href="/">Go Home to Sign In</a>
+    `);
+  } else {
+    next(err);
+  }
+});
+
 // Serve static files for verification and sitemap
 app.get('/google6cda3ef54c5c2da9.html', (req, res) =>
     res.sendFile(path.join(__dirname, 'public/google6cda3ef54c5c2da9.html'))
@@ -202,9 +231,13 @@ app.get('/favicon.ico', (req, res) => {
     res.status(204).end(); // No Content, avoids 404 in logs
 });
 
-app.use(express.static(path.join(__dirname, 'public')));
-app.use('/static', express.static(path.join(__dirname, 'static')));
-
 // Remove this legacy static CSS route, as styles.css is now in public/
+
+if (require.main === module) {
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+        console.log(`Server is running on http://localhost:${PORT}`);
+    });
+}
 
 module.exports = app;
