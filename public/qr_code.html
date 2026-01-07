@@ -33,9 +33,46 @@
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <style>
         body { font-family: 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #6C63FF 0%, #007BFF 100%); color: #222; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; }
-        header { background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(8px); box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10); padding: 18px 0 14px 0; width: 100%; display: flex; justify-content: center; align-items: center; gap: 28px; position: sticky; top: 0; z-index: 1000; }
-        header a { color: #fff; text-decoration: none; font-size: 1.15rem; padding: 8px 22px; border-radius: 30px; font-weight: 500; letter-spacing: 0.5px; transition: background 0.2s, color 0.2s, box-shadow 0.2s; }
+        header {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10);
+            padding: 12px 10px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-sizing: border-box;
+        }
+        header a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.95rem;
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+            white-space: nowrap;
+        }
+        #auth-container {
+            display: flex;
+            align-items: center;
+        }
         header a:hover, header a.active { background: linear-gradient(90deg, #6C63FF 60%, #007BFF 100%); color: #fff; box-shadow: 0 2px 12px rgba(108,99,255,0.10); }
+        header a.premium-link {
+            background: linear-gradient(90deg, #8A2BE2 0%, #4B0082 100%);
+            box-shadow: 0 2px 12px rgba(138,43,226,0.15);
+        }
+        header a.premium-link:hover {
+            background: linear-gradient(90deg, #4B0082 0%, #8A2BE2 100%);
+            box-shadow: 0 4px 16px rgba(138,43,226,0.25);
+        }
         main { flex: 1; padding: 32px 12px 24px 12px; max-width: 900px; margin: 0 auto; width: 100%; }
         footer { background: rgba(255, 255, 255, 0.13); backdrop-filter: blur(6px); color: #fff; padding: 18px 0 12px 0; text-align: center; font-size: 1.05rem; margin-top: auto; border-top: 1px solid #fff2; box-shadow: 0 -2px 12px rgba(108,99,255,0.07); }
         footer a { color: #FFCCBC; text-decoration: none; transition: text-decoration 0.2s; }
@@ -95,12 +132,13 @@
             }
             header {
                 flex-wrap: wrap;
-                gap: 4px;
-                padding: 6px 0 4px 0;
+                gap: 6px;
+                padding: 8px 4px;
             }
             header a {
-                font-size: 0.85rem;
-                padding: 5px 6px;
+                font-size: 0.8rem;
+                padding: 5px 8px;
+                margin-bottom: 2px;
             }
             main {
                 padding: 0 1vw 8px 1vw;
@@ -140,6 +178,8 @@
     <a href="/pdf_service.html">PDF Service</a>
     <a href="/image_resizer.html">Image Resizer</a>
     <a href="/frequency_generator.html">Frequency Generator</a>
+    <a href="https://webtigo-premium.vercel.app/" class="premium-link" target="_blank" rel="noopener">Premium</a>
+    <div id="auth-container"></div>
     </header>
     <main class="container">
 
@@ -259,5 +299,31 @@
         <p>&copy; 2025 Webtigo. All rights reserved.</p>
     </footer>
     <script src="/main.js"></script>
+
+    <!-- Clerk Authentication Script -->
+    <script
+      async
+      crossorigin="anonymous"
+      data-clerk-publishable-key="pk_test_ZmFjdHVhbC1qb2V5LTg4LmNsZXJrLmFjY291bnRzLmRldiQ"
+      src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
+      type="text/javascript"
+    ></script>
+
+    <script>
+      window.addEventListener("load", async function () {
+        await Clerk.load();
+        const authContainer = document.getElementById("auth-container");
+
+        if (Clerk.user) {
+          Clerk.mountUserButton(authContainer);
+        } else {
+          const signInBtn = document.createElement("a");
+          signInBtn.innerText = "Sign In";
+          signInBtn.href = "#";
+          signInBtn.onclick = () => Clerk.openSignIn();
+          authContainer.appendChild(signInBtn);
+        }
+      });
+    </script>
 </body>
 </html>

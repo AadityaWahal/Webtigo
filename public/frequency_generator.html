@@ -30,6 +30,47 @@
             </script>
     <link rel="stylesheet" href="styles.css">
     <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #6C63FF 0%, #007BFF 100%); color: #222; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; }
+        header {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10);
+            padding: 12px 10px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-sizing: border-box;
+        }
+        header a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.95rem;
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+            white-space: nowrap;
+        }
+        #auth-container {
+            display: flex;
+            align-items: center;
+        }
+        header a:hover, header a.active { background: linear-gradient(90deg, #6C63FF 60%, #007BFF 100%); color: #fff; box-shadow: 0 2px 12px rgba(108,99,255,0.10); }
+        header a.premium-link {
+            background: linear-gradient(90deg, #8A2BE2 0%, #4B0082 100%);
+            box-shadow: 0 2px 12px rgba(138,43,226,0.15);
+        }
+        header a.premium-link:hover {
+            background: linear-gradient(90deg, #4B0082 0%, #8A2BE2 100%);
+            box-shadow: 0 4px 16px rgba(138,43,226,0.25);
+        }
         .freq-container {
             max-width: 400px;
             margin: 40px auto;
@@ -50,17 +91,31 @@
             font-size: 1em;
             margin: 8px 4px;
         }
+        @media (max-width: 600px) {
+            header {
+                flex-wrap: wrap;
+                gap: 6px;
+                padding: 8px 4px;
+            }
+            header a {
+                font-size: 0.8rem;
+                padding: 5px 8px;
+                margin-bottom: 2px;
+            }
+        }
     </style>
 </head>
 <body>
-    <header style="background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(8px); box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10); padding: 18px 0 14px 0; width: 100%; display: flex; justify-content: center; align-items: center; gap: 28px; position: sticky; top: 0; z-index: 1000;">
-        <a href="/index.html" style="color: #fff; text-decoration: none; font-size: 1.15rem; padding: 8px 22px; border-radius: 30px; font-weight: 500; letter-spacing: 0.5px; transition: background 0.2s, color 0.2s, box-shadow 0.2s;">Home</a>
-        <a href="/tts.html" style="color: #fff; text-decoration: none; font-size: 1.15rem; padding: 8px 22px; border-radius: 30px; font-weight: 500; letter-spacing: 0.5px; transition: background 0.2s, color 0.2s, box-shadow 0.2s;">Text-to-Speech</a>
-        <a href="/image_compressor.html" style="color: #fff; text-decoration: none; font-size: 1.15rem; padding: 8px 22px; border-radius: 30px; font-weight: 500; letter-spacing: 0.5px; transition: background 0.2s, color 0.2s, box-shadow 0.2s;">Image Compressor</a>
-        <a href="/qr_code.html" style="color: #fff; text-decoration: none; font-size: 1.15rem; padding: 8px 22px; border-radius: 30px; font-weight: 500; letter-spacing: 0.5px; transition: background 0.2s, color 0.2s, box-shadow 0.2s;">QR Code Generator</a>
-        <a href="/pdf_service.html" style="color: #fff; text-decoration: none; font-size: 1.15rem; padding: 8px 22px; border-radius: 30px; font-weight: 500; letter-spacing: 0.5px; transition: background 0.2s, color 0.2s, box-shadow 0.2s;">PDF Service</a>
-        <a href="/image_resizer.html" style="color: #fff; text-decoration: none; font-size: 1.15rem; padding: 8px 22px; border-radius: 30px; font-weight: 500; letter-spacing: 0.5px; transition: background 0.2s, color 0.2s, box-shadow 0.2s;">Image Resizer</a>
-        <a href="/frequency_generator.html" style="background:#fff;color:#007BFF;font-weight:bold;box-shadow:0 2px 8px rgba(0,0,0,0.08); text-decoration: none; font-size: 1.15rem; padding: 8px 22px; border-radius: 30px; letter-spacing: 0.5px; transition: background 0.2s, color 0.2s, box-shadow 0.2s;">Frequency Generator</a>
+    <header>
+        <a href="/index.html">Home</a>
+        <a href="/tts.html">Text-to-Speech</a>
+        <a href="/image_compressor.html">Image Compressor</a>
+        <a href="/qr_code.html">QR Code Generator</a>
+        <a href="/pdf_service.html">PDF Service</a>
+        <a href="/image_resizer.html">Image Resizer</a>
+        <a href="/frequency_generator.html" class="active">Frequency Generator</a>
+        <a href="https://webtigo-premium.vercel.app/" class="premium-link" target="_blank" rel="noopener">Premium</a>
+        <div id="auth-container"></div>
     </header>
     <div class="freq-container">
         <h2>Frequency Generator</h2>
@@ -170,6 +225,32 @@
             stopBtn.disabled = true;
             status.textContent = '';
         };
+    </script>
+
+    <!-- Clerk Authentication Script -->
+    <script
+      async
+      crossorigin="anonymous"
+      data-clerk-publishable-key="pk_test_ZmFjdHVhbC1qb2V5LTg4LmNsZXJrLmFjY291bnRzLmRldiQ"
+      src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
+      type="text/javascript"
+    ></script>
+
+    <script>
+      window.addEventListener("load", async function () {
+        await Clerk.load();
+        const authContainer = document.getElementById("auth-container");
+
+        if (Clerk.user) {
+          Clerk.mountUserButton(authContainer);
+        } else {
+          const signInBtn = document.createElement("a");
+          signInBtn.innerText = "Sign In";
+          signInBtn.href = "#";
+          signInBtn.onclick = () => Clerk.openSignIn();
+          authContainer.appendChild(signInBtn);
+        }
+      });
     </script>
 </body>
 </html>
