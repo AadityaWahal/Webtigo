@@ -13,6 +13,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const cors = require('cors');
 const { exec } = require('child_process');
+const os = require('os');
 const googleTTS = require('google-tts-api');
 const { clerkMiddleware, requireAuth } = require('@clerk/express');
 
@@ -35,9 +36,9 @@ app.use(clerkMiddleware());
 // fs.ensureDirSync('static/pdf_pages');
 
 // Multer setup for file uploads
-const upload = multer({ dest: '/tmp' });
-const pdfUpload = multer({ dest: '/tmp' });
-const videoUpload = multer({ dest: '/tmp' });
+const upload = multer({ dest: os.tmpdir() });
+const pdfUpload = multer({ dest: os.tmpdir() });
+const videoUpload = multer({ dest: os.tmpdir() });
 
 // Serve all static files from the static directory at /static
 app.use('/static', express.static(path.join(__dirname, 'static')));
@@ -62,7 +63,7 @@ app.post('/compress-image', upload.single('image'), async (req, res) => {
     const targetSizeKB = parseInt(req.body.size_kb, 10);
     const inputPath = req.file.path;
     const uniqueFilename = `compressed_${uuid()}_${req.file.originalname}`;
-    const outputPath = path.join('/tmp', uniqueFilename);
+    const outputPath = path.join(os.tmpdir(), uniqueFilename);
     let quality = 95;
     let buffer = await fs.readFile(inputPath);
 
@@ -105,7 +106,7 @@ app.post('/speak', upload.none(), async (req, res) => {
 app.post('/generate-qr', upload.none(), async (req, res) => {
     const { data } = req.body;
     const uniqueFilename = `${uuid()}.png`;
-    const outputPath = path.join('/tmp', uniqueFilename);
+    const outputPath = path.join(os.tmpdir(), uniqueFilename);
     await QRCode.toFile(outputPath, data, { width: 300 });
     const qrBuffer = await fs.readFile(outputPath);
     res.setHeader('Content-Type', 'image/png');
@@ -130,7 +131,7 @@ app.post('/create-pdf', upload.array('images'), async (req, res) => {
     }
     const pdfBytes = await pdfDoc.save();
     const filename = `${uuid()}.pdf`;
-    const outputPath = path.join('/tmp', filename);
+    const outputPath = path.join(os.tmpdir(), filename);
     await fs.writeFile(outputPath, pdfBytes);
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
@@ -140,7 +141,7 @@ app.post('/create-pdf', upload.array('images'), async (req, res) => {
 // Split PDF to images (requires 'pdftoppm' installed)
 app.post('/split-pdf', pdfUpload.single('pdf'), async (req, res) => {
     const pdfPath = req.file.path;
-    const outputDir = path.join('/tmp', `pdf_pages_${uuid()}`);
+    const outputDir = path.join(os.tmpdir(), `pdf_pages_${uuid()}`);
     await fs.ensureDir(outputDir);
     const baseName = `page-${uuid()}`;
     const cmd = `pdftoppm -jpeg -r 200 "${pdfPath}" "${outputDir}/${baseName}"`;
@@ -161,7 +162,7 @@ app.post('/split-pdf', pdfUpload.single('pdf'), async (req, res) => {
 // Image Resizer (fixed 300x300 for demo)
 app.post('/resize-image', upload.single('image'), async (req, res) => {
     const uniqueFilename = `resized_${uuid()}_${req.file.originalname}`;
-    const outputPath = path.join('/tmp', uniqueFilename);
+    const outputPath = path.join(os.tmpdir(), uniqueFilename);
     await sharp(req.file.path).resize(300, 300).toFile(outputPath);
     const resizedBuffer = await fs.readFile(outputPath);
     await fs.remove(req.file.path);
@@ -174,7 +175,7 @@ app.post('/resize-image', upload.single('image'), async (req, res) => {
 app.post('/generate-video', upload.none(), async (req, res) => {
     const text = req.body.video_text;
     const uniqueFilename = `${uuid()}.mp4`;
-    const outputPath = path.join('/tmp', uniqueFilename);
+    const outputPath = path.join(os.tmpdir(), uniqueFilename);
     const apiUrl = "https://api.runwayml.com/v1/generate";
     const headers = {
         'Authorization': `Bearer ${process.env.API_KEY}`,
