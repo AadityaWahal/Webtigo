@@ -1,19 +1,19 @@
 // Required dependencies (install with npm):
-// express, multer, uuid, dotenv, sharp, qrcode, pdf-lib, axios, google-tts-api, fs-extra, cors, @clerk/express
+// express, multer, uuid, dotenv, sharp, qrcode, axios, google-tts-api, fs-extra, cors, @clerk/express, pdf-img-convert, pdfkit
 const express = require('express');
 const multer = require('multer');
 const uuid = require('uuid').v4;
 const dotenv = require('dotenv');
 const sharp = require('sharp');
 const QRCode = require('qrcode');
-const { PDFDocument } = require('pdf-lib');
+const PDFDocument = require('pdfkit');
 const axios = require('axios');
 const fs = require('fs-extra');
 const path = require('path');
 const cors = require('cors');
-const { exec } = require('child_process');
 const os = require('os');
 const googleTTS = require('google-tts-api');
+const pdfImgConvert = require('pdf-img-convert');
 const { clerkMiddleware, requireAuth } = require('@clerk/express');
 
 dotenv.config();
@@ -115,47 +115,57 @@ app.post('/generate-qr', upload.none(), async (req, res) => {
 
 // Create PDF from images
 app.post('/create-pdf', upload.array('images'), async (req, res) => {
-    const pdfDoc = await PDFDocument.create();
-    for (const file of req.files) {
-        const imgBytes = await fs.readFile(file.path);
-        let img;
-        if (file.mimetype === 'image/jpeg') {
-            img = await pdfDoc.embedJpg(imgBytes);
-        } else {
-            img = await pdfDoc.embedPng(imgBytes);
+    try {
+        // Create a new PDF document without an initial page
+        const doc = new PDFDocument({ autoFirstPage: false });
+        const filename = `webtigo_${uuid()}.pdf`;
+
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+
+        // Pipe the PDF data directly to the response stream
+        doc.pipe(res);
+
+        for (const file of req.files) {
+            try {
+                const img = doc.openImage(file.path);
+                // Add a page matching the image dimensions
+                doc.addPage({ size: [img.width, img.height] });
+                doc.image(img, 0, 0);
+            } catch (imgErr) {
+                console.error(`Error embedding image ${file.originalname}:`, imgErr);
+            } finally {
+                await fs.remove(file.path);
+            }
         }
-        const page = pdfDoc.addPage([img.width, img.height]);
-        page.drawImage(img, { x: 0, y: 0, width: img.width, height: img.height });
-        await fs.remove(file.path);
+        doc.end();
+    } catch (err) {
+        console.error('PDF creation error:', err);
+        if (!res.headersSent) {
+            res.status(500).json({ error: 'Failed to create PDF' });
+        }
     }
-    const pdfBytes = await pdfDoc.save();
-    const filename = `${uuid()}.pdf`;
-    const outputPath = path.join(os.tmpdir(), filename);
-    await fs.writeFile(outputPath, pdfBytes);
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-    res.send(pdfBytes);
 });
 
-// Split PDF to images (requires 'pdftoppm' installed)
+// Split PDF to images (Native Node.js implementation for Vercel compatibility)
 app.post('/split-pdf', pdfUpload.single('pdf'), async (req, res) => {
-    const pdfPath = req.file.path;
-    const outputDir = path.join(os.tmpdir(), `pdf_pages_${uuid()}`);
-    await fs.ensureDir(outputDir);
-    const baseName = `page-${uuid()}`;
-    const cmd = `pdftoppm -jpeg -r 200 "${pdfPath}" "${outputDir}/${baseName}"`;
-    exec(cmd, async (err) => {
+    try {
+        const pdfPath = req.file.path;
+        
+        // Convert PDF pages to images (returns array of Uint8Arrays)
+        const outputImages = await pdfImgConvert.convert(pdfPath);
+
+        const images = outputImages.map((imgBuffer, index) => ({
+            filename: `page-${index + 1}.png`,
+            buffer: Buffer.from(imgBuffer).toString('base64')
+        }));
+
         await fs.remove(pdfPath);
-        if (err) return res.status(500).json({ error: 'PDF split failed' });
-        const files = await fs.readdir(outputDir);
-        const imageFiles = files.filter(f => f.startsWith(baseName));
-        const images = [];
-        for (const f of imageFiles) {
-            const imgBuffer = await fs.readFile(path.join(outputDir, f));
-            images.push({ filename: f, buffer: imgBuffer.toString('base64') });
-        }
         res.json({ images });
-    });
+    } catch (err) {
+        console.error('PDF split error:', err);
+        res.status(500).json({ error: 'PDF split failed' });
+    }
 });
 
 // Image Resizer (fixed 300x300 for demo)
@@ -214,7 +224,7 @@ app.post('/convert-case', (req, res) => {
             result = text.toLowerCase().replace(/\b\w/g, s => s.toUpperCase());
             break;
         case 'camelcase':
-            result = text.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
+            result = text.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (_, chr) => chr.toUpperCase());
             break;
         default:
             result = text;

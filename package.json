@@ -14,7 +14,8 @@
     "fs-extra": "^11.1.1",
     "google-tts-api": "^2.0.2",
     "multer": "^2.0.2",
-    "pdf-lib": "^1.17.1",
+    "pdf-img-convert": "^1.2.1",
+    "pdfkit": "^0.15.0",
     "qrcode": "^1.5.3",
     "sharp": "^0.33.5",
     "uuid": "^9.0.1"
@@ -24,7 +25,8 @@
   },
   "pnpm": {
     "onlyBuiltDependencies": [
-      "sharp"
+      "sharp",
+      "canvas"
     ]
   }
 }
