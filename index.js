@@ -198,6 +198,31 @@ app.post('/generate-video', upload.none(), async (req, res) => {
     }
 });
 
+// Case Converter
+app.post('/convert-case', upload.none(), (req, res) => {
+    const { text, type } = req.body;
+    if (!text) return res.status(400).json({ error: 'Text is required' });
+
+    let result = '';
+    switch (type) {
+        case 'uppercase':
+            result = text.toUpperCase();
+            break;
+        case 'lowercase':
+            result = text.toLowerCase();
+            break;
+        case 'titlecase':
+            result = text.toLowerCase().replace(/\b\w/g, s => s.toUpperCase());
+            break;
+        case 'camelcase':
+            result = text.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
+            break;
+        default:
+            result = text;
+    }
+    res.json({ result });
+});
+
 // Protected Dashboard Route
 app.get('/dashboard', requireAuth(), (req, res) => {
     res.send(`

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case Converter - Webtigo</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Webtigo Case Converter</h1>
+        <nav><a href="/">Home</a></nav>
+    </header>
+    <main>
+        <section>
+            <textarea id="inputText" placeholder="Enter your text here..." rows="10" style="width: 100%; padding: 10px;"></textarea>
+            <div style="margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap;">
+                <button onclick="convert('uppercase')">UPPERCASE</button>
+                <button onclick="convert('lowercase')">lowercase</button>
+                <button onclick="convert('titlecase')">Title Case</button>
+                <button onclick="convert('camelcase')">camelCase</button>
+            </div>
+            <div style="margin-top: 20px;">
+                <h3>Result:</h3>
+                <textarea id="outputText" readonly rows="10" style="width: 100%; padding: 10px; background-color: #f9f9f9;"></textarea>
+            </div>
+        </section>
+    </main>
+    <script>
+        async function convert(type) {
+            const text = document.getElementById('inputText').value;
+            if (!text) return alert('Please enter some text');
+
+            const formData = new FormData();
+            formData.append('text', text);
+            formData.append('type', type);
+
+            try {
+                const response = await fetch('/convert-case', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                document.getElementById('outputText').value = data.result;
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Conversion failed');
+            }
+        }
+    </script>
+</body>
+</html>
