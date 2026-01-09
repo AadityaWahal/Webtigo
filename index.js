@@ -1,6 +1,5 @@
 // Required dependencies (install with npm):
-// express, multer, uuid, dotenv, sharp, qrcode, pdf-lib, axios, gtts, fs-extra, cors, express-ejs-layouts
-
+// express, multer, uuid, dotenv, sharp, qrcode, pdf-lib, axios, g
 const express = require('express');
 const multer = require('multer');
 const uuid = require('uuid').v4;
