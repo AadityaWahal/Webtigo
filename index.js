@@ -199,7 +199,7 @@ app.post('/generate-video', upload.none(), async (req, res) => {
 });
 
 // Case Converter
-app.post('/convert-case', upload.none(), (req, res) => {
+app.post('/convert-case', (req, res) => {
     const { text, type } = req.body;
     if (!text) return res.status(400).json({ error: 'Text is required' });
 
