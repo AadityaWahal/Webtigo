@@ -114,57 +114,35 @@ app.post('/generate-qr', upload.none(), async (req, res) => {
     res.send(qrBuffer);
 });
 
-// Create PDF from images (Buffered version to prevent corrupt downloads)
+// Create PDF from images
 app.post('/create-pdf', upload.array('images'), async (req, res) => {
     try {
         if (!req.files || req.files.length === 0) {
-            return res.status(400).json({ error: 'No images uploaded' });
+            return res.status(400).send('No images uploaded');
         }
 
         const doc = new PDFDocument({ autoFirstPage: false });
-        // Store PDF chunks in memory
-        const buffers = [];
-        doc.on('data', (chunk) => buffers.push(chunk));
-        
-        // Wrap document generation in a Promise to handle errors before responding
-        await new Promise((resolve, reject) => {
-            doc.on('end', resolve);
-            doc.on('error', reject);
-
-            try {
-                for (const file of req.files) {
-                    // Load image
-                    const img = doc.openImage(file.path);
-                    doc.addPage({ size: [img.width, img.height] });
-                    doc.image(img, 0, 0);
-                    
-                    // Clean up temp file immediately
-                    fs.remove(file.path).catch(console.error);
-                }
-                doc.end();
-            } catch (err) {
-                reject(err);
-            }
-        });
-
-        // Combine chunks and send response ONLY if successful
-        const pdfData = Buffer.concat(buffers);
         const filename = `webtigo_${uuid()}.pdf`;
 
         res.setHeader('Content-Type', 'application/pdf');
         res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-        res.send(pdfData);
 
+        doc.pipe(res);
+
+        for (const file of req.files) {
+            try {
+                const img = doc.openImage(file.path);
+                doc.addPage({ size: [img.width, img.height] });
+                doc.image(img, 0, 0);
+            } finally {
+                await fs.remove(file.path);
+            }
+        }
+        doc.end();
     } catch (err) {
         console.error('PDF creation error:', err);
-        // Clean up files if error occurred before processing finished
-        if (req.files) {
-            req.files.forEach(f => fs.remove(f.path).catch(console.error));
-        }
-        
-        // Send a proper JSON error that your frontend can catch
         if (!res.headersSent) {
-            res.status(500).json({ error: 'Failed to create PDF. The server encountered an error processing the images.' });
+            res.status(500).json({ error: 'Failed to create PDF due to a server error.' });
         }
     }
 });
