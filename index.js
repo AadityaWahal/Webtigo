@@ -13,7 +13,7 @@ const path = require('path');
 const cors = require('cors');
 const os = require('os');
 const googleTTS = require('google-tts-api');
-const pdfImgConvert = require('pdf-img-convert');
+// const pdfImgConvert = require('pdf-img-convert');
 const { clerkMiddleware, requireAuth } = require('@clerk/express');
 
 dotenv.config();
@@ -81,16 +81,17 @@ app.post('/compress-image', upload.single('image'), async (req, res) => {
 app.post('/speak', upload.none(), async (req, res) => {
     const { text, speed, accent } = req.body;
     const lang = accent || 'en';
-    const slow = speed === 'slow';
+    const ttsSpeed = speed === 'slow' ? 0.24 : 1;
     
     try {
-        const base64 = await googleTTS.getAudioBase64(text, {
-            lang: lang,
-            slow: slow,
-            host: 'https://translate.google.com',
-            timeout: 10000,
+        const url = await googleTTS(text, lang, ttsSpeed);
+        const response = await axios({
+            url,
+            method: 'GET',
+            responseType: 'arraybuffer'
         });
-        const buffer = Buffer.from(base64, 'base64');
+        const buffer = response.data;
+
         const filename = `${uuid()}.mp3`;
         res.setHeader('Content-Type', 'audio/mpeg');
         res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
@@ -113,36 +114,57 @@ app.post('/generate-qr', upload.none(), async (req, res) => {
     res.send(qrBuffer);
 });
 
-// Create PDF from images
+// Create PDF from images (Buffered version to prevent corrupt downloads)
 app.post('/create-pdf', upload.array('images'), async (req, res) => {
     try {
-        // Create a new PDF document without an initial page
+        if (!req.files || req.files.length === 0) {
+            return res.status(400).json({ error: 'No images uploaded' });
+        }
+
         const doc = new PDFDocument({ autoFirstPage: false });
+        // Store PDF chunks in memory
+        const buffers = [];
+        doc.on('data', (chunk) => buffers.push(chunk));
+        
+        // Wrap document generation in a Promise to handle errors before responding
+        await new Promise((resolve, reject) => {
+            doc.on('end', resolve);
+            doc.on('error', reject);
+
+            try {
+                for (const file of req.files) {
+                    // Load image
+                    const img = doc.openImage(file.path);
+                    doc.addPage({ size: [img.width, img.height] });
+                    doc.image(img, 0, 0);
+                    
+                    // Clean up temp file immediately
+                    fs.remove(file.path).catch(console.error);
+                }
+                doc.end();
+            } catch (err) {
+                reject(err);
+            }
+        });
+
+        // Combine chunks and send response ONLY if successful
+        const pdfData = Buffer.concat(buffers);
         const filename = `webtigo_${uuid()}.pdf`;
 
         res.setHeader('Content-Type', 'application/pdf');
         res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+        res.send(pdfData);
 
-        // Pipe the PDF data directly to the response stream
-        doc.pipe(res);
-
-        for (const file of req.files) {
-            try {
-                const img = doc.openImage(file.path);
-                // Add a page matching the image dimensions
-                doc.addPage({ size: [img.width, img.height] });
-                doc.image(img, 0, 0);
-            } catch (imgErr) {
-                console.error(`Error embedding image ${file.originalname}:`, imgErr);
-            } finally {
-                await fs.remove(file.path);
-            }
-        }
-        doc.end();
     } catch (err) {
         console.error('PDF creation error:', err);
+        // Clean up files if error occurred before processing finished
+        if (req.files) {
+            req.files.forEach(f => fs.remove(f.path).catch(console.error));
+        }
+        
+        // Send a proper JSON error that your frontend can catch
         if (!res.headersSent) {
-            res.status(500).json({ error: 'Failed to create PDF' });
+            res.status(500).json({ error: 'Failed to create PDF. The server encountered an error processing the images.' });
         }
     }
 });
@@ -150,6 +172,7 @@ app.post('/create-pdf', upload.array('images'), async (req, res) => {
 // Split PDF to images (Native Node.js implementation for Vercel compatibility)
 app.post('/split-pdf', pdfUpload.single('pdf'), async (req, res) => {
     try {
+        const pdfImgConvert = (await import('pdf-img-convert')).default;
         const pdfPath = req.file.path;
         
         // Convert PDF pages to images (returns array of Uint8Arrays)
