@@ -364,29 +364,58 @@
             let draggedIdx = null;
 
             function createPdf() {
-                const form = document.getElementById('createPdfForm');
                 const input = document.getElementById('images');
                 const container = document.getElementById('imagePreviewContainer');
+                
+                // Basic validation
+                if (!input.files || input.files.length === 0) {
+                    alert("Please select images first.");
+                    return;
+                }
+
                 const boxes = Array.from(container.children);
                 const files = Array.from(input.files);
+                // Map visual order to file objects
                 const orderedFiles = boxes.map(box => files[box.dataset.idx]);
 
                 const formData = new FormData();
                 orderedFiles.forEach(file => formData.append('images', file));
 
+                const btn = document.querySelector('button[onclick="createPdf()"]');
+                const originalText = btn.innerText;
+                btn.innerText = "Generating...";
+                btn.disabled = true;
+
                 fetch('/create-pdf', {
                     method: 'POST',
                     body: formData
                 })
-                .then(response => response.blob())
+                .then(async response => {
+                    if (!response.ok) {
+                        // If server sends an error (500, 400, etc.), parse the text
+                        const text = await response.text();
+                        throw new Error(text || `Server error: ${response.status}`);
+                    }
+                    return response.blob();
+                })
                 .then(blob => {
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a');
                     a.href = url;
-                    a.download = 'created.pdf';
+                    a.download = 'webtigo-created.pdf';
+                    document.body.appendChild(a); // Append to body for Firefox support
                     a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
                 })
-                .catch(err => console.error('PDF creation failed', err));
+                .catch(err => {
+                    console.error('PDF creation failed', err);
+                    alert('Failed to create PDF. Error: ' + err.message);
+                })
+                .finally(() => {
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                });
             }
 
             function showImagePreviews() {
