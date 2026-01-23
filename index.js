@@ -18,6 +18,10 @@ const { clerkMiddleware, requireAuth } = require('@clerk/express');
 
 dotenv.config();
 
+if (!process.env.CLERK_PUBLISHABLE_KEY || !process.env.CLERK_SECRET_KEY) {
+    console.error("CRITICAL: Clerk API keys are missing. Please set them in Vercel Environment Variables.");
+}
+
 const app = express();
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
@@ -78,11 +82,17 @@ app.post('/compress-image', upload.single('image'), async (req, res) => {
 // Text-to-Speech
 app.post('/speak', upload.none(), async (req, res) => {
     const { text, speed, accent } = req.body;
+    if (!text) return res.status(400).json({ error: 'Text is required' });
+
     const lang = accent || 'en';
-    const ttsSpeed = speed === 'slow' ? 0.24 : 1;
+    const isSlow = speed === 'slow';
     
     try {
-        const url = await googleTTS(text, lang, ttsSpeed);
+        const url = googleTTS.getAudioUrl(text, {
+            lang,
+            slow: isSlow,
+            host: 'https://translate.google.com',
+        });
         const response = await axios({
             url,
             method: 'GET',
@@ -148,6 +158,7 @@ app.post('/create-pdf', upload.array('images'), async (req, res) => {
 // Split PDF to images (Native Node.js implementation for Vercel compatibility)
 app.post('/split-pdf', upload.single('pdf'), async (req, res) => {
     try {
+        if (!req.file) return res.status(400).json({ error: 'No PDF uploaded' });
         const pdfImgConvert = (await import('pdf-img-convert')).default;
         const pdfPath = req.file.path;
         
