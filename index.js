@@ -36,8 +36,6 @@ app.use(clerkMiddleware());
 
 // Multer setup for file uploads
 const upload = multer({ dest: os.tmpdir() });
-const pdfUpload = multer({ dest: os.tmpdir() });
-const videoUpload = multer({ dest: os.tmpdir() });
 
 // Serve all static files from the static directory at /static
 app.use('/static', express.static(path.join(__dirname, 'static')));
@@ -148,13 +146,19 @@ app.post('/create-pdf', upload.array('images'), async (req, res) => {
 });
 
 // Split PDF to images (Native Node.js implementation for Vercel compatibility)
-app.post('/split-pdf', pdfUpload.single('pdf'), async (req, res) => {
+app.post('/split-pdf', upload.single('pdf'), async (req, res) => {
     try {
         const pdfImgConvert = (await import('pdf-img-convert')).default;
         const pdfPath = req.file.path;
         
         // Convert PDF pages to images (returns array of Uint8Arrays)
         const outputImages = await pdfImgConvert.convert(pdfPath);
+
+        // Vercel has a 4.5MB response body limit. 
+        // Large PDFs converted to base64 will exceed this.
+        if (outputImages.length > 10) {
+            return res.status(413).json({ error: 'PDF too large. Please split smaller files (max 10 pages).' });
+        }
 
         const images = outputImages.map((imgBuffer, index) => ({
             filename: `page-${index + 1}.png`,
