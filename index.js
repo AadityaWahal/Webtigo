@@ -1,15 +1,17 @@
-// Required dependencies: express, multer, uuid, dotenv, sharp, qrcode, pdfkit, fs-extra, cors, @clerk/express, pdf-img-convert
+// Required dependencies
 const express = require('express');
 const multer = require('multer');
-const { v4: uuidv4 } = require('uuid');
 const dotenv = require('dotenv');
-const sharp = require('sharp');
-const QRCode = require('qrcode');
-const PDFDocument = require('pdfkit');
-const fs = require('fs-extra'); // Kept for edge cases, but mostly avoiding disk
-const path = require('path');
 const cors = require('cors');
+const path = require('path');
+const fs = require('fs-extra');
 const { clerkMiddleware, requireAuth } = require('@clerk/express');
+
+// Import Modular Services
+const imageService = require('./services/imageService');
+const pdfService = require('./services/pdfService');
+const qrService = require('./services/qrService');
+const textService = require('./services/textService');
 
 dotenv.config();
 
@@ -21,10 +23,10 @@ app.use(express.json());
 // Initialize Clerk Middleware
 app.use(clerkMiddleware());
 
-// Use Memory Storage for Multer to avoid writing to disk (Vercel compatible)
+// Use Memory Storage for Multer
 const upload = multer({
     storage: multer.memoryStorage(),
-    limits: { fileSize: 10 * 1024 * 1024 } // Limit to 10MB
+    limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit
 });
 
 // Serve static HTML files from public/
@@ -44,27 +46,22 @@ app.get('/:page.html', (req, res) => {
     });
 });
 
-// --- API ENDPOINTS (No External Calls, In-Memory Only) ---
+// --- API ENDPOINTS (Using Modular Services) ---
 
 // 1. Image Compressor
 app.post('/compress-image', upload.single('image'), async (req, res) => {
     try {
         if (!req.file) return res.status(400).json({ error: 'No image uploaded' });
 
-        let quality = 80;
-        let buffer = req.file.buffer;
-
-        // Simple logic: reduce quality for stability
-        const compressedBuffer = await sharp(buffer)
-            .jpeg({ quality: quality })
-            .toBuffer();
+        const size_kb = parseInt(req.body.size_kb, 10) || 50;
+        const buffer = await imageService.compressImage(req.file.buffer, size_kb);
 
         res.set('Content-Type', 'image/jpeg');
         res.set('Content-Disposition', `attachment; filename="compressed_image.jpg"`);
-        res.send(compressedBuffer);
+        res.send(buffer);
     } catch (err) {
-        console.error("Compression error:", err);
-        res.status(500).json({ error: 'Compression failed' });
+        console.error("Compression Error:", err);
+        res.status(500).json({ error: 'Compression failed: ' + err.message });
     }
 });
 
@@ -73,16 +70,15 @@ app.post('/resize-image', upload.single('image'), async (req, res) => {
     try {
         if (!req.file) return res.status(400).json({ error: 'No image uploaded' });
 
-        const resizedBuffer = await sharp(req.file.buffer)
-            .resize(300, 300, { fit: 'cover' })
-            .toBuffer();
+        const { width, height } = req.body;
+        const buffer = await imageService.resizeImage(req.file.buffer, width || 300, height || 300);
 
         res.set('Content-Type', 'image/jpeg');
         res.set('Content-Disposition', `attachment; filename="resized_image.jpg"`);
-        res.send(resizedBuffer);
+        res.send(buffer);
     } catch (err) {
-        console.error("Resize error:", err);
-        res.status(500).json({ error: 'Resize failed' });
+        console.error("Resize Error:", err);
+        res.status(500).json({ error: 'Resize failed: ' + err.message });
     }
 });
 
@@ -90,41 +86,26 @@ app.post('/resize-image', upload.single('image'), async (req, res) => {
 app.post('/generate-qr', upload.none(), async (req, res) => {
     try {
         const { data } = req.body;
-        if (!data) return res.status(400).json({ error: 'Data is required' });
-
-        const qrBuffer = await QRCode.toBuffer(data, { width: 300 });
+        const buffer = await qrService.generateQr(data);
 
         res.set('Content-Type', 'image/png');
         res.set('Content-Disposition', `attachment; filename="qrcode.png"`);
-        res.send(qrBuffer);
+        res.send(buffer);
     } catch (err) {
         console.error("QR Error:", err);
-        res.status(500).json({ error: 'QR Generation failed' });
+        res.status(500).json({ error: 'QR failed: ' + err.message });
     }
 });
 
-// 4. Create PDF from Images
-app.post('/create-pdf', upload.array('images'), async (req, res) => {
+// 4. Create PDF
+app.post('/create-pdf', upload.array('images'), (req, res) => {
     try {
-        if (!req.files || req.files.length === 0) return res.status(400).send('No images uploaded');
-
-        const doc = new PDFDocument({ autoFirstPage: false });
-
-        res.setHeader('Content-Type', 'application/pdf');
-        res.setHeader('Content-Disposition', 'attachment; filename="images.pdf"');
-
-        doc.pipe(res);
-
-        for (const file of req.files) {
-            const img = doc.openImage(file.buffer);
-            doc.addPage({ size: [img.width, img.height] });
-            doc.image(img, 0, 0);
-        }
-
-        doc.end();
+        // pdfService.createPdfFromImages streams directly to response, so no async await needed for the initial call,
+        // but it handles its own errors inside safely.
+        pdfService.createPdfFromImages(req.files, res);
     } catch (err) {
-        console.error('PDF creation error:', err);
-        if (!res.headersSent) res.status(500).json({ error: 'PDF creation failed' });
+        console.error("PDF Create Error:", err);
+        if (!res.headersSent) res.status(500).json({ error: 'PDF Create failed: ' + err.message });
     }
 });
 
@@ -133,51 +114,30 @@ app.post('/split-pdf', upload.single('pdf'), async (req, res) => {
     try {
         if (!req.file) return res.status(400).json({ error: 'No PDF uploaded' });
 
-        // Write buffer to temp file (Vercel allows /tmp)
-        const tempPath = path.join(require('os').tmpdir(), `upload-${uuidv4()}.pdf`);
-        await fs.writeFile(tempPath, req.file.buffer);
-
-        const pdfImgConvert = (await import('pdf-img-convert')).default;
-        const outputImages = await pdfImgConvert.convert(tempPath);
-
-        // Cleanup temp file immediately
-        await fs.remove(tempPath).catch(console.error);
-
-        if (outputImages.length > 10) {
-            return res.status(413).json({ error: 'PDF too large (max 10 pages).' });
-        }
-
-        const images = outputImages.map((imgBuffer, index) => ({
-            filename: `page-${index + 1}.png`,
-            buffer: Buffer.from(imgBuffer).toString('base64')
-        }));
-
+        const images = await pdfService.splitPdf(req.file.buffer);
         res.json({ images });
+
     } catch (err) {
-        console.error('PDF split error:', err);
-        res.status(500).json({ error: 'PDF split failed' });
+        console.error("PDF Split Error:", err);
+        const statusCode = err.message.includes("too large") ? 413 : 500;
+        res.status(statusCode).json({ error: 'PDF Split failed: ' + err.message });
     }
 });
 
-// 6. Case Converter (Pure Logic)
+// 6. Case Converter
 app.post('/convert-case', upload.none(), (req, res) => {
-    const { text, type } = req.body;
-    if (!text) return res.status(400).json({ error: 'Text is required' });
-
-    let result = '';
-    switch (type) {
-        case 'uppercase': result = text.toUpperCase(); break;
-        case 'lowercase': result = text.toLowerCase(); break;
-        case 'titlecase': result = text.toLowerCase().replace(/\b\w/g, s => s.toUpperCase()); break;
-        case 'camelcase': result = text.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (_, chr) => chr.toUpperCase()); break;
-        default: result = text;
+    try {
+        const { text, type } = req.body;
+        const result = textService.convertCase(text, type);
+        res.json({ result });
+    } catch (err) {
+        res.status(400).json({ error: err.message });
     }
-    res.json({ result });
 });
 
-// 7. Video Generator Placeholder (Cannot run on Serverless CPU)
+// 7. Video Generator (Placeholder)
 app.post('/generate-video', upload.none(), (req, res) => {
-    res.status(501).json({ error: 'Video generation requires high-end GPU which is not available in this environment. Please use premium service.' });
+    res.status(501).json({ error: 'Video generation requires high-end GPU. Service not available.' });
 });
 
 // Dashboard & Auth
