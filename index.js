@@ -30,19 +30,12 @@ app.use(express.json());
 // Initialize Clerk Middleware
 app.use(clerkMiddleware());
 
-// REMOVE these lines for Vercel serverless compatibility
-// fs.ensureDirSync('static/mp3');
-// fs.ensureDirSync('static/images/uploads');
-// fs.ensureDirSync('static/images/processed');
-// fs.ensureDirSync('static/pdf');
-// fs.ensureDirSync('static/videos');
-// fs.ensureDirSync('static/pdf_pages');
 
 // Multer setup for file uploads
 const upload = multer({ dest: os.tmpdir() });
 
 // Serve all static files from the static directory at /static
-app.use('/static', express.static(path.join(__dirname, 'static')));
+
 
 // Serve static HTML files from public/
 app.use(express.static(path.join(__dirname, 'public')));
