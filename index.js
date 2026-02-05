@@ -79,7 +79,7 @@ app.post('/speak', upload.none(), async (req, res) => {
 
     const lang = accent || 'en';
     const isSlow = speed === 'slow';
-    
+
     try {
         const url = googleTTS.getAudioUrl(text, {
             lang,
@@ -154,7 +154,7 @@ app.post('/split-pdf', upload.single('pdf'), async (req, res) => {
         if (!req.file) return res.status(400).json({ error: 'No PDF uploaded' });
         const pdfImgConvert = (await import('pdf-img-convert')).default;
         const pdfPath = req.file.path;
-        
+
         // Convert PDF pages to images (returns array of Uint8Arrays)
         const outputImages = await pdfImgConvert.convert(pdfPath);
 
@@ -252,15 +252,15 @@ app.get('/dashboard', requireAuth(), (req, res) => {
 
 // Error handling for Clerk authentication
 app.use((err, req, res, next) => {
-  if (err.message === 'Unauthenticated') {
-    res.status(401).send(`
+    if (err.message === 'Unauthenticated') {
+        res.status(401).send(`
       <h1>401 - Unauthorized</h1>
       <p>You must be logged in to view this page.</p>
       <a href="/">Go Home to Sign In</a>
     `);
-  } else {
-    next(err);
-  }
+    } else {
+        next(err);
+    }
 });
 
 // Serve static files for verification and sitemap
@@ -268,8 +268,8 @@ app.get('/google6cda3ef54c5c2da9.html', (req, res) =>
     res.sendFile(path.join(__dirname, 'public/google6cda3ef54c5c2da9.html'))
 );
 app.get('/sitemap.xml', (req, res) => {
-  res.setHeader('Content-Type', 'application/xml');
-  res.sendFile(path.join(__dirname, 'public', 'sitemap.xml'));
+    res.setHeader('Content-Type', 'application/xml');
+    res.sendFile(path.join(__dirname, 'public', 'sitemap.xml'));
 });
 app.get('/favicon.ico', (req, res) => {
     res.status(204).end(); // No Content, avoids 404 in logs
