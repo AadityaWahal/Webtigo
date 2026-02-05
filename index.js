@@ -1,26 +1,17 @@
-// Required dependencies (install with npm):
-// express, multer, uuid, dotenv, sharp, qrcode, axios, google-tts-api, fs-extra, cors, @clerk/express, pdf-img-convert, pdfkit
+// Required dependencies: express, multer, uuid, dotenv, sharp, qrcode, pdfkit, fs-extra, cors, @clerk/express, pdf-img-convert
 const express = require('express');
 const multer = require('multer');
-const uuid = require('uuid').v4;
+const { v4: uuidv4 } = require('uuid');
 const dotenv = require('dotenv');
 const sharp = require('sharp');
 const QRCode = require('qrcode');
 const PDFDocument = require('pdfkit');
-const axios = require('axios');
-const fs = require('fs-extra');
+const fs = require('fs-extra'); // Kept for edge cases, but mostly avoiding disk
 const path = require('path');
 const cors = require('cors');
-const os = require('os');
-const googleTTS = require('google-tts-api');
-// const pdfImgConvert = require('pdf-img-convert');
 const { clerkMiddleware, requireAuth } = require('@clerk/express');
 
 dotenv.config();
-
-if (!process.env.CLERK_PUBLISHABLE_KEY || !process.env.CLERK_SECRET_KEY) {
-    console.error("CRITICAL: Clerk API keys are missing. Please set them in Vercel Environment Variables.");
-}
 
 const app = express();
 app.use(cors());
@@ -30,16 +21,17 @@ app.use(express.json());
 // Initialize Clerk Middleware
 app.use(clerkMiddleware());
 
-
-// Multer setup for file uploads
-const upload = multer({ dest: os.tmpdir() });
-
-// Serve all static files from the static directory at /static
-
+// Use Memory Storage for Multer to avoid writing to disk (Vercel compatible)
+const upload = multer({
+    storage: multer.memoryStorage(),
+    limits: { fileSize: 10 * 1024 * 1024 } // Limit to 10MB
+});
 
 // Serve static HTML files from public/
 app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public/index.html')));
+
+// Dynamic page routing
 app.get('/:page.html', (req, res) => {
     const page = req.params.page;
     const filePath = path.join(__dirname, 'public', `${page}.html`);
@@ -52,88 +44,107 @@ app.get('/:page.html', (req, res) => {
     });
 });
 
-// Image Compressor
+// --- API ENDPOINTS (No External Calls, In-Memory Only) ---
+
+// 1. Image Compressor
 app.post('/compress-image', upload.single('image'), async (req, res) => {
-    const targetSizeKB = parseInt(req.body.size_kb, 10);
-    const inputPath = req.file.path;
-    const uniqueFilename = `compressed_${uuid()}_${req.file.originalname}`;
-    const outputPath = path.join(os.tmpdir(), uniqueFilename);
-    let quality = 95;
-    let buffer = await fs.readFile(inputPath);
+    try {
+        if (!req.file) return res.status(400).json({ error: 'No image uploaded' });
 
-    while (buffer.length > targetSizeKB * 1024 && quality > 10) {
-        buffer = await sharp(buffer).jpeg({ quality }).toBuffer();
-        quality -= 5;
+        let quality = 80;
+        let buffer = req.file.buffer;
+
+        // Simple logic: reduce quality for stability
+        const compressedBuffer = await sharp(buffer)
+            .jpeg({ quality: quality })
+            .toBuffer();
+
+        res.set('Content-Type', 'image/jpeg');
+        res.set('Content-Disposition', `attachment; filename="compressed_image.jpg"`);
+        res.send(compressedBuffer);
+    } catch (err) {
+        console.error("Compression error:", err);
+        res.status(500).json({ error: 'Compression failed' });
     }
-    await fs.writeFile(outputPath, buffer);
-    await fs.remove(inputPath);
-    res.setHeader('Content-Type', 'image/jpeg');
-    res.setHeader('Content-Disposition', `attachment; filename="${uniqueFilename}"`);
-    res.send(buffer);
 });
 
-// Text-to-Speech
-// Text-to-Speech endpoint removed in favor of client-side Web Speech API
+// 2. Image Resizer
+app.post('/resize-image', upload.single('image'), async (req, res) => {
+    try {
+        if (!req.file) return res.status(400).json({ error: 'No image uploaded' });
 
-// QR Code Generator
+        const resizedBuffer = await sharp(req.file.buffer)
+            .resize(300, 300, { fit: 'cover' })
+            .toBuffer();
+
+        res.set('Content-Type', 'image/jpeg');
+        res.set('Content-Disposition', `attachment; filename="resized_image.jpg"`);
+        res.send(resizedBuffer);
+    } catch (err) {
+        console.error("Resize error:", err);
+        res.status(500).json({ error: 'Resize failed' });
+    }
+});
+
+// 3. QR Code Generator
 app.post('/generate-qr', upload.none(), async (req, res) => {
-    const { data } = req.body;
-    const uniqueFilename = `${uuid()}.png`;
-    const outputPath = path.join(os.tmpdir(), uniqueFilename);
-    await QRCode.toFile(outputPath, data, { width: 300 });
-    const qrBuffer = await fs.readFile(outputPath);
-    res.setHeader('Content-Type', 'image/png');
-    res.setHeader('Content-Disposition', `attachment; filename="${uniqueFilename}"`);
-    res.send(qrBuffer);
+    try {
+        const { data } = req.body;
+        if (!data) return res.status(400).json({ error: 'Data is required' });
+
+        const qrBuffer = await QRCode.toBuffer(data, { width: 300 });
+
+        res.set('Content-Type', 'image/png');
+        res.set('Content-Disposition', `attachment; filename="qrcode.png"`);
+        res.send(qrBuffer);
+    } catch (err) {
+        console.error("QR Error:", err);
+        res.status(500).json({ error: 'QR Generation failed' });
+    }
 });
 
-// Create PDF from images
+// 4. Create PDF from Images
 app.post('/create-pdf', upload.array('images'), async (req, res) => {
     try {
-        if (!req.files || req.files.length === 0) {
-            return res.status(400).send('No images uploaded');
-        }
+        if (!req.files || req.files.length === 0) return res.status(400).send('No images uploaded');
 
         const doc = new PDFDocument({ autoFirstPage: false });
-        const filename = `webtigo_${uuid()}.pdf`;
 
         res.setHeader('Content-Type', 'application/pdf');
-        res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+        res.setHeader('Content-Disposition', 'attachment; filename="images.pdf"');
 
         doc.pipe(res);
 
         for (const file of req.files) {
-            try {
-                const img = doc.openImage(file.path);
-                doc.addPage({ size: [img.width, img.height] });
-                doc.image(img, 0, 0);
-            } finally {
-                await fs.remove(file.path);
-            }
+            const img = doc.openImage(file.buffer);
+            doc.addPage({ size: [img.width, img.height] });
+            doc.image(img, 0, 0);
         }
+
         doc.end();
     } catch (err) {
         console.error('PDF creation error:', err);
-        if (!res.headersSent) {
-            res.status(500).json({ error: 'Failed to create PDF due to a server error.' });
-        }
+        if (!res.headersSent) res.status(500).json({ error: 'PDF creation failed' });
     }
 });
 
-// Split PDF to images (Native Node.js implementation for Vercel compatibility)
+// 5. Split PDF
 app.post('/split-pdf', upload.single('pdf'), async (req, res) => {
     try {
         if (!req.file) return res.status(400).json({ error: 'No PDF uploaded' });
+
+        // Write buffer to temp file (Vercel allows /tmp)
+        const tempPath = path.join(require('os').tmpdir(), `upload-${uuidv4()}.pdf`);
+        await fs.writeFile(tempPath, req.file.buffer);
+
         const pdfImgConvert = (await import('pdf-img-convert')).default;
-        const pdfPath = req.file.path;
+        const outputImages = await pdfImgConvert.convert(tempPath);
 
-        // Convert PDF pages to images (returns array of Uint8Arrays)
-        const outputImages = await pdfImgConvert.convert(pdfPath);
+        // Cleanup temp file immediately
+        await fs.remove(tempPath).catch(console.error);
 
-        // Vercel has a 4.5MB response body limit. 
-        // Large PDFs converted to base64 will exceed this.
         if (outputImages.length > 10) {
-            return res.status(413).json({ error: 'PDF too large. Please split smaller files (max 10 pages).' });
+            return res.status(413).json({ error: 'PDF too large (max 10 pages).' });
         }
 
         const images = outputImages.map((imgBuffer, index) => ({
@@ -141,7 +152,6 @@ app.post('/split-pdf', upload.single('pdf'), async (req, res) => {
             buffer: Buffer.from(imgBuffer).toString('base64')
         }));
 
-        await fs.remove(pdfPath);
         res.json({ images });
     } catch (err) {
         console.error('PDF split error:', err);
@@ -149,105 +159,46 @@ app.post('/split-pdf', upload.single('pdf'), async (req, res) => {
     }
 });
 
-// Image Resizer (fixed 300x300 for demo)
-app.post('/resize-image', upload.single('image'), async (req, res) => {
-    const uniqueFilename = `resized_${uuid()}_${req.file.originalname}`;
-    const outputPath = path.join(os.tmpdir(), uniqueFilename);
-    await sharp(req.file.path).resize(300, 300).toFile(outputPath);
-    const resizedBuffer = await fs.readFile(outputPath);
-    await fs.remove(req.file.path);
-    res.setHeader('Content-Type', 'image/jpeg');
-    res.setHeader('Content-Disposition', `attachment; filename="${uniqueFilename}"`);
-    res.send(resizedBuffer);
-});
-
-// Video Generator (RunwayML API)
-app.post('/generate-video', upload.none(), async (req, res) => {
-    const text = req.body.video_text;
-    const uniqueFilename = `${uuid()}.mp4`;
-    const outputPath = path.join(os.tmpdir(), uniqueFilename);
-    const apiUrl = "https://api.runwayml.com/v1/generate";
-    const headers = {
-        'Authorization': `Bearer ${process.env.API_KEY}`,
-        'Content-Type': 'application/json'
-    };
-    const payload = {
-        model: 'gen4_video',
-        prompt_text: text,
-        ratio: '1920:1080',
-        parameters: {}
-    };
-    try {
-        const response = await axios.post(apiUrl, payload, { headers, responseType: 'arraybuffer' });
-        await fs.writeFile(outputPath, response.data);
-        res.setHeader('Content-Type', 'video/mp4');
-        res.setHeader('Content-Disposition', `attachment; filename="${uniqueFilename}"`);
-        res.send(response.data);
-    } catch (e) {
-        res.status(500).json({ error: `Failed to connect to the API: ${e.message}` });
-    }
-});
-
-// Case Converter
-app.post('/convert-case', (req, res) => {
+// 6. Case Converter (Pure Logic)
+app.post('/convert-case', upload.none(), (req, res) => {
     const { text, type } = req.body;
     if (!text) return res.status(400).json({ error: 'Text is required' });
 
     let result = '';
     switch (type) {
-        case 'uppercase':
-            result = text.toUpperCase();
-            break;
-        case 'lowercase':
-            result = text.toLowerCase();
-            break;
-        case 'titlecase':
-            result = text.toLowerCase().replace(/\b\w/g, s => s.toUpperCase());
-            break;
-        case 'camelcase':
-            result = text.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (_, chr) => chr.toUpperCase());
-            break;
-        default:
-            result = text;
+        case 'uppercase': result = text.toUpperCase(); break;
+        case 'lowercase': result = text.toLowerCase(); break;
+        case 'titlecase': result = text.toLowerCase().replace(/\b\w/g, s => s.toUpperCase()); break;
+        case 'camelcase': result = text.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (_, chr) => chr.toUpperCase()); break;
+        default: result = text;
     }
     res.json({ result });
 });
 
-// Protected Dashboard Route
-app.get('/dashboard', requireAuth(), (req, res) => {
-    res.send(`
-      <h1>Webtigo Dashboard</h1>
-      <p>Welcome, User ID: ${req.auth.userId}</p>
-      <a href="/">Back Home</a>
-    `);
+// 7. Video Generator Placeholder (Cannot run on Serverless CPU)
+app.post('/generate-video', upload.none(), (req, res) => {
+    res.status(501).json({ error: 'Video generation requires high-end GPU which is not available in this environment. Please use premium service.' });
 });
 
-// Error handling for Clerk authentication
+// Dashboard & Auth
+app.get('/dashboard', requireAuth(), (req, res) => {
+    res.send(`<h1>Webtigo Dashboard</h1><p>Welcome, User ID: ${req.auth.userId}</p><a href="/">Back Home</a>`);
+});
+
 app.use((err, req, res, next) => {
     if (err.message === 'Unauthenticated') {
-        res.status(401).send(`
-      <h1>401 - Unauthorized</h1>
-      <p>You must be logged in to view this page.</p>
-      <a href="/">Go Home to Sign In</a>
-    `);
+        res.status(401).send(`<h1>401 - Unauthorized</h1><p>Login required.</p><a href="/">Sign In</a>`);
     } else {
         next(err);
     }
 });
 
-// Serve static files for verification and sitemap
-app.get('/google6cda3ef54c5c2da9.html', (req, res) =>
-    res.sendFile(path.join(__dirname, 'public/google6cda3ef54c5c2da9.html'))
-);
+// Utilities
 app.get('/sitemap.xml', (req, res) => {
     res.setHeader('Content-Type', 'application/xml');
     res.sendFile(path.join(__dirname, 'public', 'sitemap.xml'));
 });
-app.get('/favicon.ico', (req, res) => {
-    res.status(204).end(); // No Content, avoids 404 in logs
-});
-
-// Remove this legacy static CSS route, as styles.css is now in public/
+app.get('/favicon.ico', (req, res) => res.status(204).end());
 
 if (require.main === module) {
     const PORT = process.env.PORT || 3000;
