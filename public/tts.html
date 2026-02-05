@@ -564,67 +564,69 @@
             </div>
         </div>
 
-        let synth = window.speechSynthesis;
-        let voices = [];
+        <script>
+            let synth = window.speechSynthesis;
+            let voices = [];
 
-        function populateVoices() {
-        voices = synth.getVoices();
-        const accentSelect = document.getElementById('accent');
-        accentSelect.innerHTML = '';
+            function populateVoices() {
+                voices = synth.getVoices();
+                const accentSelect = document.getElementById('accent');
+                accentSelect.innerHTML = '';
 
-        // Filter specifically for "Microsoft" voices or common languages if wanted,
-        // but generally just listing them is safer for "common tools" compatibility.
-        // We'll group them for better UX.
-        voices.forEach((voice) => {
-        const option = document.createElement('option');
-        option.textContent = `${voice.name} (${voice.lang})`;
-        option.value = voice.name;
-        accentSelect.appendChild(option);
-        });
-        }
+                // Filter specifically for "Microsoft" voices or common languages if wanted, 
+                // but generally just listing them is safer for "common tools" compatibility.
+                // We'll group them for better UX.
+                voices.forEach((voice) => {
+                    const option = document.createElement('option');
+                    option.textContent = `${voice.name} (${voice.lang})`;
+                    option.value = voice.name;
+                    accentSelect.appendChild(option);
+                });
+            }
 
-        populateVoices();
-        if (speechSynthesis.onvoiceschanged !== undefined) {
-        speechSynthesis.onvoiceschanged = populateVoices;
-        }
+            populateVoices();
+            if (speechSynthesis.onvoiceschanged !== undefined) {
+                speechSynthesis.onvoiceschanged = populateVoices;
+            }
 
-        function generateSpeech() {
-        if (synth.speaking) {
-        console.error('speechSynthesis.speaking');
-        return;
-        }
+            function generateSpeech() {
+                if (synth.speaking) {
+                    console.error('speechSynthesis.speaking');
+                    return;
+                }
 
-        const text = document.getElementById('text').value;
-        const speed = document.getElementById('speed').value;
-        const voiceName = document.getElementById('accent').value;
+                const text = document.getElementById('text').value;
+                const speed = document.getElementById('speed').value;
+                const voiceName = document.getElementById('accent').value;
 
-        if (text !== '') {
-        const utterThis = new SpeechSynthesisUtterance(text);
+                if (text !== '') {
+                    const utterThis = new SpeechSynthesisUtterance(text);
 
-        // Find the selected voice
-        const selectedVoice = voices.find(v => v.name === voiceName);
-        if (selectedVoice) {
-        utterThis.voice = selectedVoice;
-        }
+                    // Find the selected voice
+                    const selectedVoice = voices.find(v => v.name === voiceName);
+                    if (selectedVoice) {
+                        utterThis.voice = selectedVoice;
+                    }
 
-        // Set Rate
-        if (speed === 'slow') {
-        utterThis.rate = 0.5;
-        } else {
-        utterThis.rate = 1;
-        }
+                    // Set Rate
+                    if (speed === 'slow') {
+                        utterThis.rate = 0.5;
+                    } else {
+                        utterThis.rate = 1;
+                    }
 
-        utterThis.onend = function (event) {
-        console.log('SpeechSynthesisUtterance.onend');
-        };
+                    utterThis.onend = function (event) {
+                        console.log('SpeechSynthesisUtterance.onend');
+                    };
 
-        utterThis.onerror = function (event) {
-        console.error('SpeechSynthesisUtterance.onerror');
-        };
+                    utterThis.onerror = function (event) {
+                        console.error('SpeechSynthesisUtterance.onerror');
+                    };
 
-        synth.speak(utterThis);
-        }
-        }
+                    synth.speak(utterThis);
+                }
+            }
+        </script>
     </main>
     <footer>
         <p>&copy; 2025 Webtigo. All rights reserved.</p>
