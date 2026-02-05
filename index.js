@@ -6,7 +6,31 @@ const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 
-// ... (existing imports)
+// Import Modular Services
+const imageService = require('./services/imageService');
+const pdfService = require('./services/pdfService');
+const qrService = require('./services/qrService');
+const textService = require('./services/textService');
+
+dotenv.config();
+
+const app = express();
+app.use(cors());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+// Initialize Clerk Middleware
+app.use(clerkMiddleware());
+
+// Use Memory Storage for Multer
+const upload = multer({
+    storage: multer.memoryStorage(),
+    limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit
+});
+
+// Serve static HTML files from public/
+app.use(express.static(path.join(__dirname, 'public')));
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public/index.html')));
 
 // (lines 37-47 replacement)
 // Dynamic page routing
