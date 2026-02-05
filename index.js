@@ -55,10 +55,9 @@ app.post('/compress-image', upload.single('image'), async (req, res) => {
 
         const size_kb = parseInt(req.body.size_kb, 10) || 50;
         const buffer = await imageService.compressImage(req.file.buffer, size_kb);
+        const base64Image = `data:image/jpeg;base64,${buffer.toString('base64')}`;
 
-        res.set('Content-Type', 'image/jpeg');
-        res.set('Content-Disposition', `attachment; filename="compressed_image.jpg"`);
-        res.send(buffer);
+        res.json({ image: base64Image, filename: 'compressed_image.jpg' });
     } catch (err) {
         console.error("Compression Error:", err);
         res.status(500).json({ error: 'Compression failed: ' + err.message });
@@ -72,10 +71,9 @@ app.post('/resize-image', upload.single('image'), async (req, res) => {
 
         const { width, height } = req.body;
         const buffer = await imageService.resizeImage(req.file.buffer, width || 300, height || 300);
+        const base64Image = `data:image/jpeg;base64,${buffer.toString('base64')}`;
 
-        res.set('Content-Type', 'image/jpeg');
-        res.set('Content-Disposition', `attachment; filename="resized_image.jpg"`);
-        res.send(buffer);
+        res.json({ image: base64Image, filename: 'resized_image.jpg' });
     } catch (err) {
         console.error("Resize Error:", err);
         res.status(500).json({ error: 'Resize failed: ' + err.message });
@@ -87,10 +85,9 @@ app.post('/generate-qr', upload.none(), async (req, res) => {
     try {
         const { data } = req.body;
         const buffer = await qrService.generateQr(data);
+        const base64Image = `data:image/png;base64,${buffer.toString('base64')}`;
 
-        res.set('Content-Type', 'image/png');
-        res.set('Content-Disposition', `attachment; filename="qrcode.png"`);
-        res.send(buffer);
+        res.json({ image: base64Image, filename: 'qrcode.png' });
     } catch (err) {
         console.error("QR Error:", err);
         res.status(500).json({ error: 'QR failed: ' + err.message });
