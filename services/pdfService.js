@@ -1,12 +1,11 @@
 const PDFDocument = require('pdfkit');
-const fs = require('fs-extra');
+const fs = require('fs').promises; // Use native fs promises
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 const os = require('os');
 
 class PdfService {
-    // Create PDF: Streams directly to response, so we pass `res` in or return a doc?
-    // Passing `res` allows us to pipe directly.
+    // ... (keep createPdfFromImages unchanged) ...
     createPdfFromImages(files, res) {
         if (!files || files.length === 0) throw new Error("No images provided");
 
@@ -39,14 +38,12 @@ class PdfService {
             const uniqueName = `upload-${uuidv4()}.pdf`;
             tempPath = path.join(os.tmpdir(), uniqueName);
 
+            // Use native fs.writeFile
             await fs.writeFile(tempPath, buffer);
 
             // Dynamic import for pdf-img-convert
             const pdfImgConvert = (await import('pdf-img-convert')).default;
 
-            // Limit to first 10 pages for safety
-            // pdf-img-convert docs say specific pages can be passed via config, 
-            // but default behavior is all pages. We will slice output if needed.
             const outputImages = await pdfImgConvert.convert(tempPath);
 
             if (outputImages.length > 10) {
@@ -60,7 +57,8 @@ class PdfService {
 
         } finally {
             if (tempPath) {
-                await fs.remove(tempPath).catch(() => { });
+                // Use native fs.rm (Node 14.14+) or fs.unlink
+                await fs.unlink(tempPath).catch(() => { });
             }
         }
     }

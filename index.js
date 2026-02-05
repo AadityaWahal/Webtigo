@@ -4,41 +4,19 @@ const multer = require('multer');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const path = require('path');
-const fs = require('fs-extra');
-const { clerkMiddleware, requireAuth } = require('@clerk/express');
+const fs = require('fs');
 
-// Import Modular Services
-const imageService = require('./services/imageService');
-const pdfService = require('./services/pdfService');
-const qrService = require('./services/qrService');
-const textService = require('./services/textService');
+// ... (existing imports)
 
-dotenv.config();
-
-const app = express();
-app.use(cors());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-
-// Initialize Clerk Middleware
-app.use(clerkMiddleware());
-
-// Use Memory Storage for Multer
-const upload = multer({
-    storage: multer.memoryStorage(),
-    limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit
-});
-
-// Serve static HTML files from public/
-app.use(express.static(path.join(__dirname, 'public')));
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public/index.html')));
-
+// (lines 37-47 replacement)
 // Dynamic page routing
 app.get('/:page.html', (req, res) => {
     const page = req.params.page;
     const filePath = path.join(__dirname, 'public', `${page}.html`);
-    fs.pathExists(filePath).then(exists => {
-        if (exists) {
+
+    // Check if file exists using native fs
+    fs.access(filePath, fs.constants.F_OK, (err) => {
+        if (!err) {
             res.sendFile(filePath);
         } else {
             res.status(404).send('Not Found');
