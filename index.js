@@ -73,35 +73,7 @@ app.post('/compress-image', upload.single('image'), async (req, res) => {
 });
 
 // Text-to-Speech
-app.post('/speak', upload.none(), async (req, res) => {
-    const { text, speed, accent } = req.body;
-    if (!text) return res.status(400).json({ error: 'Text is required' });
-
-    const lang = accent || 'en';
-    const isSlow = speed === 'slow';
-
-    try {
-        const url = googleTTS.getAudioUrl(text, {
-            lang,
-            slow: isSlow,
-            host: 'https://translate.google.com',
-        });
-        const response = await axios({
-            url,
-            method: 'GET',
-            responseType: 'arraybuffer'
-        });
-        const buffer = response.data;
-
-        const filename = `${uuid()}.mp3`;
-        res.setHeader('Content-Type', 'audio/mpeg');
-        res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-        res.status(200).send(buffer);
-    } catch (e) {
-        console.error(e);
-        res.status(500).json({ error: 'TTS failed' });
-    }
-});
+// Text-to-Speech endpoint removed in favor of client-side Web Speech API
 
 // QR Code Generator
 app.post('/generate-qr', upload.none(), async (req, res) => {

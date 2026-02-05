@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>Text-to-Speech Online - Free TTS Converter | Webtigo</title>
     <meta charset="UTF-8">
@@ -7,28 +8,32 @@
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-G93K7HRC9X"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-G93K7HRC9X');
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-G93K7HRC9X');
     </script>
     <meta name="robots" content="index, follow">
-    <meta name="description" content="Convert text to speech online for free with Webtigo. Download or preview audio instantly. No login required. Supports multiple languages and voices.">
-    <meta name="keywords" content="text to speech, tts, online tts, free text to speech, tts converter, speech generator, download speech, webtigo, text to audio, speech synthesis, online voice generator, mp3 tts">
+    <meta name="description"
+        content="Convert text to speech online for free with Webtigo. Download or preview audio instantly. No login required. Supports multiple languages and voices.">
+    <meta name="keywords"
+        content="text to speech, tts, online tts, free text to speech, tts converter, speech generator, download speech, webtigo, text to audio, speech synthesis, online voice generator, mp3 tts">
     <link rel="canonical" href="https://webtigo.vercel.app/tts.html">
     <meta name="google-site-verification" content="Gk-7350xltisPdpbrr_LEOlwsC8P2wapgivz_7Uhuu0" />
-        <meta property="og:title" content="Text-to-Speech Online - Free TTS Converter | Webtigo">
-        <meta property="og:description" content="Convert text to speech online for free. Download or preview audio instantly. No login required. Supports multiple languages and voices.">
-        <meta property="og:type" content="website">
-        <meta property="og:url" content="https://webtigo.vercel.app/tts.html">
-        <meta property="og:image" content="https://webtigo.vercel.app/webtigo-logo.svg">
-        <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:title" content="Text-to-Speech Online - Free TTS Converter | Webtigo">
-        <meta name="twitter:description" content="Convert text to speech online for free. Download or preview audio instantly. No login required. Supports multiple languages and voices.">
-        <meta name="twitter:image" content="https://webtigo.vercel.app/webtigo-logo.svg">
-        <link rel="icon" type="image/svg+xml" href="/webtigo-logo.svg">
-        <!-- Organization Logo Structured Data for Google -->
-        <script type="application/ld+json">
+    <meta property="og:title" content="Text-to-Speech Online - Free TTS Converter | Webtigo">
+    <meta property="og:description"
+        content="Convert text to speech online for free. Download or preview audio instantly. No login required. Supports multiple languages and voices.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://webtigo.vercel.app/tts.html">
+    <meta property="og:image" content="https://webtigo.vercel.app/webtigo-logo.svg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Text-to-Speech Online - Free TTS Converter | Webtigo">
+    <meta name="twitter:description"
+        content="Convert text to speech online for free. Download or preview audio instantly. No login required. Supports multiple languages and voices.">
+    <meta name="twitter:image" content="https://webtigo.vercel.app/webtigo-logo.svg">
+    <link rel="icon" type="image/svg+xml" href="/webtigo-logo.svg">
+    <!-- Organization Logo Structured Data for Google -->
+    <script type="application/ld+json">
         {
             "@context": "https://schema.org",
             "@type": "Organization",
@@ -42,7 +47,17 @@
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #6C63FF 0%, #007BFF 100%); color: #222; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #6C63FF 0%, #007BFF 100%);
+            color: #222;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
         header {
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(8px);
@@ -59,6 +74,7 @@
             z-index: 1000;
             box-sizing: border-box;
         }
+
         header a {
             color: #fff;
             text-decoration: none;
@@ -70,50 +86,96 @@
             transition: background 0.2s, color 0.2s, box-shadow 0.2s;
             white-space: nowrap;
         }
+
         #auth-container {
             display: flex;
             align-items: center;
         }
-        header a:hover, header a.active { background: linear-gradient(90deg, #6C63FF 60%, #007BFF 100%); color: #fff; box-shadow: 0 2px 12px rgba(108,99,255,0.10); }
+
+        header a:hover,
+        header a.active {
+            background: linear-gradient(90deg, #6C63FF 60%, #007BFF 100%);
+            color: #fff;
+            box-shadow: 0 2px 12px rgba(108, 99, 255, 0.10);
+        }
+
         header a.premium-link {
             background: linear-gradient(90deg, #8A2BE2 0%, #4B0082 100%);
-            box-shadow: 0 2px 12px rgba(138,43,226,0.15);
+            box-shadow: 0 2px 12px rgba(138, 43, 226, 0.15);
         }
+
         header a.premium-link:hover {
             background: linear-gradient(90deg, #4B0082 0%, #8A2BE2 100%);
-            box-shadow: 0 4px 16px rgba(138,43,226,0.25);
+            box-shadow: 0 4px 16px rgba(138, 43, 226, 0.25);
         }
-        main { flex: 1; padding: 32px 12px 24px 12px; max-width: 900px; margin: 0 auto; width: 100%; }
-        footer { background: rgba(255, 255, 255, 0.13); backdrop-filter: blur(6px); color: #fff; padding: 18px 0 12px 0; text-align: center; font-size: 1.05rem; margin-top: auto; border-top: 1px solid #fff2; box-shadow: 0 -2px 12px rgba(108,99,255,0.07); }
-        footer a { color: #FFCCBC; text-decoration: none; transition: text-decoration 0.2s; }
-        footer a:hover { text-decoration: underline; }
 
-        html, body {
+        main {
+            flex: 1;
+            padding: 32px 12px 24px 12px;
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        footer {
+            background: rgba(255, 255, 255, 0.13);
+            backdrop-filter: blur(6px);
+            color: #fff;
+            padding: 18px 0 12px 0;
+            text-align: center;
+            font-size: 1.05rem;
+            margin-top: auto;
+            border-top: 1px solid #fff2;
+            box-shadow: 0 -2px 12px rgba(108, 99, 255, 0.07);
+        }
+
+        footer a {
+            color: #FFCCBC;
+            text-decoration: none;
+            transition: text-decoration 0.2s;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        html,
+        body {
             max-width: 100vw;
             overflow-x: hidden;
         }
-        main, .container, .services-container {
+
+        main,
+        .container,
+        .services-container {
             max-width: 100vw;
             box-sizing: border-box;
         }
+
         @media (max-width: 900px) {
             .hero h1 {
                 font-size: 1.5rem !important;
                 word-break: break-word;
             }
+
             .tagline {
                 font-size: 0.98rem;
             }
+
             .services-container {
                 max-width: 99vw;
             }
         }
+
         @media (max-width: 600px) {
-            html, body {
+
+            html,
+            body {
                 font-size: 14px;
                 max-width: 100vw;
                 overflow-x: hidden;
             }
+
             .services-container {
                 flex-direction: column;
                 align-items: stretch;
@@ -121,6 +183,7 @@
                 gap: 10px;
                 max-width: 100vw;
             }
+
             .service-btn {
                 min-width: 0;
                 width: 100%;
@@ -128,49 +191,62 @@
                 font-size: 0.98rem;
                 padding: 10px 8px;
             }
+
             .hero {
                 padding: 12px 0 6px 0;
             }
+
             .logo {
                 width: 40px;
                 height: 40px;
                 margin-bottom: 6px;
             }
+
             .logo svg {
                 width: 22px;
                 height: 22px;
             }
+
             header {
                 flex-wrap: wrap;
                 gap: 6px;
                 padding: 8px 4px;
             }
+
             header a {
                 font-size: 0.8rem;
                 padding: 5px 8px;
                 margin-bottom: 2px;
             }
+
             main {
                 padding: 0 1vw 8px 1vw;
                 max-width: 100vw;
             }
         }
+
         @media (max-width: 400px) {
-            html, body {
+
+            html,
+            body {
                 font-size: 12px;
                 max-width: 100vw;
                 overflow-x: hidden;
             }
+
             .hero h1 {
                 font-size: 1.05rem !important;
             }
+
             .tagline {
                 font-size: 0.78rem;
             }
+
             .logo {
                 width: 28px;
                 height: 28px;
             }
+
             .logo svg {
                 width: 14px;
                 height: 14px;
@@ -180,7 +256,7 @@
         h1 {
             font-size: 2.5rem;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 8px rgba(0,0,0,0.18);
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.18);
             color: #fff;
             letter-spacing: 1px;
             text-align: center;
@@ -189,20 +265,20 @@
         p {
             font-size: 1.15rem;
             margin-bottom: 18px;
-            color: rgba(255,255,255,0.93);
+            color: rgba(255, 255, 255, 0.93);
             text-align: center;
         }
 
         .tts-container {
-            background: rgba(255,255,255,0.18);
+            background: rgba(255, 255, 255, 0.18);
             padding: 32px 28px 28px 28px;
             border-radius: 18px;
-            box-shadow: 0 8px 32px rgba(31,38,135,0.13);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.13);
             width: 100%;
             max-width: 500px;
             margin: 0 auto 32px auto;
             backdrop-filter: blur(6px);
-            border: 1.5px solid rgba(255,255,255,0.22);
+            border: 1.5px solid rgba(255, 255, 255, 0.22);
         }
 
         .form-group {
@@ -278,7 +354,7 @@
             border-radius: 7px;
             font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 2px 8px rgba(108,99,255,0.09);
+            box-shadow: 0 2px 8px rgba(108, 99, 255, 0.09);
             transition: background 0.2s, transform 0.2s;
             margin-top: 8px;
         }
@@ -291,11 +367,11 @@
         #previewContainer {
             margin-top: 28px;
             text-align: center;
-            background: rgba(255,255,255,0.13);
+            background: rgba(255, 255, 255, 0.13);
             border-radius: 12px;
             padding: 18px 10px 12px 10px;
-            box-shadow: 0 2px 8px rgba(108,99,255,0.06);
-            border: 1px solid rgba(108,99,255,0.08);
+            box-shadow: 0 2px 8px rgba(108, 99, 255, 0.06);
+            border: 1px solid rgba(108, 99, 255, 0.08);
         }
 
         #previewContainer h2 {
@@ -322,7 +398,7 @@
             border-radius: 6px;
             font-weight: 500;
             transition: background 0.2s, transform 0.2s;
-            box-shadow: 0 2px 8px rgba(108,99,255,0.09);
+            box-shadow: 0 2px 8px rgba(108, 99, 255, 0.09);
         }
 
         .download-btn:hover {
@@ -335,19 +411,25 @@
                 font-size: 1.5rem !important;
                 word-break: break-word;
             }
+
             .tagline {
                 font-size: 0.98rem;
             }
+
             .services-container {
                 max-width: 99vw;
             }
         }
+
         @media (max-width: 600px) {
-            html, body {
+
+            html,
+            body {
                 font-size: 14px;
                 max-width: 100vw;
                 overflow-x: hidden;
             }
+
             .services-container {
                 flex-direction: column;
                 align-items: stretch;
@@ -355,6 +437,7 @@
                 gap: 10px;
                 max-width: 100vw;
             }
+
             .service-btn {
                 min-width: 0;
                 width: 100%;
@@ -362,48 +445,61 @@
                 font-size: 0.98rem;
                 padding: 10px 8px;
             }
+
             .hero {
                 padding: 12px 0 6px 0;
             }
+
             .logo {
                 width: 40px;
                 height: 40px;
                 margin-bottom: 6px;
             }
+
             .logo svg {
                 width: 22px;
                 height: 22px;
             }
+
             header {
                 flex-wrap: wrap;
                 gap: 4px;
                 padding: 6px 0 4px 0;
             }
+
             header a {
                 font-size: 0.85rem;
                 padding: 5px 6px;
             }
+
             main {
                 padding: 0 1vw 8px 1vw;
                 max-width: 100vw;
             }
         }
+
         @media (max-width: 400px) {
-            html, body {
+
+            html,
+            body {
                 font-size: 12px;
                 max-width: 100vw;
                 overflow-x: hidden;
             }
+
             .hero h1 {
                 font-size: 1.05rem !important;
             }
+
             .tagline {
                 font-size: 0.78rem;
             }
+
             .logo {
                 width: 28px;
                 height: 28px;
             }
+
             .logo svg {
                 width: 14px;
                 height: 14px;
@@ -411,22 +507,25 @@
         }
     </style>
 </head>
+
 <body>
     <header>
-    <a href="/index.html">Home</a>
-    <a href="/tts.html" class="active">Text-to-Speech</a>
-    <a href="/image_compressor.html">Image Compressor</a>
-    <a href="/qr_code.html">QR Code Generator</a>
-    <a href="/pdf_service.html">PDF Service</a>
-    <a href="/image_resizer.html">Image Resizer</a>
-    <a href="/frequency_generator.html">Frequency Generator</a>
-    <a href="https://webtigo-premium.vercel.app/" class="premium-link" target="_blank" rel="noopener">Premium</a>
-    <div id="auth-container"></div>
+        <a href="/index.html">Home</a>
+        <a href="/tts.html" class="active">Text-to-Speech</a>
+        <a href="/image_compressor.html">Image Compressor</a>
+        <a href="/qr_code.html">QR Code Generator</a>
+        <a href="/pdf_service.html">PDF Service</a>
+        <a href="/image_resizer.html">Image Resizer</a>
+        <a href="/frequency_generator.html">Frequency Generator</a>
+        <a href="https://webtigo-premium.vercel.app/" class="premium-link" target="_blank" rel="noopener">Premium</a>
+        <div id="auth-container"></div>
     </header>
     <main class="container">
         <h1>Free Text-to-Speech Tool - No Login Required</h1>
-        <p>Convert your text into speech with ease. Choose the speed and voice type, then generate and download the audio file.</p>
-        <p>Our free Text-to-Speech tool allows you to convert text into natural-sounding speech without requiring a login. Generate audio files instantly and download them for free.</p>
+        <p>Convert your text into speech with ease. Choose the speed and voice type, then generate and download the
+            audio file.</p>
+        <p>Our free Text-to-Speech tool allows you to convert text into natural-sounding speech without requiring a
+            login. Generate audio files instantly and download them for free.</p>
 
         <div class="tts-container">
             <form id="ttsForm" enctype="multipart/form-data" onsubmit="event.preventDefault(); generateSpeech();">
@@ -458,69 +557,104 @@
                 <button type="submit">Generate Speech</button>
             </form>
 
+            <!-- Preview container removed for Client-Side TTS (Web Speech API streams directly) -->
             <div id="previewContainer" style="display: none;">
-                <h2>Audio Preview</h2>
-                <audio id="audioPreview" controls></audio>
-                <a id="downloadLink" class="download-btn" href="#" download="output.mp3">Download Audio</a>
+                <h2>Audio Playback</h2>
+                <p>Playing audio directly from your browser...</p>
             </div>
         </div>
 
-        <script>
-            function generateSpeech() {
-                const form = document.getElementById('ttsForm');
-                const formData = new FormData(form);
+        let synth = window.speechSynthesis;
+        let voices = [];
 
-                fetch('/speak', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.blob())
-                .then(blob => {
-                    const url = URL.createObjectURL(blob);
-                    // Show audio preview and enable download link
-                    const previewContainer = document.getElementById('previewContainer');
-                    const audioPreview = document.getElementById('audioPreview');
-                    const downloadLink = document.getElementById('downloadLink');
-                    audioPreview.src = url;
-                    downloadLink.href = url;
-                    previewContainer.style.display = 'block';
-                })
-                .catch(err => console.error('TTS failed', err));
-            }
-        </script>
+        function populateVoices() {
+        voices = synth.getVoices();
+        const accentSelect = document.getElementById('accent');
+        accentSelect.innerHTML = '';
+
+        // Filter specifically for "Microsoft" voices or common languages if wanted,
+        // but generally just listing them is safer for "common tools" compatibility.
+        // We'll group them for better UX.
+        voices.forEach((voice) => {
+        const option = document.createElement('option');
+        option.textContent = `${voice.name} (${voice.lang})`;
+        option.value = voice.name;
+        accentSelect.appendChild(option);
+        });
+        }
+
+        populateVoices();
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = populateVoices;
+        }
+
+        function generateSpeech() {
+        if (synth.speaking) {
+        console.error('speechSynthesis.speaking');
+        return;
+        }
+
+        const text = document.getElementById('text').value;
+        const speed = document.getElementById('speed').value;
+        const voiceName = document.getElementById('accent').value;
+
+        if (text !== '') {
+        const utterThis = new SpeechSynthesisUtterance(text);
+
+        // Find the selected voice
+        const selectedVoice = voices.find(v => v.name === voiceName);
+        if (selectedVoice) {
+        utterThis.voice = selectedVoice;
+        }
+
+        // Set Rate
+        if (speed === 'slow') {
+        utterThis.rate = 0.5;
+        } else {
+        utterThis.rate = 1;
+        }
+
+        utterThis.onend = function (event) {
+        console.log('SpeechSynthesisUtterance.onend');
+        };
+
+        utterThis.onerror = function (event) {
+        console.error('SpeechSynthesisUtterance.onerror');
+        };
+
+        synth.speak(utterThis);
+        }
+        }
     </main>
     <footer>
         <p>&copy; 2025 Webtigo. All rights reserved.</p>
     </footer>
     <script src="/main.js"></script>
     <script>
-      if (window.AOS) AOS.init();
+        if (window.AOS) AOS.init();
     </script>
 
     <!-- Clerk Authentication Script -->
-    <script
-      async
-      crossorigin="anonymous"
-      data-clerk-publishable-key="pk_test_ZmFjdHVhbC1qb2V5LTg4LmNsZXJrLmFjY291bnRzLmRldiQ"
-      src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
-      type="text/javascript"
-    ></script>
+    <script async crossorigin="anonymous"
+        data-clerk-publishable-key="pk_test_ZmFjdHVhbC1qb2V5LTg4LmNsZXJrLmFjY291bnRzLmRldiQ"
+        src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js" type="text/javascript"></script>
 
     <script>
-      window.addEventListener("load", async function () {
-        await Clerk.load();
-        const authContainer = document.getElementById("auth-container");
+        window.addEventListener("load", async function () {
+            await Clerk.load();
+            const authContainer = document.getElementById("auth-container");
 
-        if (Clerk.user) {
-          Clerk.mountUserButton(authContainer);
-        } else {
-          const signInBtn = document.createElement("a");
-          signInBtn.innerText = "Sign In";
-          signInBtn.href = "#";
-          signInBtn.onclick = () => Clerk.openSignIn();
-          authContainer.appendChild(signInBtn);
-        }
-      });
+            if (Clerk.user) {
+                Clerk.mountUserButton(authContainer);
+            } else {
+                const signInBtn = document.createElement("a");
+                signInBtn.innerText = "Sign In";
+                signInBtn.href = "#";
+                signInBtn.onclick = () => Clerk.openSignIn();
+                authContainer.appendChild(signInBtn);
+            }
+        });
     </script>
 </body>
+
 </html>
