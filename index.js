@@ -20,7 +20,8 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static('public'));
+// Explicit absolute path for static files
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Global View Variables
 app.use((req, res, next) => {
@@ -30,6 +31,8 @@ app.use((req, res, next) => {
 
 // Templating Engine (Next.js-style)
 app.use(expressLayouts);
+// Explicit absolute path for views
+app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.set('layout', './layout'); // looks for views/layout.ejs
 
