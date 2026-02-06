@@ -25,6 +25,55 @@
   <meta property="twitter:title" content="<%= title %>">
   <meta property="twitter:description" content="Free premium web tools for everyday tasks.">
 
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="application-name" content="Webtigo">
+  <meta name="apple-mobile-web-app-title" content="Webtigo">
+  <link rel="canonical" href="https://webtigo.vercel.app<%= typeof currentPath !== 'undefined' ? currentPath : '' %>">
+
+  <meta property="og:site_name" content="Webtigo">
+  <meta name="twitter:creator" content="@webtigo">
+  <meta name="twitter:image" content="https://webtigo.vercel.app/og-image.jpg">
+
+  <!-- Schema.org JSON-LD for Sitelinks -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "url": "https://webtigo.vercel.app/",
+        "name": "Webtigo",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://webtigo.vercel.app/search?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "name": "Text to Speech",
+        "url": "https://webtigo.vercel.app/tts"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "name": "Image Compressor",
+        "url": "https://webtigo.vercel.app/compressor"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "name": "QR Code Generator",
+        "url": "https://webtigo.vercel.app/qrcode"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "name": "Premium Tools",
+        "url": "https://webtigo-premium.vercel.app/"
+      }
+    ]
+  }
+  </script>
+
   <title>
     <%= title %>
   </title>
