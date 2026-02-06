@@ -8,9 +8,7 @@ const fsSync = require('fs');      // Use native sync fs for ensuring dirs
 const { v4: uuidv4 } = require('uuid');
 const sharp = require('sharp');
 const QRCode = require('qrcode');
-const { PDFDocument } = require('pdf-lib');
 const gTTS = require('gtts');
-const createZip = require('./utils/zip');
 require('dotenv').config();
 
 const app = express();
@@ -67,9 +65,7 @@ app.get('/qrcode', (req, res) => {
     res.render('pages/qrcode', { title: 'QR Code Generator - Webtigo' });
 });
 
-app.get('/pdf', (req, res) => {
-    res.render('pages/pdf', { title: 'PDF Tools - Webtigo' });
-});
+// (PDF Page removed)
 
 app.get('/resizer', (req, res) => {
     res.render('pages/resizer', { title: 'Image Resizer - Webtigo' });
@@ -152,62 +148,7 @@ app.post('/api/generate-qr', upload.none(), async (req, res) => {
     }
 });
 
-// 4. Create PDF
-app.post('/api/create-pdf', upload.array('images'), async (req, res) => {
-    try {
-        if (!req.files || req.files.length === 0) return res.status(400).send('No images');
-        const pdfDoc = await PDFDocument.create();
-        for (const file of req.files) {
-            const imgBuffer = await fs.readFile(file.path);
-            let img;
-            if (file.mimetype === 'image/png') {
-                img = await pdfDoc.embedPng(imgBuffer);
-            } else {
-                img = await pdfDoc.embedJpg(imgBuffer);
-            }
-            const page = pdfDoc.addPage([img.width, img.height]);
-            page.drawImage(img, { x: 0, y: 0, width: img.width, height: img.height });
-            await safeRemove(file.path);
-        }
-        const pdfBytes = await pdfDoc.save();
-        const filename = `created_${uuidv4()}.pdf`;
-        res.setHeader('Content-Type', 'application/pdf');
-        res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-        res.send(Buffer.from(pdfBytes));
-    } catch (err) {
-        res.status(500).send('PDF Create Failed');
-    }
-});
-
-// 5. Split PDF
-app.post('/api/split-pdf', upload.single('pdf'), async (req, res) => {
-    try {
-        if (!req.file) return res.status(400).send('No PDF');
-        const pdfBytes = await fs.readFile(req.file.path);
-        const pdfDoc = await PDFDocument.load(pdfBytes);
-        const pageCount = pdfDoc.getPageCount();
-        const filesToZip = [];
-
-        for (let i = 0; i < pageCount; i++) {
-            const newPdf = await PDFDocument.create();
-            const [copiedPage] = await newPdf.copyPages(pdfDoc, [i]);
-            newPdf.addPage(copiedPage);
-            const pdfBuffer = await newPdf.save();
-            filesToZip.push({ name: `page-${i + 1}.pdf`, buffer: Buffer.from(pdfBuffer) });
-        }
-
-        const zipBuffer = createZip(filesToZip);
-        const filename = `split_pages_${uuidv4()}.zip`;
-        res.setHeader('Content-Type', 'application/zip');
-        res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-        res.send(zipBuffer);
-        await safeRemove(req.file.path);
-    } catch (err) {
-        res.status(500).send('Split PDF Failed');
-    }
-});
-
-// 6. TTS
+// 4. TTS
 app.post('/api/speak', upload.none(), async (req, res) => {
     try {
         const { text, speed, accent } = req.body;
@@ -231,7 +172,7 @@ app.post('/api/speak', upload.none(), async (req, res) => {
     }
 });
 
-// 7. Sitemap
+// 5. Sitemap
 app.get('/sitemap.xml', (req, res) => {
     const pages = [
         '/',
@@ -239,7 +180,6 @@ app.get('/sitemap.xml', (req, res) => {
         '/tts',
         '/compressor',
         '/qrcode',
-        '/pdf',
         '/resizer',
         '/frequency',
         '/case-converter'
