@@ -1,169 +1,222 @@
-// Required dependencies
 const express = require('express');
+const expressLayouts = require('express-ejs-layouts');
 const multer = require('multer');
-const dotenv = require('dotenv');
 const cors = require('cors');
 const path = require('path');
-const fs = require('fs');
-
-// Import Modular Services
-const imageService = require('./services/imageService');
-const pdfService = require('./services/pdfService');
-const qrService = require('./services/qrService');
-const textService = require('./services/textService');
-
-dotenv.config();
+const fs = require('fs-extra');
+const { v4: uuidv4 } = require('uuid');
+const sharp = require('sharp');
+const QRCode = require('qrcode');
+const { PDFDocument } = require('pdf-lib');
+const gTTS = require('gtts');
+const createZip = require('./utils/zip');
+require('dotenv').config();
 
 const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Middleware
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.static('public'));
 
-// Initialize Clerk Middleware
-app.use(clerkMiddleware());
-
-// Use Memory Storage for Multer
-const upload = multer({
-    storage: multer.memoryStorage(),
-    limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit
+// Global View Variables
+app.use((req, res, next) => {
+    res.locals.clerkKey = process.env.CLERK_PUBLISHABLE_KEY;
+    next();
 });
 
-// Serve static HTML files from public/
-app.use(express.static(path.join(__dirname, 'public')));
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public/index.html')));
+// Templating Engine (Next.js-style)
+app.use(expressLayouts);
+app.set('view engine', 'ejs');
+app.set('layout', './layout'); // looks for views/layout.ejs
 
-// (lines 37-47 replacement)
-// Dynamic page routing
-app.get('/:page.html', (req, res) => {
-    const page = req.params.page;
-    const filePath = path.join(__dirname, 'public', `${page}.html`);
+// File Upload Config (Temporary /tmp storage)
+const upload = multer({ dest: '/tmp' });
 
-    // Check if file exists using native fs
-    fs.access(filePath, fs.constants.F_OK, (err) => {
-        if (!err) {
-            res.sendFile(filePath);
-        } else {
-            res.status(404).send('Not Found');
-        }
-    });
+// Ensure temp dirs
+fs.ensureDirSync(path.join(__dirname, 'public/temp_downloads')); // Not used in serverless logic, but good practice locally
+
+// --- VIEW ROUTES (Next.js Pages) ---
+
+app.get('/', (req, res) => {
+    res.render('pages/index', { title: 'Webtigo - Free Online Tools' });
 });
 
-// --- API ENDPOINTS (Using Modular Services) ---
+app.get('/signin', (req, res) => {
+    res.render('pages/signin', { title: 'Sign In - Webtigo' });
+});
+
+app.get('/tts', (req, res) => {
+    res.render('pages/tts', { title: 'Text to Speech - Webtigo' });
+});
+
+app.get('/compressor', (req, res) => {
+    res.render('pages/compressor', { title: 'Image Compressor - Webtigo' });
+});
+
+app.get('/qrcode', (req, res) => {
+    res.render('pages/qrcode', { title: 'QR Code Generator - Webtigo' });
+});
+
+app.get('/pdf', (req, res) => {
+    res.render('pages/pdf', { title: 'PDF Tools - Webtigo' });
+});
+
+app.get('/resizer', (req, res) => {
+    res.render('pages/resizer', { title: 'Image Resizer - Webtigo' });
+});
+
+app.get('/frequency', (req, res) => {
+    res.render('pages/frequency', { title: 'Frequency Generator - Webtigo' });
+});
+
+app.get('/case-converter', (req, res) => {
+    res.render('pages/case-converter', { title: 'Case Converter - Webtigo' });
+});
+
+
+// --- API ROUTES (Serverless Processing) ---
 
 // 1. Image Compressor
-app.post('/compress-image', upload.single('image'), async (req, res) => {
+app.post('/api/compress-image', upload.single('image'), async (req, res) => {
     try {
-        if (!req.file) return res.status(400).json({ error: 'No image uploaded' });
+        if (!req.file) return res.status(400).send('No image uploaded');
+        const targetSizeKB = parseInt(req.body.size_kb, 10) || 50;
+        let quality = 95;
+        let buffer = await fs.readFile(req.file.path);
 
-        const size_kb = parseInt(req.body.size_kb, 10) || 50;
-        const buffer = await imageService.compressImage(req.file.buffer, size_kb);
-        const base64Image = `data:image/jpeg;base64,${buffer.toString('base64')}`;
+        while (buffer.length > targetSizeKB * 1024 && quality > 10) {
+            buffer = await sharp(buffer).jpeg({ quality }).toBuffer();
+            quality -= 10;
+        }
 
-        res.json({ image: base64Image, filename: 'compressed_image.jpg' });
+        const filename = `compressed_${uuidv4()}.jpg`;
+        res.setHeader('Content-Type', 'image/jpeg');
+        res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+        res.send(buffer);
+        await fs.remove(req.file.path);
     } catch (err) {
-        console.error("Compression Error:", err);
-        res.status(500).json({ error: 'Compression failed: ' + err.message });
+        res.status(500).send('Compression Failed');
     }
 });
 
 // 2. Image Resizer
-app.post('/resize-image', upload.single('image'), async (req, res) => {
+app.post('/api/resize-image', upload.single('image'), async (req, res) => {
     try {
-        if (!req.file) return res.status(400).json({ error: 'No image uploaded' });
+        if (!req.file) return res.status(400).send('No image uploaded');
+        const width = parseInt(req.body.width) || 300;
+        const height = parseInt(req.body.height) || 300;
 
-        const { width, height } = req.body;
-        const buffer = await imageService.resizeImage(req.file.buffer, width || 300, height || 300);
-        const base64Image = `data:image/jpeg;base64,${buffer.toString('base64')}`;
+        const buffer = await sharp(req.file.path)
+            .resize(width, height, { fit: 'cover' })
+            .toBuffer();
 
-        res.json({ image: base64Image, filename: 'resized_image.jpg' });
+        const filename = `resized_${uuidv4()}.jpg`;
+        res.setHeader('Content-Type', 'image/jpeg');
+        res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+        res.send(buffer);
+        await fs.remove(req.file.path);
     } catch (err) {
-        console.error("Resize Error:", err);
-        res.status(500).json({ error: 'Resize failed: ' + err.message });
+        res.status(500).send('Resize Failed');
     }
 });
 
-// 3. QR Code Generator
-app.post('/generate-qr', upload.none(), async (req, res) => {
+// 3. QR Code
+app.post('/api/generate-qr', upload.none(), async (req, res) => {
     try {
         const { data } = req.body;
-        const buffer = await qrService.generateQr(data);
-        const base64Image = `data:image/png;base64,${buffer.toString('base64')}`;
-
-        res.json({ image: base64Image, filename: 'qrcode.png' });
+        if (!data) return res.status(400).send('No data provided');
+        const buffer = await QRCode.toBuffer(data, { width: 300 });
+        const filename = `qr_${uuidv4()}.png`;
+        res.setHeader('Content-Type', 'image/png');
+        res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+        res.send(buffer);
     } catch (err) {
-        console.error("QR Error:", err);
-        res.status(500).json({ error: 'QR failed: ' + err.message });
+        res.status(500).send('QR Gen Failed');
     }
 });
 
 // 4. Create PDF
-app.post('/create-pdf', upload.array('images'), (req, res) => {
+app.post('/api/create-pdf', upload.array('images'), async (req, res) => {
     try {
-        // pdfService.createPdfFromImages streams directly to response, so no async await needed for the initial call,
-        // but it handles its own errors inside safely.
-        pdfService.createPdfFromImages(req.files, res);
+        if (!req.files || req.files.length === 0) return res.status(400).send('No images');
+        const pdfDoc = await PDFDocument.create();
+        for (const file of req.files) {
+            const imgBuffer = await fs.readFile(file.path);
+            let img;
+            if (file.mimetype === 'image/png') {
+                img = await pdfDoc.embedPng(imgBuffer);
+            } else {
+                img = await pdfDoc.embedJpg(imgBuffer);
+            }
+            const page = pdfDoc.addPage([img.width, img.height]);
+            page.drawImage(img, { x: 0, y: 0, width: img.width, height: img.height });
+            await fs.remove(file.path);
+        }
+        const pdfBytes = await pdfDoc.save();
+        const filename = `created_${uuidv4()}.pdf`;
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+        res.send(Buffer.from(pdfBytes));
     } catch (err) {
-        console.error("PDF Create Error:", err);
-        if (!res.headersSent) res.status(500).json({ error: 'PDF Create failed: ' + err.message });
+        res.status(500).send('PDF Create Failed');
     }
 });
 
 // 5. Split PDF
-app.post('/split-pdf', upload.single('pdf'), async (req, res) => {
+app.post('/api/split-pdf', upload.single('pdf'), async (req, res) => {
     try {
-        if (!req.file) return res.status(400).json({ error: 'No PDF uploaded' });
+        if (!req.file) return res.status(400).send('No PDF');
+        const pdfBytes = await fs.readFile(req.file.path);
+        const pdfDoc = await PDFDocument.load(pdfBytes);
+        const pageCount = pdfDoc.getPageCount();
+        const filesToZip = [];
 
-        const images = await pdfService.splitPdf(req.file.buffer);
-        res.json({ images });
+        for (let i = 0; i < pageCount; i++) {
+            const newPdf = await PDFDocument.create();
+            const [copiedPage] = await newPdf.copyPages(pdfDoc, [i]);
+            newPdf.addPage(copiedPage);
+            const pdfBuffer = await newPdf.save();
+            filesToZip.push({ name: `page-${i + 1}.pdf`, buffer: Buffer.from(pdfBuffer) });
+        }
 
+        const zipBuffer = createZip(filesToZip);
+        const filename = `split_pages_${uuidv4()}.zip`;
+        res.setHeader('Content-Type', 'application/zip');
+        res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+        res.send(zipBuffer);
+        await fs.remove(req.file.path);
     } catch (err) {
-        console.error("PDF Split Error:", err);
-        const statusCode = err.message.includes("too large") ? 413 : 500;
-        res.status(statusCode).json({ error: 'PDF Split failed: ' + err.message });
+        res.status(500).send('Split PDF Failed');
     }
 });
 
-// 6. Case Converter
-app.post('/convert-case', upload.none(), (req, res) => {
+// 6. TTS
+app.post('/api/speak', upload.none(), async (req, res) => {
     try {
-        const { text, type } = req.body;
-        const result = textService.convertCase(text, type);
-        res.json({ result });
+        const { text, speed, accent } = req.body;
+        if (!text) return res.status(400).send('No text');
+        const lang = accent || 'en';
+        const slow = speed === 'slow';
+        const filename = `tts_${uuidv4()}.mp3`;
+        const tempPath = path.join('/tmp', filename);
+
+        const tts = new gTTS(text, lang, slow);
+        tts.save(tempPath, async (err) => {
+            if (err) return res.status(500).send('TTS Failed');
+            const buffer = await fs.readFile(tempPath);
+            res.setHeader('Content-Type', 'audio/mpeg');
+            res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+            res.send(buffer);
+            await fs.remove(tempPath);
+        });
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        res.status(500).send('TTS Error');
     }
 });
 
-// 7. Video Generator (Placeholder)
-app.post('/generate-video', upload.none(), (req, res) => {
-    res.status(501).json({ error: 'Video generation requires high-end GPU. Service not available.' });
-});
-
-// Dashboard & Auth
-app.get('/dashboard', requireAuth(), (req, res) => {
-    res.send(`<h1>Webtigo Dashboard</h1><p>Welcome, User ID: ${req.auth.userId}</p><a href="/">Back Home</a>`);
-});
-
-app.use((err, req, res, next) => {
-    if (err.message === 'Unauthenticated') {
-        res.status(401).send(`<h1>401 - Unauthorized</h1><p>Login required.</p><a href="/">Sign In</a>`);
-    } else {
-        next(err);
-    }
-});
-
-// Utilities
-app.get('/sitemap.xml', (req, res) => {
-    res.setHeader('Content-Type', 'application/xml');
-    res.sendFile(path.join(__dirname, 'public', 'sitemap.xml'));
-});
-app.get('/favicon.ico', (req, res) => res.status(204).end());
-
-if (require.main === module) {
-    const PORT = process.env.PORT || 3000;
-    app.listen(PORT, () => {
-        console.log(`Server is running on http://localhost:${PORT}`);
-    });
-}
+app.listen(PORT, () => console.log(`Available on http://localhost:${PORT}`));
 
 module.exports = app;

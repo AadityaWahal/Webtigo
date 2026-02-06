@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="Gk-7350xltisPdpbrr_LEOlwsC8P2wapgivz_7Uhuu0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/globals.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Clerk Auth -->
+    <script
+      async
+      crossorigin="anonymous"
+      data-clerk-publishable-key="<%= clerkKey %>"
+      src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
+      type="text/javascript"
+    ></script>
+    <script>
+      window.addEventListener("load", async function () {
+        await Clerk.load();
+        
+        // Update UI based on auth state
+        const userButton = document.getElementById("user-button");
+        const authLinks = document.getElementById("auth-links");
+        
+        if (Clerk.user) {
+          Clerk.mountUserButton(userButton);
+          authLinks.style.display = 'none';
+        } else {
+          userButton.style.display = 'none';
+          authLinks.style.display = 'flex';
+        }
+      });
+    </script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">Webtigo</div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="https://webtigo-premium.vercel.app/" target="_blank" class="premium-link">Premium</a>
+            <div id="auth-links">
+                <a href="/signin" class="btn-signin">Sign In</a>
+            </div>
+            <div id="user-button"></div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <%- body %>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Webtigo. All rights reserved.</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<div class="glass-card" style="max-width: 600px; margin: 0 auto;">
+    <h1 style="margin-bottom: 2rem; text-align: center;">QR Code Generator</h1>
+
+    <div class="form-group">
+        <label>Enter URL or Text</label>
+        <input type="text" id="qr-text" placeholder="https://example.com">
+    </div>
+
+    <button class="primary-btn" onclick="generateQR()">Generate QR</button>
+
+    <div id="result" class="result-area" style="display: none;">
+        <img id="qr-img" src="" alt="QR Code" style="max-width: 100%; border-radius: 8px; margin-bottom: 1rem;">
+        <br>
+        <a id="download-link" href="#" class="primary-btn"
+            style="text-decoration: none; display: inline-block;">Download PNG</a>
+    </div>
+</div>
+
+<script>
+    async function generateQR() {
+        const text = document.getElementById('qr-text').value;
+        const resultDiv = document.getElementById('result');
+
+        if (!text) return alert('Enter text');
+
+        const formData = new FormData();
+        formData.append('data', text);
+
+        try {
+            const res = await fetch('/api/generate-qr', { method: 'POST', body: formData });
+            if (!res.ok) throw new Error('Failed');
+
+            const blob = await res.blob();
+            const url = URL.createObjectURL(blob);
+
+            const img = document.getElementById('qr-img');
+            img.src = url;
+
+            const link = document.getElementById('download-link');
+            link.href = url;
+            link.download = `qrcode-${Date.now()}.png`;
+
+            resultDiv.style.display = 'block';
+        } catch (e) {
+            alert(e.message);
+        }
+    }
+</script>

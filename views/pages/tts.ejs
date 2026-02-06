@@ -1,0 +1,72 @@
+<div class="glass-card" style="max-width: 600px; margin: 0 auto;">
+    <h1 style="margin-bottom: 2rem; text-align: center;">Text to Speech</h1>
+
+    <div class="form-group">
+        <label>Enter Text</label>
+        <textarea id="tts-text" rows="5" placeholder="Type something here..."></textarea>
+    </div>
+
+    <div class="form-group">
+        <label>Accent / Language</label>
+        <select id="tts-accent">
+            <option value="en">English (US)</option>
+            <option value="en-uk">English (UK)</option>
+            <option value="en-au">English (Australia)</option>
+            <option value="fr">French</option>
+            <option value="es">Spanish</option>
+            <option value="de">German</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Speed</label>
+        <select id="tts-speed">
+            <option value="normal">Normal</option>
+            <option value="slow">Slow</option>
+        </select>
+    </div>
+
+    <button class="primary-btn" onclick="generateSpeech()">Generate Audio</button>
+
+    <div id="result" class="result-area" style="display: none;">
+        <audio id="audio-player" controls style="width: 100%; margin-bottom: 1rem;"></audio>
+        <a id="download-link" href="#" class="primary-btn"
+            style="text-decoration: none; display: inline-block;">Download MP3</a>
+    </div>
+</div>
+
+<script>
+    async function generateSpeech() {
+        const text = document.getElementById('tts-text').value;
+        const accent = document.getElementById('tts-accent').value;
+        const speed = document.getElementById('tts-speed').value;
+        const resultDiv = document.getElementById('result');
+
+        if (!text) return alert('Please enter text');
+
+        const formData = new FormData();
+        formData.append('text', text);
+        formData.append('accent', accent);
+        formData.append('speed', speed);
+
+        try {
+            const res = await fetch('/api/speak', { method: 'POST', body: formData });
+            if (!res.ok) throw new Error('Generation failed');
+
+            const blob = await res.blob();
+            const url = URL.createObjectURL(blob);
+
+            const audio = document.getElementById('audio-player');
+            audio.src = url;
+            audio.play();
+
+            const link = document.getElementById('download-link');
+            link.href = url;
+            link.download = `speech-${Date.now()}.mp3`;
+
+            resultDiv.style.display = 'block';
+        } catch (e) {
+            alert(e.message);
+        }
+    }
+</script>

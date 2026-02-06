@@ -1,0 +1,63 @@
+<div class="glass-card" style="max-width: 800px; margin: 0 auto;">
+    <h1 style="margin-bottom: 2rem; text-align: center;">Case Converter</h1>
+
+    <div class="form-group">
+        <textarea id="case-text" rows="8" placeholder="Type or paste your text here..."
+            oninput="updateStats()"></textarea>
+    </div>
+
+    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem;">
+        <button class="primary-btn" style="width: auto;" onclick="convert('upper')">UPPERCASE</button>
+        <button class="primary-btn" style="width: auto;" onclick="convert('lower')">lowercase</button>
+        <button class="primary-btn" style="width: auto;" onclick="convert('title')">Title Case</button>
+        <button class="primary-btn" style="width: auto;" onclick="convert('sentence')">Sentence case</button>
+        <button class="primary-btn" style="width: auto; background: #ef4444;" onclick="copyText()">Copy Text</button>
+        <button class="primary-btn" style="width: auto; background: transparent; border: 1px solid var(--border);"
+            onclick="clearText()">Clear</button>
+    </div>
+
+    <div style="color: var(--text-muted); font-size: 0.9rem;">
+        Characters: <span id="char-count">0</span> | Words: <span id="word-count">0</span>
+    </div>
+</div>
+
+<script>
+    function convert(type) {
+        const textArea = document.getElementById('case-text');
+        let text = textArea.value;
+
+        switch (type) {
+            case 'upper':
+                text = text.toUpperCase();
+                break;
+            case 'lower':
+                text = text.toLowerCase();
+                break;
+            case 'title':
+                text = text.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+                break;
+            case 'sentence':
+                text = text.toLowerCase().replace(/(^\s*\w|[\.\!\?]\s*\w)/g, c => c.toUpperCase());
+                break;
+        }
+        textArea.value = text;
+    }
+
+    function updateStats() {
+        const text = document.getElementById('case-text').value;
+        document.getElementById('char-count').innerText = text.length;
+        document.getElementById('word-count').innerText = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+    }
+
+    function copyText() {
+        const text = document.getElementById('case-text');
+        text.select();
+        document.execCommand('copy');
+        alert('Copied to clipboard!');
+    }
+
+    function clearText() {
+        document.getElementById('case-text').value = '';
+        updateStats();
+    }
+</script>

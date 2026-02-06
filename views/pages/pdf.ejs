@@ -1,0 +1,81 @@
+<div class="glass-card" style="max-width: 600px; margin: 0 auto;">
+    <h1 style="margin-bottom: 2rem; text-align: center;">PDF Tools</h1>
+
+    <div style="display: flex; gap: 1rem; justify-content: center; margin-bottom: 2rem;">
+        <button class="primary-btn" onclick="showTab('split')" style="width: auto;">Split PDF</button>
+        <button class="primary-btn" onclick="showTab('create')"
+            style="width: auto; background: transparent; border: 1px solid var(--primary);">Create PDF</button>
+    </div>
+
+    <!-- Split Section -->
+    <div id="split-section">
+        <h3 style="margin-bottom: 1rem;">Split PDF to Pages</h3>
+        <div class="form-group">
+            <label>Upload PDF</label>
+            <input type="file" id="split-file" accept="application/pdf">
+        </div>
+        <button class="primary-btn" onclick="splitPdf()">Split & Download ZIP</button>
+    </div>
+
+    <!-- Create Section -->
+    <div id="create-section" style="display: none;">
+        <h3 style="margin-bottom: 1rem;">Images to PDF</h3>
+        <div class="form-group">
+            <label>Upload Images</label>
+            <input type="file" id="create-files" accept="image/*" multiple>
+        </div>
+        <button class="primary-btn" onclick="createPdf()">Create PDF</button>
+    </div>
+
+    <div id="result" class="result-area" style="display: none;">
+        <p>Processing Complete!</p>
+        <a id="download-link" href="#" class="primary-btn"
+            style="text-decoration: none; display: inline-block;">Download Result</a>
+    </div>
+</div>
+
+<script>
+    function showTab(tab) {
+        document.getElementById('split-section').style.display = tab === 'split' ? 'block' : 'none';
+        document.getElementById('create-section').style.display = tab === 'create' ? 'block' : 'none';
+    }
+
+    async function splitPdf() {
+        const file = document.getElementById('split-file').files[0];
+        if (!file) return alert('No PDF selected');
+
+        const formData = new FormData();
+        formData.append('pdf', file);
+
+        processRequest('/api/split-pdf', formData, 'split_pages.zip');
+    }
+
+    async function createPdf() {
+        const files = document.getElementById('create-files').files;
+        if (files.length === 0) return alert('No images selected');
+
+        const formData = new FormData();
+        for (const f of files) formData.append('images', f);
+
+        processRequest('/api/create-pdf', formData, 'images.pdf');
+    }
+
+    async function processRequest(url, body, defaultName) {
+        const resultDiv = document.getElementById('result');
+        try {
+            const res = await fetch(url, { method: 'POST', body });
+            if (!res.ok) throw new Error('Failed');
+
+            const blob = await res.blob();
+            const urlObj = URL.createObjectURL(blob);
+
+            const link = document.getElementById('download-link');
+            link.href = urlObj;
+            link.download = defaultName;
+
+            resultDiv.style.display = 'block';
+        } catch (e) {
+            alert(e.message);
+        }
+    }
+</script>

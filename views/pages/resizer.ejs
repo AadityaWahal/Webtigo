@@ -1,0 +1,56 @@
+<div class="glass-card" style="max-width: 600px; margin: 0 auto;">
+    <h1 style="margin-bottom: 2rem; text-align: center;">Image Resizer</h1>
+
+    <div class="form-group">
+        <label>Upload Image</label>
+        <input type="file" id="res-file" accept="image/*">
+    </div>
+
+    <div style="display: flex; gap: 1rem;">
+        <div class="form-group" style="flex: 1;">
+            <label>Width (px)</label>
+            <input type="number" id="res-width" value="300">
+        </div>
+        <div class="form-group" style="flex: 1;">
+            <label>Height (px)</label>
+            <input type="number" id="res-height" value="300">
+        </div>
+    </div>
+
+    <button class="primary-btn" onclick="resizeImage()">Resize</button>
+
+    <div id="result" class="result-area" style="display: none;">
+        <a id="download-link" href="#" class="primary-btn"
+            style="text-decoration: none; display: inline-block;">Download Resized Image</a>
+    </div>
+</div>
+
+<script>
+    async function resizeImage() {
+        const file = document.getElementById('res-file').files[0];
+        const width = document.getElementById('res-width').value;
+        const height = document.getElementById('res-height').value;
+
+        if (!file) return alert('Select image');
+
+        const formData = new FormData();
+        formData.append('image', file);
+        formData.append('width', width);
+        formData.append('height', height);
+
+        try {
+            const res = await fetch('/api/resize-image', { method: 'POST', body: formData });
+            if (!res.ok) throw new Error('Failed');
+
+            const blob = await res.blob();
+            const url = URL.createObjectURL(blob);
+
+            const link = document.getElementById('download-link');
+            link.href = url;
+            link.download = `resized-${Date.now()}.jpg`;
+            document.getElementById('result').style.display = 'block';
+        } catch (e) {
+            alert(e.message);
+        }
+    }
+</script>
