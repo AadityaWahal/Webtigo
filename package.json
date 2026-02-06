@@ -1,7 +1,7 @@
 {
     "name": "webtigo",
-    "version": "2.0.0",
-    "description": "Premium Web Tools - Next.js Style Express App",
+    "version": "2.0.1",
+    "description": "Premium Web Tools",
     "main": "index.js",
     "engines": {
         "node": "20.x"
@@ -17,7 +17,6 @@
         "multer": "^1.4.5-lts.1",
         "cors": "^2.8.5",
         "dotenv": "^16.3.1",
-        "fs-extra": "^11.1.1",
         "uuid": "^9.0.1",
         "sharp": "^0.32.6",
         "pdf-lib": "^1.17.1",

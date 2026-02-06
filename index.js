@@ -3,7 +3,8 @@ const expressLayouts = require('express-ejs-layouts');
 const multer = require('multer');
 const cors = require('cors');
 const path = require('path');
-const fs = require('fs-extra');
+const fs = require('fs').promises; // Use native fs promises
+const fsSync = require('fs');      // Use native sync fs for ensuring dirs
 const { v4: uuidv4 } = require('uuid');
 const sharp = require('sharp');
 const QRCode = require('qrcode');
@@ -36,7 +37,10 @@ app.set('layout', './layout'); // looks for views/layout.ejs
 const upload = multer({ dest: '/tmp' });
 
 // Ensure temp dirs
-fs.ensureDirSync(path.join(__dirname, 'public/temp_downloads')); // Not used in serverless logic, but good practice locally
+// native fs mkdirSync with recursive: true replaces ensureDirSync
+try {
+    fsSync.mkdirSync(path.join(__dirname, 'public/temp_downloads'), { recursive: true });
+} catch (e) { }
 
 // --- VIEW ROUTES (Next.js Pages) ---
 
@@ -79,6 +83,13 @@ app.get('/case-converter', (req, res) => {
 
 // --- API ROUTES (Serverless Processing) ---
 
+// Helper to safely remove files via native fs
+const safeRemove = async (filePath) => {
+    try {
+        await fs.rm(filePath, { recursive: true, force: true });
+    } catch (e) { /* ignore */ }
+};
+
 // 1. Image Compressor
 app.post('/api/compress-image', upload.single('image'), async (req, res) => {
     try {
@@ -96,7 +107,7 @@ app.post('/api/compress-image', upload.single('image'), async (req, res) => {
         res.setHeader('Content-Type', 'image/jpeg');
         res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
         res.send(buffer);
-        await fs.remove(req.file.path);
+        await safeRemove(req.file.path);
     } catch (err) {
         res.status(500).send('Compression Failed');
     }
@@ -117,7 +128,7 @@ app.post('/api/resize-image', upload.single('image'), async (req, res) => {
         res.setHeader('Content-Type', 'image/jpeg');
         res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
         res.send(buffer);
-        await fs.remove(req.file.path);
+        await safeRemove(req.file.path);
     } catch (err) {
         res.status(500).send('Resize Failed');
     }
@@ -153,7 +164,7 @@ app.post('/api/create-pdf', upload.array('images'), async (req, res) => {
             }
             const page = pdfDoc.addPage([img.width, img.height]);
             page.drawImage(img, { x: 0, y: 0, width: img.width, height: img.height });
-            await fs.remove(file.path);
+            await safeRemove(file.path);
         }
         const pdfBytes = await pdfDoc.save();
         const filename = `created_${uuidv4()}.pdf`;
@@ -187,7 +198,7 @@ app.post('/api/split-pdf', upload.single('pdf'), async (req, res) => {
         res.setHeader('Content-Type', 'application/zip');
         res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
         res.send(zipBuffer);
-        await fs.remove(req.file.path);
+        await safeRemove(req.file.path);
     } catch (err) {
         res.status(500).send('Split PDF Failed');
     }
@@ -210,7 +221,7 @@ app.post('/api/speak', upload.none(), async (req, res) => {
             res.setHeader('Content-Type', 'audio/mpeg');
             res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
             res.send(buffer);
-            await fs.remove(tempPath);
+            await safeRemove(tempPath);
         });
     } catch (err) {
         res.status(500).send('TTS Error');
