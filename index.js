@@ -23,7 +23,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Global View Variables
 app.use((req, res, next) => {
-    res.locals.clerkKey = process.env.CLERK_PUBLISHABLE_KEY;
+    // Support both standard and Next.js-style env var names
+    res.locals.clerkKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || process.env.CLERK_PUBLISHABLE_KEY;
     next();
 });
 
