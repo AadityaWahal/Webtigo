@@ -67,45 +67,85 @@ app.use((req, res, next) => {
 // --- VIEW ROUTES (Next.js Pages) ---
 
 app.get('/', (req, res) => {
-    res.render('pages/index', { title: 'Webtigo - Free Online Tools' });
+    res.render('pages/index', {
+        title: 'Webtigo - Free Online PDF, Image & Audio Tools',
+        description: 'Free online tools for PDF conversion, image compression, QR code generation, text to speech, and more. No registration required.',
+        keywords: 'free online tools, pdf converter, image compressor, qr code generator, text to speech, webtigo'
+    });
 });
 
 app.get('/signin', (req, res) => {
-    res.render('pages/signin', { title: 'Sign In - Webtigo' });
+    res.render('pages/signin', {
+        title: 'Sign In - Webtigo',
+        description: 'Sign in to Webtigo to access premium features and save your preferences.',
+        keywords: 'sign in, login, webtigo account'
+    });
 });
 
 app.get('/tts', (req, res) => {
-    res.render('pages/tts', { title: 'Text to Speech - Webtigo' });
+    res.render('pages/tts', {
+        title: 'Text to Speech Converter - Free Online TTS',
+        description: 'Convert text to natural sounding speech online. Download as MP3. Multiple languages and accents supported.',
+        keywords: 'text to speech, tts, convert text to audio, free tts, text reader'
+    });
 });
 
 app.get('/compressor', (req, res) => {
-    res.render('pages/compressor', { title: 'Image Compressor - Webtigo' });
+    res.render('pages/compressor', {
+        title: 'Image Compressor - Reduce File Size Online',
+        description: 'Compress JPG, PNG images online for free. Reduce file size without losing quality.',
+        keywords: 'image compressor, reduce image size, compress jpg, compress png, online image optimizer'
+    });
 });
 
 app.get('/qrcode', (req, res) => {
-    res.render('pages/qrcode', { title: 'QR Code Generator - Webtigo' });
+    res.render('pages/qrcode', {
+        title: 'Free QR Code Generator - Create Custom QR Codes',
+        description: 'Generate free QR codes for URLs, text, Wi-Fi, and more. Customizable and downloadable.',
+        keywords: 'qr code generator, create qr code, free qr code, custom qr code, qrcode maker'
+    });
 });
 
 // (PDF Page removed)
 
 app.get('/resizer', (req, res) => {
-    res.render('pages/resizer', { title: 'Image Resizer - Webtigo' });
+    res.render('pages/resizer', {
+        title: 'Image Resizer - Resize Images Online',
+        description: 'Resize JPG, PNG images to exact pixel dimensions online. Bulk resizing supported.',
+        keywords: 'image resizer, resize image, change image size, photo resizer, online image tool'
+    });
 });
 
 app.get('/frequency', (req, res) => {
-    res.render('pages/frequency', { title: 'Frequency Generator - Webtigo' });
+    res.render('pages/frequency', {
+        title: 'Online Frequency Generator - Tone Generator',
+        description: 'Generate pure sine, square, sawtooth, and triangle waves. Test audio equipment or hearing.',
+        keywords: 'frequency generator, tone generator, online signal generator, sound test, audio test'
+    });
 });
 
 app.get('/case-converter', (req, res) => {
-    res.render('pages/case-converter', { title: 'Case Converter - Webtigo' });
+    res.render('pages/case-converter', {
+        title: 'Case Converter - Upper, Lower & Title Case',
+        description: 'Convert text between uppercase, lowercase, title case, and sentence case online.',
+        keywords: 'case converter, uppercase to lowercase, title case converter, text tool, string manipulator'
+    });
 });
 
 app.get('/images-to-pdf', (req, res) => {
-    res.render('pages/images-to-pdf', { title: 'Images to PDF - Webtigo' });
+    res.render('pages/images-to-pdf', {
+        title: 'Images to PDF Converter - Free Online Tool',
+        description: 'Convert JPG, PNG images to a single PDF document online. Drag and drop, reorder pages, fast and secure.',
+        keywords: 'images to pdf, jpg to pdf, png to pdf, convert image to pdf, free pdf converter'
+    });
 });
 
 app.get('/pdf-to-images', (req, res) => {
-    res.render('pages/pdf-to-images', { title: 'PDF to Images - Webtigo' });
+    res.render('pages/pdf-to-images', {
+        title: 'PDF to Images Converter - Extract Pages',
+        description: 'Extract all pages from a PDF file as high-quality JPG images. Free online PDF to Image converter.',
+        keywords: 'pdf to images, pdf to jpg, extract pdf pages, convert pdf to image, free pdf tool'
+    });
 });
 
 
