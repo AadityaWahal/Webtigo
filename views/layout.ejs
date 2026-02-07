@@ -82,32 +82,39 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
 
   <!-- Clerk Auth -->
-  <script async crossorigin="anonymous" data-clerk-publishable-key="<%= clerkKey %>"
-    src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js" type="text/javascript"></script>
   <script>
-    window.addEventListener("load", async function () {
-      await Clerk.load();
+    const clerkPublishableKey = "<%= clerkKey %>";
 
-      // Update UI based on auth state
-      const userButton = document.getElementById("user-button");
-      const authLinks = document.getElementById("auth-links");
+    const script = document.createElement('script');
+    script.src = "https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js";
+    script.crossOrigin = "anonymous";
+    script.async = true;
 
-      if (Clerk.user) {
-        Clerk.mountUserButton(userButton);
-        authLinks.style.display = 'none';
-      } else {
-        userButton.style.display = 'none';
-        authLinks.style.display = 'flex';
+    script.onload = async function () {
+      try {
+        await Clerk.load({ publishableKey: clerkPublishableKey });
+
+        const userButton = document.getElementById("user-button");
+        const authLinks = document.getElementById("auth-links");
+        const signInDiv = document.getElementById("sign-in");
+
+        if (Clerk.user) {
+          if (userButton) Clerk.mountUserButton(userButton);
+          if (authLinks) authLinks.style.display = 'none';
+        } else {
+          if (userButton) userButton.style.display = 'none';
+          if (authLinks) authLinks.style.display = 'flex';
+        }
+
+        if (signInDiv) {
+          Clerk.mountSignIn(signInDiv);
+        }
+      } catch (err) {
+        console.error("Clerk failed to load:", err);
       }
-
-      // Mount Sign In component if the container exists (fixes race condition)
-      const signInDiv = document.getElementById("sign-in");
-      if (signInDiv) {
-        Clerk.mountSignIn(signInDiv);
-      }
-    });
+    };
+    document.head.appendChild(script);
   </script>
-</head>
 
 <body>
   <nav class="navbar">

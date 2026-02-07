@@ -11,9 +11,16 @@ const QRCode = require('qrcode');
 const gTTS = require('gtts');
 const { PDFDocument } = require('pdf-lib');
 const AdmZip = require('adm-zip');
-// Load environment variables (try .env.local first, then .env)
-require('dotenv').config({ path: '.env.local' });
-require('dotenv').config();
+// Load environment variables (Robust loading for local and Vercel)
+const resultLocal = require('dotenv').config({ path: '.env.local' });
+const resultMain = require('dotenv').config();
+
+// Debugging: Log if keys are missing (without revealing secrets)
+if (!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY && !process.env.CLERK_PUBLISHABLE_KEY) {
+    console.error("❌ ERROR: Clerk Publishable Key is missing!");
+} else {
+    console.log("✅ Clerk Configuration Loaded");
+}
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -28,7 +35,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Global View Variables
 app.use((req, res, next) => {
     // Support both standard and Next.js-style env var names
-    res.locals.clerkKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || process.env.CLERK_PUBLISHABLE_KEY;
+    const key = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || process.env.CLERK_PUBLISHABLE_KEY;
+
+    if (!key) {
+        console.error("⚠️ Warning: Clerk Publishable Key not found in environment variables.");
+    }
+
+    res.locals.clerkKey = key;
     next();
 });
 
