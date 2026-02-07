@@ -69,40 +69,40 @@ app.use((req, res, next) => {
 app.get('/', (req, res) => {
     res.render('pages/index', {
         title: 'Webtigo - Free Online PDF, Image & Audio Tools',
-        description: 'Free online tools for PDF conversion, image compression, QR code generation, text to speech, and more. No registration required.',
-        keywords: 'free online tools, pdf converter, image compressor, qr code generator, text to speech, webtigo'
+        description: 'Access free, premium-grade web tools. Convert PDF to JPG, compress images, generate QR codes, and convert text to speech. No registration required.',
+        keywords: 'free online tools, pdf converter, image compressor, qr code generator, text to speech, webtigo, online utilities'
     });
 });
 
 app.get('/signin', (req, res) => {
     res.render('pages/signin', {
-        title: 'Sign In - Webtigo',
-        description: 'Sign in to Webtigo to access premium features and save your preferences.',
-        keywords: 'sign in, login, webtigo account'
+        title: 'Sign In - Webtigo Premium',
+        description: 'Log in to your Webtigo account to save preferences and access exclusive features.',
+        keywords: 'sign in, login, webtigo account, user dashboard'
     });
 });
 
 app.get('/tts', (req, res) => {
     res.render('pages/tts', {
-        title: 'Text to Speech Converter - Free Online TTS',
-        description: 'Convert text to natural sounding speech online. Download as MP3. Multiple languages and accents supported.',
-        keywords: 'text to speech, tts, convert text to audio, free tts, text reader'
+        title: 'Free Text to Speech Converter - Download MP3 Audio',
+        description: 'Convert text into natural-sounding speech instantly. Support for multiple accents and speeds. Download your audio as an MP3 file for free.',
+        keywords: 'text to speech, tts converter, text to mp3, read aloud online, free voice generator, natural sounding tts'
     });
 });
 
 app.get('/compressor', (req, res) => {
     res.render('pages/compressor', {
-        title: 'Image Compressor - Reduce File Size Online',
-        description: 'Compress JPG, PNG images online for free. Reduce file size without losing quality.',
-        keywords: 'image compressor, reduce image size, compress jpg, compress png, online image optimizer'
+        title: 'Image Compressor - Reduce JPG & PNG Size Online',
+        description: 'Compress JPG and PNG images online without losing quality. Reduce file size for faster websites and easier sharing. Free and secure.',
+        keywords: 'image compressor, compress jpeg, compress png, reduce image size, online image optimizer, shrink image file'
     });
 });
 
 app.get('/qrcode', (req, res) => {
     res.render('pages/qrcode', {
-        title: 'Free QR Code Generator - Create Custom QR Codes',
-        description: 'Generate free QR codes for URLs, text, Wi-Fi, and more. Customizable and downloadable.',
-        keywords: 'qr code generator, create qr code, free qr code, custom qr code, qrcode maker'
+        title: 'Free QR Code Generator - Create & Download Custom QRs',
+        description: 'Generate high-quality QR codes for URLs, text, Wi-Fi, and email. Instant creation with no expiration. Download as PNG.',
+        keywords: 'qr code generator, create qr code, free qr maker, custom qr code, url to qr, wifi qr code'
     });
 });
 
@@ -110,41 +110,41 @@ app.get('/qrcode', (req, res) => {
 
 app.get('/resizer', (req, res) => {
     res.render('pages/resizer', {
-        title: 'Image Resizer - Resize Images Online',
-        description: 'Resize JPG, PNG images to exact pixel dimensions online. Bulk resizing supported.',
-        keywords: 'image resizer, resize image, change image size, photo resizer, online image tool'
+        title: 'Image Resizer - Change JPG & PNG Dimensions Online',
+        description: 'Resize images to exact pixel dimensions (width & height). Perfect for social media, passports, and web content. Fast and free.',
+        keywords: 'image resizer, resize jpg, resize png, change photo size, online photo editor, pixel resizer'
     });
 });
 
 app.get('/frequency', (req, res) => {
     res.render('pages/frequency', {
-        title: 'Online Frequency Generator - Tone Generator',
-        description: 'Generate pure sine, square, sawtooth, and triangle waves. Test audio equipment or hearing.',
-        keywords: 'frequency generator, tone generator, online signal generator, sound test, audio test'
+        title: 'Online Tone Generator - Generate Pure Sine & Square Waves',
+        description: 'Free online frequency generator. Create pure Sine, Square, Sawtooth, and Triangle waves from 20Hz to 20kHz. Test audio equipment and hearing.',
+        keywords: 'frequency generator, tone generator, online hz generator, sound test, audio oscillator, sine wave generator'
     });
 });
 
 app.get('/case-converter', (req, res) => {
     res.render('pages/case-converter', {
-        title: 'Case Converter - Upper, Lower & Title Case',
-        description: 'Convert text between uppercase, lowercase, title case, and sentence case online.',
-        keywords: 'case converter, uppercase to lowercase, title case converter, text tool, string manipulator'
+        title: 'Case Converter Tool - Uppercase, Lowercase & Title Case',
+        description: 'Instantly convert text between Uppercase, Lowercase, Title Case, and Sentence Case. Copy to clipboard with one click.',
+        keywords: 'case converter, uppercase to lowercase, title case generator, text capitalization, sentence case tool'
     });
 });
 
 app.get('/images-to-pdf', (req, res) => {
     res.render('pages/images-to-pdf', {
-        title: 'Images to PDF Converter - Free Online Tool',
-        description: 'Convert JPG, PNG images to a single PDF document online. Drag and drop, reorder pages, fast and secure.',
-        keywords: 'images to pdf, jpg to pdf, png to pdf, convert image to pdf, free pdf converter'
+        title: 'JPG to PDF Converter - Merge Images into One PDF',
+        description: 'Convert and merge JPG or PNG images into a single PDF document. Drag and drop, reorder pages, and download instantly.',
+        keywords: 'images to pdf, jpg to pdf, png to pdf, combine photos to pdf, free pdf converter, merge images'
     });
 });
 
 app.get('/pdf-to-images', (req, res) => {
     res.render('pages/pdf-to-images', {
-        title: 'PDF to Images Converter - Extract Pages',
-        description: 'Extract all pages from a PDF file as high-quality JPG images. Free online PDF to Image converter.',
-        keywords: 'pdf to images, pdf to jpg, extract pdf pages, convert pdf to image, free pdf tool'
+        title: 'PDF to JPG Converter - Extract Pages as Images',
+        description: 'Extract every page from a PDF file as a high-quality JPG image. Download all pages as a ZIP file. Fast, free, and private.',
+        keywords: 'pdf to images, pdf to jpg, extract pdf pages, convert pdf to image, pdf to zip, free pdf tool'
     });
 });
 

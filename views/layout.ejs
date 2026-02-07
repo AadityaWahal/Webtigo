@@ -10,6 +10,7 @@
   <meta name="keywords"
     content="<%= typeof keywords !== 'undefined' ? keywords : 'pdf tools, image compressor, qr code generator, online tools, free web tools' %>">
   <meta name="author" content="Webtigo">
+  <link rel="icon" href="/logo.png" type="image/png">
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
@@ -110,7 +111,10 @@
 
 <body>
   <nav class="navbar">
-    <div class="logo">Webtigo</div>
+    <div class="logo" style="display: flex; align-items: center; gap: 10px;">
+      <img src="/logo.png" alt="Webtigo Logo" style="height: 40px; width: auto;">
+      <span>Webtigo</span>
+    </div>
     <div class="nav-links">
       <a href="/">Home</a>
       <a href="https://webtigo-premium.vercel.app/" target="_blank" class="premium-link">Premium</a>
