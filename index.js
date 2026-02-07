@@ -9,6 +9,8 @@ const { v4: uuidv4 } = require('uuid');
 const sharp = require('sharp');
 const QRCode = require('qrcode');
 const gTTS = require('gtts');
+// Load environment variables (try .env.local first, then .env)
+require('dotenv').config({ path: '.env.local' });
 require('dotenv').config();
 
 const app = express();

@@ -98,6 +98,12 @@
         userButton.style.display = 'none';
         authLinks.style.display = 'flex';
       }
+
+      // Mount Sign In component if the container exists (fixes race condition)
+      const signInDiv = document.getElementById("sign-in");
+      if (signInDiv) {
+        Clerk.mountSignIn(signInDiv);
+      }
     });
   </script>
 </head>

@@ -2,11 +2,3 @@
     <h2 style="margin-bottom: 2rem;">Sign In to Webtigo</h2>
     <div id="sign-in"></div>
 </div>
-
-<script>
-    window.addEventListener("load", async function () {
-        if (Clerk) {
-            Clerk.mountSignIn(document.getElementById("sign-in"));
-        }
-    });
-</script>
