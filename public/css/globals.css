@@ -175,6 +175,14 @@ footer {
     display: flex;
     flex-direction: column;
     gap: 0.8rem;
+    transform: translateY(0);
+    /* Default visible */
+    opacity: 1;
+    /* Default visible */
+}
+
+/* Only hide if JS is enabled and animation is ready */
+body.js-enabled .tool-card {
     opacity: 0;
     transform: translateY(30px);
 }

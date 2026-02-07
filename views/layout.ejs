@@ -132,6 +132,40 @@
   <footer>
     <p>&copy; 2024 Webtigo. All rights reserved.</p>
   </footer>
+
+  <script>
+    // Scroll Reveal Animation (Apple Style)
+    document.addEventListener("DOMContentLoaded", function () {
+      // 1. Enable JS animations only if JS loads
+      document.body.classList.add('js-enabled');
+
+      // 2. Fallback: If IntersectionObserver is not supported, reveal all immediately
+      if (!('IntersectionObserver' in window)) {
+        document.querySelectorAll('.tool-card').forEach(card => card.classList.add('reveal'));
+        return;
+      }
+
+      const observerIn = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('reveal');
+            observerIn.unobserve(entry.target); // Performance: stop observing once revealed
+          }
+        });
+      }, { threshold: 0.1, rootMargin: "50px" }); // Increased margin to trigger earlier
+
+      const cards = document.querySelectorAll('.tool-card');
+      cards.forEach((card, index) => {
+        card.style.transitionDelay = `${index * 50}ms`; // Stagger effect
+        observerIn.observe(card);
+      });
+
+      // Safety net: Force reveal after 1 seconds regardless of scroll
+      setTimeout(() => {
+        cards.forEach(card => card.classList.add('reveal'));
+      }, 2000);
+    });
+  </script>
 </body>
 
 </html>
