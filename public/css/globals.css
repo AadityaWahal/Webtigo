@@ -188,9 +188,10 @@ body.js-enabled .tool-card {
 }
 
 /* Reveal Animation Class (added by JS) */
+body.js-enabled .tool-card.reveal,
 .tool-card.reveal {
-    opacity: 1;
-    transform: translateY(0);
+    opacity: 1 !important;
+    transform: translateY(0) !important;
 }
 
 .tool-card:hover {
