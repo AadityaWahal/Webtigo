@@ -9,6 +9,8 @@ const { v4: uuidv4 } = require('uuid');
 const sharp = require('sharp');
 const QRCode = require('qrcode');
 const gTTS = require('gtts');
+const { PDFDocument } = require('pdf-lib');
+const AdmZip = require('adm-zip');
 // Load environment variables (try .env.local first, then .env)
 require('dotenv').config({ path: '.env.local' });
 require('dotenv').config();
@@ -96,6 +98,14 @@ app.get('/frequency', (req, res) => {
 
 app.get('/case-converter', (req, res) => {
     res.render('pages/case-converter', { title: 'Case Converter - Webtigo' });
+});
+
+app.get('/images-to-pdf', (req, res) => {
+    res.render('pages/images-to-pdf', { title: 'Images to PDF - Webtigo' });
+});
+
+app.get('/pdf-to-images', (req, res) => {
+    res.render('pages/pdf-to-images', { title: 'PDF to Images - Webtigo' });
 });
 
 
@@ -191,6 +201,92 @@ app.post('/api/speak', upload.none(), async (req, res) => {
     }
 });
 
+// 6. Img to PDF
+app.post('/api/images-to-pdf', upload.array('images', 50), async (req, res) => {
+    try {
+        if (!req.files || req.files.length === 0) return res.status(400).send('No images uploaded');
+
+        // Create a new PDFDocument
+        const pdfDoc = await PDFDocument.create();
+
+        // Sort files by index if sent, but multer array maintains order of upload
+        // We assume frontend sends them in order
+
+        for (const file of req.files) {
+            const imageBytes = await fs.readFile(file.path);
+            let image;
+            // Embed based on type
+            if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/jpg') {
+                image = await pdfDoc.embedJpg(imageBytes);
+            } else if (file.mimetype === 'image/png') {
+                image = await pdfDoc.embedPng(imageBytes);
+            } else {
+                continue; // Skip unsupported
+            }
+
+            const { width, height } = image.scale(1);
+            const page = pdfDoc.addPage([width, height]);
+            page.drawImage(image, {
+                x: 0,
+                y: 0,
+                width: width,
+                height: height,
+            });
+            await safeRemove(file.path);
+        }
+
+        const pdfBytes = await pdfDoc.save();
+        const filename = `converted_${uuidv4()}.pdf`;
+
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+        res.send(Buffer.from(pdfBytes));
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Conversion Failed');
+    }
+});
+
+// 7. PDF to Images
+app.post('/api/pdf-to-images', upload.single('pdf'), async (req, res) => {
+    try {
+        if (!req.file) return res.status(400).send('No PDF uploaded');
+
+        // 1. Get page count using pdf-lib
+        const pdfBuffer = await fs.readFile(req.file.path);
+        const pdfDoc = await PDFDocument.load(pdfBuffer);
+        const pageCount = pdfDoc.getPageCount();
+
+        const zip = new AdmZip();
+
+        // 2. Render each page with sharp
+        for (let i = 0; i < pageCount; i++) {
+            try {
+                const imageBuffer = await sharp(req.file.path, { page: i, density: 150 })
+                    .jpeg({ quality: 90 })
+                    .toBuffer();
+                zip.addFile(`page_${i + 1}.jpg`, imageBuffer);
+            } catch (sharpError) {
+                console.error('Sharp PDF render error:', sharpError);
+                // Continue to next page or fail? Better to fail or warn.
+            }
+        }
+
+        const zipBuffer = zip.toBuffer();
+        const filename = `extracted_images_${uuidv4()}.zip`;
+
+        res.setHeader('Content-Type', 'application/zip');
+        res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+        res.send(zipBuffer);
+
+        await safeRemove(req.file.path);
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Extraction Failed. Note: This feature requires system-level PDF libraries which may be missing.');
+    }
+});
+
 // 5. Sitemap
 app.get('/sitemap.xml', (req, res) => {
     const pages = [
@@ -201,7 +297,9 @@ app.get('/sitemap.xml', (req, res) => {
         '/qrcode',
         '/resizer',
         '/frequency',
-        '/case-converter'
+        '/case-converter',
+        '/images-to-pdf',
+        '/pdf-to-images'
     ];
 
     const baseUrl = 'https://' + (req.get('host') || 'webtigo.vercel.app');

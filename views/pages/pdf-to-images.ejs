@@ -1,0 +1,61 @@
+<div class="glass-card" style="max-width: 600px; margin: 0 auto;">
+    <h1 style="text-align: center; margin-bottom: 2rem;">PDF to Images</h1>
+
+    <div class="form-group">
+        <label>Select PDF File</label>
+        <input type="file" id="pdf-file" accept=".pdf">
+    </div>
+
+    <div class="info-box"
+        style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 0.5rem; margin-bottom: 2rem; font-size: 0.9rem;">
+        <p>This tool will extract all pages from your PDF and download them as a ZIP file containing high-quality
+            images.</p>
+    </div>
+
+    <button class="primary-btn" onclick="convertPdfToImages()" id="convert-btn">Convert to Images</button>
+</div>
+
+<script>
+    async function convertPdfToImages() {
+        const fileInput = document.getElementById('pdf-file');
+        const btn = document.getElementById('convert-btn');
+
+        if (fileInput.files.length === 0) return alert('Please select a PDF file first.');
+
+        const originalText = btn.innerText;
+        btn.innerText = 'Processing...';
+        btn.disabled = true;
+        btn.style.opacity = '0.7';
+
+        const formData = new FormData();
+        formData.append('pdf', fileInput.files[0]);
+
+        try {
+            const res = await fetch('/api/pdf-to-images', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!res.ok) {
+                const text = await res.text();
+                throw new Error(text || 'Extraction failed');
+            }
+
+            const blob = await res.blob();
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `webtigo-extracted-${Date.now()}.zip`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+
+        } catch (err) {
+            alert('Error: ' + err.message);
+        } finally {
+            btn.innerText = originalText;
+            btn.disabled = false;
+            btn.style.opacity = '1';
+        }
+    }
+</script>
