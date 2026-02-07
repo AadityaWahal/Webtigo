@@ -11,13 +11,19 @@ const QRCode = require('qrcode');
 const gTTS = require('gtts');
 const { PDFDocument } = require('pdf-lib');
 const AdmZip = require('adm-zip');
-// Load environment variables (Robust loading for local and Vercel)
+// Load environment variables (Prioritize .env.local)
 const resultLocal = require('dotenv').config({ path: '.env.local' });
-const resultMain = require('dotenv').config();
+if (resultLocal.error) {
+    console.log("⚠️ .env.local not found, trying default .env");
+    require('dotenv').config();
+} else {
+    console.log("✅ Loaded config from .env.local");
+}
 
 // Debugging: Log if keys are missing (without revealing secrets)
+// Vercel might not have the file, so checking process.env is crucial
 if (!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY && !process.env.CLERK_PUBLISHABLE_KEY) {
-    console.error("❌ ERROR: Clerk Publishable Key is missing!");
+    console.error("❌ ERROR: Clerk Publishable Key is missing! Check Vercel Environment Variables or .env.local");
 } else {
     console.log("✅ Clerk Configuration Loaded");
 }
