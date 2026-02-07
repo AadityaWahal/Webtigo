@@ -38,11 +38,27 @@ app.set('layout', './layout'); // looks for views/layout.ejs
 // File Upload Config (Temporary /tmp storage)
 const upload = multer({ dest: '/tmp' });
 
+
 // Ensure temp dirs
 // native fs mkdirSync with recursive: true replaces ensureDirSync
 try {
     fsSync.mkdirSync(path.join(__dirname, 'public/temp_downloads'), { recursive: true });
 } catch (e) { }
+
+// --- LEGACY REDIRECTS (SEO) ---
+app.use((req, res, next) => {
+    const redirects = {
+        '/tts.html': '/tts',
+        '/image_compressor.html': '/compressor',
+        '/qr_code.html': '/qrcode',
+        '/index.html': '/'
+    };
+
+    if (redirects[req.path]) {
+        return res.redirect(301, redirects[req.path]);
+    }
+    next();
+});
 
 // --- VIEW ROUTES (Next.js Pages) ---
 
