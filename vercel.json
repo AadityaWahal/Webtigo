@@ -1,14 +1,22 @@
 {
     "version": 2,
-    "rewrites": [
+    "builds": [
         {
-            "source": "/(.*)",
-            "destination": "/index.js"
+            "src": "index.js",
+            "use": "@vercel/node",
+            "config": {
+                "includeFiles": [
+                    "views/**",
+                    "public/**",
+                    "node_modules/pdfjs-dist/legacy/build/pdf.worker.mjs"
+                ]
+            }
         }
     ],
-    "functions": {
-        "index.js": {
-            "includeFiles": "{views/**,public/**,node_modules/pdfjs-dist/legacy/build/pdf.worker.mjs}"
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "index.js"
         }
-    }
+    ]
 }
