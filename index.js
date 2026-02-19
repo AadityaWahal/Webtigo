@@ -286,7 +286,7 @@ app.post('/api/images-to-pdf', upload.array('images', 50), async (req, res) => {
         res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
         res.send(Buffer.from(pdfBytes));
     } catch (err) {
-        console.error(err);
+        console.error("Images-to-PDF Failed:", err);
         res.status(500).send('Conversion Failed');
     }
 });
