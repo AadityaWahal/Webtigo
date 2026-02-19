@@ -40,8 +40,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Global View Variables
 app.use((req, res, next) => {
-    // Support both standard and Next.js-style env var names
-    const key = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || process.env.CLERK_PUBLISHABLE_KEY;
+    // Support both standard and Next.js-style env var names, plus a hardcoded fallback as requested
+    const key = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ||
+        process.env.CLERK_PUBLISHABLE_KEY ||
+        "pk_test_ZmFjdHVhbC1qb2V5LTg4LmNsZXJrLmFjY291bnRzLmRldiQ";
 
     if (!key) {
         console.error("⚠️ Warning: Clerk Publishable Key not found in environment variables.");
