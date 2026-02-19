@@ -180,6 +180,12 @@ app.get('/sitemap.xml', (req, res) => {
     res.send(sitemap);
 });
 
-app.listen(PORT, () => console.log(`Available on http://localhost:${PORT}`));
+// Start Server
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+        console.log(`http://localhost:${PORT}`);
+    });
+}
 
 module.exports = app;
