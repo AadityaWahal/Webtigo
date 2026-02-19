@@ -3,7 +3,7 @@ const { PassThrough } = require('stream');
 
 // Use dynamic import for pdfjs-dist because it is ESM-only in v4+
 async function convertPdfToImages(pdfBuffer) {
-    // Shim global.document for pdfjs-dist
+    // Shim DOM for pdfjs-dist
     // pureimage doesn't provide a full DOM, so we mock createElement for canvas
     if (!global.document) {
         global.document = {
@@ -17,6 +17,14 @@ async function convertPdfToImages(pdfBuffer) {
                 return null;
             }
         };
+    }
+
+    if (!global.DOMMatrix) {
+        try {
+            global.DOMMatrix = require('dommatrix');
+        } catch (e) {
+            console.warn("DOMMatrix polyfill failed:", e);
+        }
     }
 
     // Import pdfjs-dist dynamically
