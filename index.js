@@ -38,20 +38,6 @@ app.use(express.json());
 // Explicit absolute path for static files
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Global View Variables
-app.use((req, res, next) => {
-    // Support both standard and Next.js-style env var names, plus a hardcoded fallback as requested
-    const key = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ||
-        process.env.CLERK_PUBLISHABLE_KEY ||
-        "pk_test_ZmFjdHVhbC1qb2V5LTg4LmNsZXJrLmFjY291bnRzLmRldiQ";
-
-    if (!key) {
-        console.error("⚠️ Warning: Clerk Publishable Key not found in environment variables.");
-    }
-
-    res.locals.clerkKey = key;
-    next();
-});
 
 // Templating Engine (Next.js-style)
 app.use(expressLayouts);
@@ -95,13 +81,7 @@ app.get('/', (req, res) => {
     });
 });
 
-app.get('/signin', (req, res) => {
-    res.render('pages/signin', {
-        title: 'Sign In - Webtigo Premium',
-        description: 'Log in to your Webtigo account to save preferences and access exclusive features.',
-        keywords: 'sign in, login, webtigo account, user dashboard'
-    });
-});
+
 
 app.get('/tts', (req, res) => {
     res.render('pages/tts', {

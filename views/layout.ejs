@@ -85,40 +85,7 @@
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8054743572805756"
     crossorigin="anonymous"></script>
 
-  <!-- Clerk Auth -->
-  <script>
-    const clerkPublishableKey = "<%= clerkKey %>";
 
-    const script = document.createElement('script');
-    script.src = "https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js";
-    script.crossOrigin = "anonymous";
-    script.async = true;
-
-    script.onload = async function () {
-      try {
-        await Clerk.load({ publishableKey: clerkPublishableKey });
-
-        const userButton = document.getElementById("user-button");
-        const authLinks = document.getElementById("auth-links");
-        const signInDiv = document.getElementById("sign-in");
-
-        if (Clerk.user) {
-          if (userButton) Clerk.mountUserButton(userButton);
-          if (authLinks) authLinks.style.display = 'none';
-        } else {
-          if (userButton) userButton.style.display = 'none';
-          if (authLinks) authLinks.style.display = 'flex';
-        }
-
-        if (signInDiv) {
-          Clerk.mountSignIn(signInDiv);
-        }
-      } catch (err) {
-        console.error("Clerk failed to load:", err);
-      }
-    };
-    document.head.appendChild(script);
-  </script>
 
 <body>
   <nav class="navbar">
@@ -129,10 +96,7 @@
     <div class="nav-links">
       <a href="/">Home</a>
       <a href="https://webtigo-premium.vercel.app/" target="_blank" class="premium-link">Premium</a>
-      <div id="auth-links">
-        <a href="/signin" class="btn-signin">Sign In</a>
-      </div>
-      <div id="user-button"></div>
+
     </div>
   </nav>
 
