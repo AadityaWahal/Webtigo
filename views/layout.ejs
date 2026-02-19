@@ -141,6 +141,43 @@
       }, 2000);
     });
   </script>
+
+  <% if (typeof currentPath==='undefined' || currentPath !=='/tts' ) { %>
+    <audio id="bg-music" loop>
+      <source src="/audio/background.mp3" type="audio/mpeg">
+    </audio>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var audio = document.getElementById('bg-music');
+        if (audio) {
+          audio.volume = 0.5; // Set default volume to 50%
+
+          var playAttempt = setInterval(() => {
+            audio.play()
+              .then(() => {
+                clearInterval(playAttempt);
+              })
+              .catch(error => {
+                console.log('Audio autoplay prevented, waiting for interaction.');
+              });
+          }, 3000);
+
+          const unlockAudio = () => {
+            audio.play().then(() => {
+              clearInterval(playAttempt);
+              document.removeEventListener('click', unlockAudio);
+              document.removeEventListener('scroll', unlockAudio);
+              document.removeEventListener('keydown', unlockAudio);
+            }).catch(e => { });
+          };
+
+          document.addEventListener('click', unlockAudio);
+          document.addEventListener('scroll', unlockAudio);
+          document.addEventListener('keydown', unlockAudio);
+        }
+      });
+    </script>
+    <% } %>
 </body>
 
 </html>

@@ -57,7 +57,9 @@ try {
 } catch (e) { }
 
 // --- LEGACY REDIRECTS (SEO) ---
+// Global View Variables
 app.use((req, res, next) => {
+    res.locals.currentPath = req.path;
     const redirects = {
         '/tts.html': '/tts',
         '/image_compressor.html': '/compressor',
