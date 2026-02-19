@@ -11,6 +11,7 @@ const QRCode = require('qrcode');
 const gTTS = require('gtts');
 const { PDFDocument } = require('pdf-lib');
 const AdmZip = require('adm-zip');
+const { convertPdfToImages } = require('./utils/pdf-converter');
 // Load environment variables (Prioritize .env.local)
 const resultLocal = require('dotenv').config({ path: '.env.local' });
 if (resultLocal.error) {
@@ -295,25 +296,18 @@ app.post('/api/pdf-to-images', upload.single('pdf'), async (req, res) => {
     try {
         if (!req.file) return res.status(400).send('No PDF uploaded');
 
-        // 1. Get page count using pdf-lib
+        // Retrieve the PDF file data
         const pdfBuffer = await fs.readFile(req.file.path);
-        const pdfDoc = await PDFDocument.load(pdfBuffer);
-        const pageCount = pdfDoc.getPageCount();
+
+        // Convert the PDF to images (returns an array of Buffers)
+        const outputImages = await convertPdfToImages(pdfBuffer);
 
         const zip = new AdmZip();
 
-        // 2. Render each page with sharp
-        for (let i = 0; i < pageCount; i++) {
-            try {
-                const imageBuffer = await sharp(req.file.path, { page: i, density: 150 })
-                    .jpeg({ quality: 90 })
-                    .toBuffer();
-                zip.addFile(`page_${i + 1}.jpg`, imageBuffer);
-            } catch (sharpError) {
-                console.error('Sharp PDF render error:', sharpError);
-                // Continue to next page or fail? Better to fail or warn.
-            }
-        }
+        // Add each image to the ZIP file
+        outputImages.forEach((imageBuffer, index) => {
+            zip.addFile(`page_${index + 1}.png`, imageBuffer);
+        });
 
         const zipBuffer = zip.toBuffer();
         const filename = `extracted_images_${uuidv4()}.zip`;
@@ -325,8 +319,8 @@ app.post('/api/pdf-to-images', upload.single('pdf'), async (req, res) => {
         await safeRemove(req.file.path);
 
     } catch (err) {
-        console.error(err);
-        res.status(500).send('Extraction Failed. Note: This feature requires system-level PDF libraries which may be missing.');
+        console.error("PDF-to-Image Error:", err);
+        res.status(500).send('Extraction Failed. Please try a different or smaller PDF.');
     }
 });
 
