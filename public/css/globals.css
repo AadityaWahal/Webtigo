@@ -197,6 +197,51 @@ footer {
     line-height: 1.6;
 }
 
+/* --- Search Bar --- */
+.search-wrapper {
+    margin: 2.5rem auto 0;
+    max-width: 500px;
+    position: relative;
+    z-index: 10;
+}
+
+#tool-search {
+    width: 100%;
+    padding: 1.2rem 1.5rem;
+    font-size: 1.1rem;
+    border-radius: 99px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    box-shadow:
+        0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06),
+        inset 0 0 20px rgba(255, 255, 255, 0.05);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-align: center;
+}
+
+#tool-search:focus {
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow:
+        0 20px 25px -5px rgba(0, 0, 0, 0.2),
+        0 0 30px rgba(59, 130, 246, 0.4);
+    border-color: rgba(59, 130, 246, 0.6);
+    transform: scale(1.03);
+    outline: none;
+}
+
+#tool-search::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+    transition: opacity 0.3s;
+}
+
+#tool-search:focus::placeholder {
+    opacity: 0.5;
+}
+
 /* --- Glass Cards --- */
 .glass-card {
     background: var(--glass-bg);

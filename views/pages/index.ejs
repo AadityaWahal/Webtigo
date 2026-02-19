@@ -1,9 +1,13 @@
 <div class="hero">
     <h1>All Your Web Tools in One Place</h1>
     <p>Professional grade PDF, Image, and Audio tools. Free, fast, and secure.</p>
+
+    <div class="search-wrapper">
+        <input type="text" id="tool-search" placeholder="🔍  Search for a tool..." autocomplete="off">
+    </div>
 </div>
 
-<div class="tools-grid">
+<div class="tools-grid" id="tools-grid">
     <a href="/compressor" class="tool-card">
         <span class="tool-icon">📉</span>
         <span class="tool-title">Image Compressor</span>
@@ -52,3 +56,38 @@
         <span class="tool-desc">Unlock exclusive advanced features.</span>
     </a>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const searchInput = document.getElementById('tool-search');
+        const toolCards = document.querySelectorAll('.tool-card');
+        const grid = document.getElementById('tools-grid');
+
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase().trim();
+            let hasVisible = false;
+
+            toolCards.forEach(card => {
+                const title = card.querySelector('.tool-title').innerText.toLowerCase();
+                const desc = card.querySelector('.tool-desc').innerText.toLowerCase();
+
+                // Allow searching by keywords not explicitly in text
+                const keywords = card.getAttribute('href').replace('/', '').replace('-', ' ');
+
+                if (title.includes(term) || desc.includes(term) || keywords.includes(term)) {
+                    card.style.display = 'flex';
+                    // Re-trigger animation if hidden previously
+                    if (card.style.opacity === '0') {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }
+                    hasVisible = true;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // Optional: Show "No results" message could be added here
+        });
+    });
+</script>
