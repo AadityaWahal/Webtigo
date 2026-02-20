@@ -54,7 +54,190 @@ const upload = multer({
     limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit per file
 });
 
-// ... (skip lines)
+// --- LEGACY REDIRECTS (SEO) ---
+// Global View Variables
+app.use((req, res, next) => {
+    res.locals.currentPath = req.path;
+    const redirects = {
+        '/tts.html': '/tts',
+        '/image_compressor.html': '/compressor',
+        '/qr_code.html': '/qrcode',
+        '/index.html': '/'
+    };
+
+    if (redirects[req.path]) {
+        return res.redirect(301, redirects[req.path]);
+    }
+    next();
+});
+
+// --- VIEW ROUTES (Next.js Pages) ---
+
+app.get('/', (req, res) => {
+    res.render('pages/index', {
+        title: 'Webtigo - Free Online PDF, Image & Audio Tools',
+        description: 'Access free, premium-grade web tools. Convert PDF to JPG, compress images, generate QR codes, and convert text to speech. No registration required.',
+        keywords: 'free online tools, pdf converter, image compressor, qr code generator, text to speech, webtigo, online utilities'
+    });
+});
+
+app.get('/signin', (req, res) => {
+    res.render('pages/signin', {
+        title: 'Sign In - Webtigo',
+        description: 'Sign in to access premium Webtigo features and personalized tools.',
+        keywords: 'signin, login, webtigo account'
+    });
+});
+
+app.get('/tts', (req, res) => {
+    res.render('pages/tts', {
+        title: 'Free Text to Speech Converter - Download MP3 Audio',
+        description: 'Convert text into natural-sounding speech instantly. Support for multiple accents and speeds. Download your audio as an MP3 file for free.',
+        keywords: 'text to speech, tts converter, text to mp3, read aloud online, free voice generator, natural sounding tts'
+    });
+});
+
+app.get('/compressor', (req, res) => {
+    res.render('pages/compressor', {
+        title: 'Image Compressor - Reduce JPG & PNG Size Online',
+        description: 'Compress JPG and PNG images online without losing quality. Reduce file size for faster websites and easier sharing. Free and secure.',
+        keywords: 'image compressor, compress jpeg, compress png, reduce image size, online image optimizer, shrink image file'
+    });
+});
+
+app.get('/qrcode', (req, res) => {
+    res.render('pages/qrcode', {
+        title: 'Free QR Code Generator - Create & Download Custom QRs',
+        description: 'Generate high-quality QR codes for URLs, text, Wi-Fi, and email. Instant creation with no expiration. Download as PNG.',
+        keywords: 'qr code generator, create qr code, free qr maker, custom qr code, url to qr, wifi qr code'
+    });
+});
+
+app.get('/resizer', (req, res) => {
+    res.render('pages/resizer', {
+        title: 'Image Resizer - Change JPG & PNG Dimensions Online',
+        description: 'Resize images to exact pixel dimensions (width & height). Perfect for social media, passports, and web content. Fast and free.',
+        keywords: 'image resizer, resize jpg, resize png, change photo size, online photo editor, pixel resizer'
+    });
+});
+
+app.get('/frequency', (req, res) => {
+    res.render('pages/frequency', {
+        title: 'Online Tone Generator - Generate Pure Sine & Square Waves',
+        description: 'Free online frequency generator. Create pure Sine, Square, Sawtooth, and Triangle waves from 20Hz to 20kHz. Test audio equipment and hearing.',
+        keywords: 'frequency generator, tone generator, online hz generator, sound test, audio oscillator, sine wave generator'
+    });
+});
+
+app.get('/case-converter', (req, res) => {
+    res.render('pages/case-converter', {
+        title: 'Case Converter Tool - Uppercase, Lowercase & Title Case',
+        description: 'Instantly convert text between Uppercase, Lowercase, Title Case, and Sentence Case. Copy to clipboard with one click.',
+        keywords: 'case converter, uppercase to lowercase, title case generator, text capitalization, sentence case tool'
+    });
+});
+
+app.get('/images-to-pdf', (req, res) => {
+    res.render('pages/images-to-pdf', {
+        title: 'JPG to PDF Converter - Merge Images into One PDF',
+        description: 'Convert and merge JPG or PNG images into a single PDF document. Drag and drop, reorder pages, and download instantly.',
+        keywords: 'images to pdf, jpg to pdf, png to pdf, combine photos to pdf, free pdf converter, merge images'
+    });
+});
+
+app.get('/pdf-to-images', (req, res) => {
+    res.render('pages/pdf-to-images', {
+        title: 'PDF to JPG Converter - Extract Pages as Images',
+        description: 'Extract every page from a PDF file as a high-quality JPG image. Download all pages as a ZIP file. Fast, free, and private.',
+        keywords: 'pdf to images, pdf to jpg, extract pdf pages, convert pdf to image, pdf to zip, free pdf tool'
+    });
+});
+
+// --- API ROUTES (Serverless Processing) ---
+
+// 1. Image Compressor
+app.post('/api/compress-image', upload.single('image'), async (req, res) => {
+    try {
+        if (!req.file) return res.status(400).send('No image uploaded');
+        const targetSizeKB = parseInt(req.body.size_kb, 10) || 50;
+        let quality = 95;
+        let buffer = req.file.buffer;
+
+        while (buffer.length > targetSizeKB * 1024 && quality > 10) {
+            buffer = await sharp(req.file.buffer).jpeg({ quality }).toBuffer();
+            quality -= 10;
+        }
+
+        const filename = `compressed_${uuidv4()}.jpg`;
+        res.setHeader('Content-Type', 'image/jpeg');
+        res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+        res.send(buffer);
+    } catch (err) {
+        res.status(500).send('Compression Failed');
+    }
+});
+
+// 2. Image Resizer
+app.post('/api/resize-image', upload.single('image'), async (req, res) => {
+    try {
+        if (!req.file) return res.status(400).send('No image uploaded');
+        const width = parseInt(req.body.width) || 300;
+        const height = parseInt(req.body.height) || 300;
+
+        const buffer = await sharp(req.file.buffer)
+            .resize(width, height, { fit: 'cover' })
+            .toBuffer();
+
+        const filename = `resized_${uuidv4()}.jpg`;
+        res.setHeader('Content-Type', 'image/jpeg');
+        res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+        res.send(buffer);
+    } catch (err) {
+        res.status(500).send('Resize Failed');
+    }
+});
+
+// 3. QR Code
+app.post('/api/generate-qr', upload.none(), async (req, res) => {
+    try {
+        const { data } = req.body;
+        if (!data) return res.status(400).send('No data provided');
+        const buffer = await QRCode.toBuffer(data, { width: 300 });
+        const filename = `qr_${uuidv4()}.png`;
+        res.setHeader('Content-Type', 'image/png');
+        res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+        res.send(buffer);
+    } catch (err) {
+        res.status(500).send('QR Gen Failed');
+    }
+});
+
+// 4. TTS
+app.post('/api/speak', upload.none(), async (req, res) => {
+    try {
+        const { text, speed, accent } = req.body;
+        if (!text) return res.status(400).send('No text');
+        const lang = accent || 'en';
+        const slow = speed === 'slow';
+        const filename = `tts_${uuidv4()}.mp3`;
+
+        // Vercel allows writing to /tmp
+        const tempPath = path.join(os.tmpdir(), filename);
+
+        const tts = new gTTS(text, lang, slow);
+        tts.save(tempPath, async (err) => {
+            if (err) return res.status(500).send('TTS Failed');
+            const buffer = await fs.readFile(tempPath);
+            res.setHeader('Content-Type', 'audio/mpeg');
+            res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+            res.send(buffer);
+            try { await fs.rm(tempPath, { force: true }); } catch (e) { }
+        });
+    } catch (err) {
+        res.status(500).send('TTS Error');
+    }
+});
+
 
 // 6. Img to PDF
 app.post('/api/images-to-pdf', (req, res, next) => {
