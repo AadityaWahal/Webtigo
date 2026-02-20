@@ -160,6 +160,38 @@ app.get('/pdf-to-images', (req, res) => {
     });
 });
 
+app.get('/privacy', (req, res) => {
+    res.render('pages/privacy', {
+        title: 'Privacy Policy - Webtigo',
+        description: 'Read the Webtigo Privacy Policy. Learn how we handle your data, our use of Google AdSense cookies, and Clerk authentication.',
+        keywords: 'privacy policy, webtigo privacy, data protection, cookies'
+    });
+});
+
+app.get('/terms', (req, res) => {
+    res.render('pages/terms', {
+        title: 'Terms of Service - Webtigo',
+        description: 'Read the Webtigo Terms of Service. Understand our as-is service provision and data retention policy for uploaded files.',
+        keywords: 'terms of service, webtigo terms, user agreement, data retention'
+    });
+});
+
+app.get('/about', (req, res) => {
+    res.render('pages/about', {
+        title: 'About Us - Webtigo',
+        description: 'Learn about Webtigo. We provide free, premium web tools for everyday tasks like PDF creation, image compression, and more.',
+        keywords: 'about webtigo, free web tools, premium utilities, webtigo mission'
+    });
+});
+
+app.get('/contact', (req, res) => {
+    res.render('pages/contact', {
+        title: 'Contact Us - Webtigo',
+        description: 'Get in touch with the Webtigo team for support, questions, or feedback regarding our free web tools.',
+        keywords: 'contact webtigo, webtigo support, help, customer service'
+    });
+});
+
 // --- API ROUTES (Serverless Processing) ---
 
 // 1. Image Compressor
@@ -260,7 +292,11 @@ app.get('/sitemap.xml', (req, res) => {
         '/frequency',
         '/case-converter',
         '/images-to-pdf',
-        '/pdf-to-images'
+        '/pdf-to-images',
+        '/privacy',
+        '/terms',
+        '/about',
+        '/contact'
     ];
 
     const baseUrl = 'https://' + (req.get('host') || 'webtigo.vercel.app');

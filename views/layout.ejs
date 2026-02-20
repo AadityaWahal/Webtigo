@@ -9,7 +9,7 @@
     content="<%= typeof description !== 'undefined' ? description : 'Webtigo provides free, premium web tools for PDF creation, image compression, text-to-speech, QR code generation. Fast, secure, and user-friendly.' %>">
   <meta name="keywords"
     content="<%= typeof keywords !== 'undefined' ? keywords : 'pdf tools, image compressor, qr code generator, online tools, free web tools' %>">
-  <meta name="author" content="Webtigo">
+  <meta name="author" content="Member of Mutivers (Aaditya Wahal)">
   <link rel="icon" href="/logo.png" type="image/png">
 
   <!-- Open Graph / Facebook -->
@@ -17,14 +17,15 @@
   <meta property="og:url" content="https://webtigo.vercel.app/">
   <meta property="og:title" content="<%= title %>">
   <meta property="og:description"
-    content="Free premium web tools for everyday tasks. PDF, Images, Audio, and Text utilities.">
+    content="<%= typeof description !== 'undefined' ? description : 'Free premium web tools for everyday tasks. PDF, Images, Audio, and Text utilities.' %>">
   <meta property="og:image" content="https://webtigo.vercel.app/og-image.jpg">
 
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://webtigo.vercel.app/">
   <meta property="twitter:title" content="<%= title %>">
-  <meta property="twitter:description" content="Free premium web tools for everyday tasks.">
+  <meta property="twitter:description"
+    content="<%= typeof description !== 'undefined' ? description : 'Free premium web tools for everyday tasks.' %>">
 
   <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#0f172a">
@@ -116,7 +117,21 @@
   </main>
 
   <footer>
-    <p>&copy; 2024 Webtigo. All rights reserved.</p>
+    <div style="margin-bottom: 1rem; display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap;">
+      <a href="/about"
+        style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: color 0.3s;"
+        onmouseover="this.style.color='white'" onmouseout="this.style.color='var(--text-muted)'">About Us</a>
+      <a href="/privacy"
+        style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: color 0.3s;"
+        onmouseover="this.style.color='white'" onmouseout="this.style.color='var(--text-muted)'">Privacy Policy</a>
+      <a href="/terms"
+        style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: color 0.3s;"
+        onmouseover="this.style.color='white'" onmouseout="this.style.color='var(--text-muted)'">Terms of Service</a>
+      <a href="/contact"
+        style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: color 0.3s;"
+        onmouseover="this.style.color='white'" onmouseout="this.style.color='var(--text-muted)'">Contact Us</a>
+    </div>
+    <p>&copy; 2026 Member of Mutivers (Aaditya Wahal). All rights reserved.</p>
   </footer>
 
   <script>
@@ -146,10 +161,10 @@
         observerIn.observe(card);
       });
 
-      // Safety net: Force reveal after 1 seconds regardless of scroll
+      // Safety net: Force reveal immediately for crawlers
       setTimeout(() => {
         cards.forEach(card => card.classList.add('reveal'));
-      }, 2000);
+      }, 0);
 
       // Initialize Clerk UI
       const initClerk = async () => {
