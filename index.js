@@ -9,6 +9,7 @@ const { v4: uuidv4 } = require('uuid');
 const sharp = require('sharp');
 const QRCode = require('qrcode');
 const gTTS = require('gtts');
+const { clerkMiddleware } = require('@clerk/express');
 
 // Load environment variables (Prioritize .env.local)
 const resultLocal = require('dotenv').config({ path: '.env.local' });
@@ -21,8 +22,8 @@ if (resultLocal.error) {
 
 // Debugging: Log if keys are missing (without revealing secrets)
 // Vercel might not have the file, so checking process.env is crucial
-if (!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY && !process.env.CLERK_PUBLISHABLE_KEY) {
-    console.error("❌ ERROR: Clerk Publishable Key is missing! Check Vercel Environment Variables or .env.local");
+if (!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || !process.env.CLERK_SECRET_KEY) {
+    console.error("❌ ERROR: Clerk Keys are missing! Check Vercel Environment Variables or .env.local");
 } else {
     console.log("✅ Clerk Configuration Loaded");
 }
@@ -37,6 +38,11 @@ app.use(express.json());
 // Explicit absolute path for static files
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Clerk Middleware (MUST be before routes that need auth)
+app.use(clerkMiddleware({
+    publishableKey: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || process.env.CLERK_PUBLISHABLE_KEY,
+    secretKey: process.env.CLERK_SECRET_KEY
+}));
 
 // Templating Engine (Next.js-style)
 app.use(expressLayouts);
@@ -56,6 +62,9 @@ const upload = multer({
 // Global View Variables
 app.use((req, res, next) => {
     res.locals.currentPath = req.path;
+    res.locals.clerkPublishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+    res.locals.auth = req.auth; // Available from clerkMiddleware
+
     const redirects = {
         '/tts.html': '/tts',
         '/image_compressor.html': '/compressor',

@@ -81,6 +81,11 @@
   <link rel="stylesheet" href="/css/globals.css">
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
 
+  <!-- Clerk Auth -->
+  <script async crossorigin="anonymous"
+    data-clerk-publishable-key="<%= typeof clerkPublishableKey !== 'undefined' ? clerkPublishableKey : '' %>"
+    src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js" type="text/javascript"></script>
+
   <!-- Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8054743572805756"
     crossorigin="anonymous"></script>
@@ -101,7 +106,8 @@
     <div class="nav-links">
       <a href="/">Home</a>
       <a href="https://webtigo-premium.vercel.app/" target="_blank" class="premium-link">Premium</a>
-
+      <a href="/signin" id="sign-in-btn" style="display: none;">Sign In</a>
+      <div id="user-button"></div>
     </div>
   </nav>
 
@@ -144,6 +150,38 @@
       setTimeout(() => {
         cards.forEach(card => card.classList.add('reveal'));
       }, 2000);
+
+      // Initialize Clerk UI
+      const initClerk = async () => {
+        if (window.Clerk) {
+          try {
+            await window.Clerk.load();
+            const userButtonEl = document.getElementById('user-button');
+            const signInBtnEl = document.getElementById('sign-in-btn');
+
+            if (window.Clerk.user) {
+              if (userButtonEl) window.Clerk.mountUserButton(userButtonEl);
+              if (signInBtnEl) signInBtnEl.style.display = 'none';
+            } else {
+              if (signInBtnEl) signInBtnEl.style.display = 'block';
+            }
+          } catch (error) {
+            console.error('Error loading Clerk:', error);
+          }
+        }
+      };
+
+      // Check if Clerk is loaded, else wait
+      if (window.Clerk) {
+        initClerk();
+      } else {
+        const checkClerkInterval = setInterval(() => {
+          if (window.Clerk) {
+            clearInterval(checkClerkInterval);
+            initClerk();
+          }
+        }, 100);
+      }
     });
   </script>
 
