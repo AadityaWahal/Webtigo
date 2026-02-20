@@ -64,6 +64,8 @@
     }
 </style>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+
 <script>
     let selectedFiles = [];
     const dropZone = document.getElementById('drop-zone');
@@ -151,18 +153,36 @@
         convertBtn.innerText = 'Converting...';
         convertBtn.disabled = true;
 
-        const formData = new FormData();
-        selectedFiles.forEach(file => formData.append('images', file));
-
         try {
-            const res = await fetch('/api/images-to-pdf', {
-                method: 'POST',
-                body: formData
-            });
+            const { PDFDocument } = PDFLib;
+            const pdfDoc = await PDFDocument.create();
 
-            if (!res.ok) throw new Error('Conversion failed');
+            for (const file of selectedFiles) {
+                const arrayBuffer = await file.arrayBuffer();
+                let image;
 
-            const blob = await res.blob();
+                if (file.type === 'image/jpeg' || file.type === 'image/jpg') {
+                    image = await pdfDoc.embedJpg(arrayBuffer);
+                } else if (file.type === 'image/png') {
+                    image = await pdfDoc.embedPng(arrayBuffer);
+                } else {
+                    continue; // Skip unsupported
+                }
+
+                // Get dimensions and add page
+                const { width, height } = image.scale(1);
+                const page = pdfDoc.addPage([width, height]);
+                page.drawImage(image, {
+                    x: 0,
+                    y: 0,
+                    width: width,
+                    height: height,
+                });
+            }
+
+            const pdfBytes = await pdfDoc.save();
+            const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
@@ -170,8 +190,10 @@
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
+            URL.revokeObjectURL(url);
 
         } catch (err) {
+            console.error(err);
             alert('Error converting images: ' + err.message);
         } finally {
             convertBtn.innerText = originalText;
