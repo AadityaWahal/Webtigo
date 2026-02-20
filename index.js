@@ -288,4 +288,10 @@ if (require.main === module) {
     });
 }
 
+// Global Error Handler for debugging
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send(`<pre>DEBUG ERROR: ${err.message}\n${err.stack}</pre>`);
+});
+
 module.exports = app;
