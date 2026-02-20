@@ -7,9 +7,7 @@
         const initSignIn = async () => {
             try {
                 // Ensure Clerk is loaded if it hasn't been completely loaded by layout
-                if (!window.Clerk.isReady()) {
-                    await window.Clerk.load();
-                }
+                await window.Clerk.load();
 
                 const signInDiv = document.getElementById('sign-in-mount');
                 if (signInDiv) {
