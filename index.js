@@ -69,7 +69,8 @@ app.use((req, res, next) => {
         '/tts.html': '/tts',
         '/image_compressor.html': '/compressor',
         '/qr_code.html': '/qrcode',
-        '/index.html': '/'
+        '/index.html': '/',
+        '/Ads.txt': '/ads.txt'
     };
 
     if (redirects[req.path]) {
