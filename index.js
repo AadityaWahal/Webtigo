@@ -70,7 +70,7 @@ app.use((req, res, next) => {
         '/image_compressor.html': '/compressor',
         '/qr_code.html': '/qrcode',
         '/index.html': '/',
-        '/Ads.txt': '/ads.txt'
+        '/ads.txt': '/Ads.txt'
     };
 
     if (redirects[req.path]) {
