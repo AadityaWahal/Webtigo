@@ -87,11 +87,7 @@
     data-clerk-publishable-key="<%= typeof clerkPublishableKey !== 'undefined' ? clerkPublishableKey : '' %>"
     src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js" type="text/javascript"></script>
 
-  <!-- Google AdSense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8054743572805756"
-    crossorigin="anonymous"></script>
-
-
+</head>
 
 <body>
   <div class="background-container">
@@ -115,6 +111,18 @@
   <main class="container">
     <%- body %>
   </main>
+
+  <!-- down side -->
+  <div class="ad-container"
+    style="max-width: 800px; margin: 2rem auto; text-align: center; padding: 0 1rem; overflow: hidden;">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8054743572805756"
+      crossorigin="anonymous"></script>
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8054743572805756" data-ad-slot="8840405516"
+      data-ad-format="auto" data-full-width-responsive="true"></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
 
   <footer>
     <div style="margin-bottom: 1rem; display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap;">
