@@ -137,6 +137,14 @@ app.get('/blog/pdf-to-images', (req, res) => {
     });
 });
 
+app.get('/blog/compressor', (req, res) => {
+    res.render('pages/blog-compressor', {
+        title: 'Shrink the Size, Keep the Quality: The Ultimate Guide to the Webtigo Image Compressor',
+        description: 'Reduce image file sizes instantly without losing quality. Perfect for meeting upload limits, speeding up websites, and saving hard drive space.',
+        keywords: 'image compressor guide, reduce photo size online, compress jpg, compress png, optimize images for web'
+    });
+});
+
 app.get('/signin', (req, res) => {
     res.render('pages/signin', {
         title: 'Sign In - Webtigo',
@@ -357,6 +365,7 @@ app.get('/sitemap.xml', (req, res) => {
         '/blog/tts',
         '/blog/images-to-pdf',
         '/blog/pdf-to-images',
+        '/blog/compressor',
         '/privacy',
         '/terms',
         '/about',
