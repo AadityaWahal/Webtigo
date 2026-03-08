@@ -113,6 +113,14 @@ app.get('/blog/frequency-detector', (req, res) => {
     });
 });
 
+app.get('/blog/tts', (req, res) => {
+    res.render('pages/blog-tts', {
+        title: 'Giving Your Words a Voice - Webtigo Blog',
+        description: 'Learn how to generate perfect AI speech using the Webtigo Text-to-Speech tool. Master accents, punctuation, and social media AI voices.',
+        keywords: 'text to speech guide, AI voice generator, how to use tts, punctuation tts, text to speech accents'
+    });
+});
+
 app.get('/signin', (req, res) => {
     res.render('pages/signin', {
         title: 'Sign In - Webtigo',
@@ -330,6 +338,7 @@ app.get('/sitemap.xml', (req, res) => {
         '/blog',
         '/blog/frequency-generator',
         '/blog/frequency-detector',
+        '/blog/tts',
         '/privacy',
         '/terms',
         '/about',

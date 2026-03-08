@@ -73,4 +73,45 @@
             alert(e.message);
         }
     }
+
+    // Auto-populate from URL (e.g. from Blog)
+    window.addEventListener('DOMContentLoaded', () => {
+        const params = new URLSearchParams(window.location.search);
+
+        if (params.has('text')) {
+            document.getElementById('tts-text').value = decodeURIComponent(params.get('text'));
+        }
+
+        if (params.has('accent')) {
+            const select = document.getElementById('tts-accent');
+            const val = params.get('accent');
+            // ensure value exists in options before setting
+            if (Array.from(select.options).some(opt => opt.value === val)) {
+                select.value = val;
+            }
+        }
+
+        if (params.get('auto') === 'true') {
+            // Slight delay so the UI fully loads before playing
+            setTimeout(() => {
+                generateSpeech();
+            }, 300);
+        }
+    });
 </script>
+
+<div class="glass-card"
+    style="max-width: 800px; margin: 3rem auto; padding: 2rem; position: relative; text-align: center;">
+    <h2
+        style="color: var(--primary); margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">
+        Giving Your Words a Voice</h2>
+    <p style="color: rgba(255,255,255,0.8); line-height: 1.6; margin-bottom: 1.5rem; text-align: left;">
+        The Webtigo Text-to-Speech (TTS) Generator is designed to take your written words and instantly breathe life
+        into them, transforming text into highly realistic, human-sounding audio. Whether you are a social media
+        creator, a student, or just someone looking to proofread an essay by ear...
+    </p>
+    <a href="/blog/tts" class="secondary-btn"
+        style="background: transparent; color: var(--primary); border: 1px solid var(--primary); text-decoration: none; display: inline-block; padding: 0.75rem 1.5rem;">
+        Read Full Guide on our Blog
+    </a>
+</div>
