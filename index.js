@@ -129,6 +129,14 @@ app.get('/blog/images-to-pdf', (req, res) => {
     });
 });
 
+app.get('/blog/pdf-to-images', (req, res) => {
+    res.render('pages/blog-pdf-to-images', {
+        title: 'Free Your Photos: The Ultimate Guide to the Webtigo PDF to Image Converter',
+        description: 'Learn how to extract high-quality PNGs and JPGs from any PDF file without taking blurry screenshots. Perfect for social media and web development.',
+        keywords: 'pdf to image guide, pdf extractor, convert pdf to png, how to put pdf on instagram, pdf to jpg high quality'
+    });
+});
+
 app.get('/signin', (req, res) => {
     res.render('pages/signin', {
         title: 'Sign In - Webtigo',
@@ -348,6 +356,7 @@ app.get('/sitemap.xml', (req, res) => {
         '/blog/frequency-detector',
         '/blog/tts',
         '/blog/images-to-pdf',
+        '/blog/pdf-to-images',
         '/privacy',
         '/terms',
         '/about',
