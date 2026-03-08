@@ -102,6 +102,7 @@
     </div>
     <div class="nav-links">
       <a href="/">Home</a>
+      <a href="/blog">Blog</a>
       <a href="https://webtigo-premium.vercel.app/" target="_blank" class="premium-link">Premium</a>
       <a href="/signin" id="sign-in-btn" style="display: none;">Sign In</a>
       <div id="user-button"></div>
@@ -208,7 +209,8 @@
     });
   </script>
 
-  <% if (typeof currentPath==='undefined' || (currentPath !=='/tts' && currentPath !=='/frequency' ) ) { %>
+  <% if (typeof currentPath==='undefined' || (currentPath !=='/tts' && currentPath !=='/frequency' && currentPath
+    !=='/frequency-detector' ) ) { %>
     <audio id="bg-music" loop>
       <source src="/audio/background.mp3" type="audio/mpeg">
     </audio>

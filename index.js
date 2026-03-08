@@ -89,6 +89,30 @@ app.get('/', (req, res) => {
     });
 });
 
+app.get('/blog', (req, res) => {
+    res.render('pages/blog', {
+        title: 'Blog - Webtigo',
+        description: 'Read the latest guides, tutorials and insights from Webtigo. Discover how to use our tools effectively.',
+        keywords: 'webtigo blog, guides, tutorials, web tools, sound frequencies'
+    });
+});
+
+app.get('/blog/frequency-generator', (req, res) => {
+    res.render('pages/blog-frequency-generator', {
+        title: 'The Ultimate Guide to Sound Frequencies - Webtigo Blog',
+        description: 'Sound is more than just what we hear—it is a physical force. Learn what frequency is, how it works, and explore the universe of sound.',
+        keywords: 'frequency guide, sound frequency blog, what is frequency, 432 hz, binaural beats'
+    });
+});
+
+app.get('/blog/frequency-detector', (req, res) => {
+    res.render('pages/blog-frequency-detector', {
+        title: 'Unlocking the Hidden Language of Sound - Webtigo Blog',
+        description: 'Discover how frequency detectors work. Tune instruments, visualize audio, and find phantom hums with our ultimate guide.',
+        keywords: 'frequency detector guide, how frequency detector works, audio visualizer'
+    });
+});
+
 app.get('/signin', (req, res) => {
     res.render('pages/signin', {
         title: 'Sign In - Webtigo',
@@ -134,6 +158,14 @@ app.get('/frequency', (req, res) => {
         title: 'Online Tone Generator - Generate Pure Sine & Square Waves',
         description: 'Free online frequency generator. Create pure Sine, Square, Sawtooth, and Triangle waves from 20Hz to 20kHz. Test audio equipment and hearing.',
         keywords: 'frequency generator, tone generator, online hz generator, sound test, audio oscillator, sine wave generator'
+    });
+});
+
+app.get('/frequency-detector', (req, res) => {
+    res.render('pages/frequency-detector', {
+        title: 'Frequency Detector - Analyze Pitch & Tones Online',
+        description: 'Free online frequency and pitch detector. Detect real-time frequencies from your microphone or find constant sustained tones. Test your voice or instruments.',
+        keywords: 'frequency detector, pitch detector, find frequency, detect tone, online tuner, microphone frequency analyzer'
     });
 });
 
@@ -291,9 +323,13 @@ app.get('/sitemap.xml', (req, res) => {
         '/qrcode',
         '/resizer',
         '/frequency',
+        '/frequency-detector',
         '/case-converter',
         '/images-to-pdf',
         '/pdf-to-images',
+        '/blog',
+        '/blog/frequency-generator',
+        '/blog/frequency-detector',
         '/privacy',
         '/terms',
         '/about',
