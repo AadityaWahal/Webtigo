@@ -145,6 +145,14 @@ app.get('/blog/compressor', (req, res) => {
     });
 });
 
+app.get('/blog/resizer', (req, res) => {
+    res.render('pages/blog-resizer', {
+        title: 'Pixel Perfect Every Time: The Ultimate Guide to the Webtigo Image Resizer',
+        description: 'Take control of your image dimensions. Get the perfect pixels for YouTube thumbnails, Instagram posts, and official passport photos instantly.',
+        keywords: 'image resizer guide, resize photo pixels, 1080x1080, youtube thumbnail size, resize image for web'
+    });
+});
+
 app.get('/signin', (req, res) => {
     res.render('pages/signin', {
         title: 'Sign In - Webtigo',
@@ -366,6 +374,7 @@ app.get('/sitemap.xml', (req, res) => {
         '/blog/images-to-pdf',
         '/blog/pdf-to-images',
         '/blog/compressor',
+        '/blog/resizer',
         '/privacy',
         '/terms',
         '/about',

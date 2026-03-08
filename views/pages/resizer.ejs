@@ -10,6 +10,30 @@
         <input type="file" id="res-file" accept="image/*">
     </div>
 
+    <div class="form-group" style="margin-bottom: 2rem;">
+        <label>Common Presets (Cheat Sheet)</label>
+        <select id="res-preset" onchange="applyPreset()"
+            style="width: 100%; padding: 0.75rem; border-radius: 0.5rem; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.2); color: white; outline: none; transition: border-color 0.3s; font-family: inherit;">
+            <option value="">-- Select a Preset Dimension --</option>
+            <optgroup label="Content Creation (16:9)">
+                <option value="1280,720">YouTube Thumbnail (1280 x 720)</option>
+                <option value="2560,1440">YouTube Channel Banner (2560 x 1440)</option>
+                <option value="1920,1080">Standard HD Video (1920 x 1080)</option>
+            </optgroup>
+            <optgroup label="Social Media">
+                <option value="1080,1080">Instagram Square (1080 x 1080)</option>
+                <option value="1080,1350">Instagram Portrait (1080 x 1350)</option>
+                <option value="1080,1920">Instagram/WhatsApp Story (1080 x 1920)</option>
+                <option value="1500,500">X / Twitter Header (1500 x 500)</option>
+            </optgroup>
+            <optgroup label="Official Docs / Profile Pics">
+                <option value="413,531">Standard Digital Passport Photo (413 x 531)</option>
+                <option value="256,64">Digital Signature (256 x 64)</option>
+                <option value="256,256">Twitch / Standard Profile Base (256 x 256)</option>
+            </optgroup>
+        </select>
+    </div>
+
     <div style="display: flex; gap: 1rem;">
         <div class="form-group" style="flex: 1;">
             <label>Width (px)</label>
@@ -57,4 +81,42 @@
             alert(e.message);
         }
     }
+
+    function applyPreset() {
+        const val = document.getElementById('res-preset').value;
+        if (val) {
+            const [w, h] = val.split(',');
+            document.getElementById('res-width').value = w;
+            document.getElementById('res-height').value = h;
+        }
+    }
+
+    // Auto-populate from URL parameters (e.g. ?w=1280&h=720)
+    window.addEventListener('DOMContentLoaded', () => {
+        const params = new URLSearchParams(window.location.search);
+        if (params.has('w')) {
+            document.getElementById('res-width').value = params.get('w');
+        }
+        if (params.has('h')) {
+            document.getElementById('res-height').value = params.get('h');
+        }
+    });
+
 </script>
+
+<div class="glass-card"
+    style="margin-top: 3rem; padding: 2rem; position: relative; text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;">
+    <h2
+        style="color: var(--primary); margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">
+        Pixel Perfect Every Time</h2>
+    <p style="color: rgba(255,255,255,0.8); line-height: 1.6; margin-bottom: 1.5rem; text-align: left;">
+        We have all been there. You try to upload a fantastic new profile picture, and the website forcefully crops out
+        half of your face. You try to set a desktop background, and it stretches out, making everything look wide and
+        distorted. Or, you try to upload a YouTube thumbnail, and the site flat-out rejects it for being the wrong
+        dimensions. Our Image Resizer lets you take total control of your image's exact height and width in pixels...
+    </p>
+    <a href="/blog/resizer" class="secondary-btn"
+        style="background: transparent; color: var(--primary); border: 1px solid var(--primary); text-decoration: none; display: inline-block; padding: 0.75rem 1.5rem;">
+        Read Full Guide on our Blog
+    </a>
+</div>
