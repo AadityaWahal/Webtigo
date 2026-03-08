@@ -15,6 +15,9 @@
         <button class="primary-btn" style="width: auto;" onclick="convert('lower')">lowercase</button>
         <button class="primary-btn" style="width: auto;" onclick="convert('title')">Title Case</button>
         <button class="primary-btn" style="width: auto;" onclick="convert('sentence')">Sentence case</button>
+        <button class="primary-btn" style="width: auto;" onclick="convert('alternating')">aLtErNaTiNg cAsE</button>
+        <button class="primary-btn" style="width: auto;" onclick="convert('camel')">camelCase</button>
+        <button class="primary-btn" style="width: auto;" onclick="convert('snake')">snake_case</button>
         <button class="primary-btn" style="width: auto; background: #ef4444;" onclick="copyText()">Copy Text</button>
         <button class="primary-btn" style="width: auto; background: transparent; border: 1px solid var(--border);"
             onclick="clearText()">Clear</button>
@@ -43,6 +46,15 @@
             case 'sentence':
                 text = text.toLowerCase().replace(/(^\s*\w|[\.\!\?]\s*\w)/g, c => c.toUpperCase());
                 break;
+            case 'alternating':
+                text = text.split('').map((c, i) => i % 2 === 0 ? c.toLowerCase() : c.toUpperCase()).join('');
+                break;
+            case 'camel':
+                text = text.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
+                break;
+            case 'snake':
+                text = text.toLowerCase().replace(/\s+/g, '_').replace(/[^\w]/g, '');
+                break;
         }
         textArea.value = text;
     }
@@ -64,4 +76,36 @@
         document.getElementById('case-text').value = '';
         updateStats();
     }
+
+    // Handle URL parameters
+    window.addEventListener('DOMContentLoaded', () => {
+        const params = new URLSearchParams(window.location.search);
+        const text = params.get('text');
+        const caseType = params.get('case');
+
+        if (text) {
+            document.getElementById('case-text').value = decodeURIComponent(text);
+            updateStats();
+            if (caseType) {
+                convert(caseType);
+            }
+        }
+    });
 </script>
+
+<div class="glass-card"
+    style="margin-top: 3rem; padding: 2rem; position: relative; text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;">
+    <h2
+        style="color: var(--primary); margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">
+        Master Your Text</h2>
+    <p style="color: rgba(255,255,255,0.8); line-height: 1.6; margin-bottom: 1.5rem; text-align: left;">
+        Have you ever accidentally typed an entire, massive paragraph only to realize your "Caps Lock" key was turned on
+        the whole time? Or maybe you are trying to write a professional title for a YouTube video, but you aren't sure
+        which words are supposed to be capitalized. Retyping everything from scratch is incredibly frustrating and a
+        massive waste of time. Our Case Converter is the ultimate shortcut...
+    </p>
+    <a href="/blog/case-converter" class="secondary-btn"
+        style="background: transparent; color: var(--primary); border: 1px solid var(--primary); text-decoration: none; display: inline-block; padding: 0.75rem 1.5rem;">
+        Read Full Guide on our Blog
+    </a>
+</div>

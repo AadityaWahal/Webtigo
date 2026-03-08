@@ -161,6 +161,14 @@ app.get('/blog/qrcode', (req, res) => {
     });
 });
 
+app.get('/blog/case-converter', (req, res) => {
+    res.render('pages/blog-case-converter', {
+        title: 'Master Your Text: The Ultimate Guide to the Webtigo Case Converter',
+        description: 'Instantly transform text between UPPERCASE, lowercase, Title Case, and more. Perfect for fixing caps lock errors and formatting code variables.',
+        keywords: 'case converter guide, change text case, uppercase to lowercase, title case online, camelCase, snake_case'
+    });
+});
+
 app.get('/signin', (req, res) => {
     res.render('pages/signin', {
         title: 'Sign In - Webtigo',
@@ -384,6 +392,7 @@ app.get('/sitemap.xml', (req, res) => {
         '/blog/compressor',
         '/blog/resizer',
         '/blog/qrcode',
+        '/blog/case-converter',
         '/privacy',
         '/terms',
         '/about',
