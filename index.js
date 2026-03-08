@@ -121,6 +121,14 @@ app.get('/blog/tts', (req, res) => {
     });
 });
 
+app.get('/blog/images-to-pdf', (req, res) => {
+    res.render('pages/blog-images-to-pdf', {
+        title: 'The Ultimate Guide to Webtigo’s Image to PDF Converter - Webtigo Blog',
+        description: 'Learn how to turn messy image galleries into perfectly ordered PDF documents. Great for students, makers, and organizing your files.',
+        keywords: 'image to pdf guide, how to make pdf from images, jpg to pdf, organizing receipts, pdf converter'
+    });
+});
+
 app.get('/signin', (req, res) => {
     res.render('pages/signin', {
         title: 'Sign In - Webtigo',
@@ -339,6 +347,7 @@ app.get('/sitemap.xml', (req, res) => {
         '/blog/frequency-generator',
         '/blog/frequency-detector',
         '/blog/tts',
+        '/blog/images-to-pdf',
         '/privacy',
         '/terms',
         '/about',
