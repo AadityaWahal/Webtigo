@@ -49,4 +49,31 @@
             alert(e.message);
         }
     }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const params = new URLSearchParams(window.location.search);
+        if (params.has('text')) {
+            document.getElementById('qr-text').value = decodeURIComponent(params.get('text'));
+        }
+        if (params.get('auto') === 'true' && params.has('text')) {
+            setTimeout(generateQR, 300);
+        }
+    });
+
 </script>
+
+<div class="glass-card"
+    style="margin-top: 3rem; padding: 2rem; position: relative; text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;">
+    <h2
+        style="color: var(--primary); margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">
+        The Magic Square</h2>
+    <p style="color: rgba(255,255,255,0.8); line-height: 1.6; margin-bottom: 1.5rem; text-align: left;">
+        Instead of forcing someone to type out a massive, complicated web address, a QR code lets them simply point
+        their phone camera at the screen and instantly teleport to exactly where you want them to go. Did you know you
+        can also use QR codes for hidden text messages instead of URLs?
+    </p>
+    <a href="/blog/qrcode" class="secondary-btn"
+        style="background: transparent; color: var(--primary); border: 1px solid var(--primary); text-decoration: none; display: inline-block; padding: 0.75rem 1.5rem;">
+        Read Full Guide on our Blog
+    </a>
+</div>

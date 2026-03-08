@@ -153,6 +153,14 @@ app.get('/blog/resizer', (req, res) => {
     });
 });
 
+app.get('/blog/qrcode', (req, res) => {
+    res.render('pages/blog-qrcode', {
+        title: 'The Magic Square: The Ultimate Guide to the Webtigo QR Code Generator',
+        description: 'Instantly generate QR codes for URLs, social media profiles, or secret text messages. Completely free, no software required.',
+        keywords: 'qr code generator, create qr code free, text qr code, url to qr code, scan qr code online'
+    });
+});
+
 app.get('/signin', (req, res) => {
     res.render('pages/signin', {
         title: 'Sign In - Webtigo',
@@ -375,6 +383,7 @@ app.get('/sitemap.xml', (req, res) => {
         '/blog/pdf-to-images',
         '/blog/compressor',
         '/blog/resizer',
+        '/blog/qrcode',
         '/privacy',
         '/terms',
         '/about',

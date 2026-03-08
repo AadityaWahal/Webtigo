@@ -91,17 +91,22 @@
         }
     }
 
-    // Auto-populate from URL parameters (e.g. ?w=1280&h=720)
     window.addEventListener('DOMContentLoaded', () => {
         const params = new URLSearchParams(window.location.search);
+        let updated = false;
         if (params.has('w')) {
             document.getElementById('res-width').value = params.get('w');
+            updated = true;
         }
         if (params.has('h')) {
             document.getElementById('res-height').value = params.get('h');
+            updated = true;
+        }
+
+        if (updated && document.getElementById('res-file').files && document.getElementById('res-file').files.length > 0 && params.get('auto') === 'true') {
+            setTimeout(resizeImage, 100);
         }
     });
-
 </script>
 
 <div class="glass-card"
@@ -113,7 +118,7 @@
         We have all been there. You try to upload a fantastic new profile picture, and the website forcefully crops out
         half of your face. You try to set a desktop background, and it stretches out, making everything look wide and
         distorted. Or, you try to upload a YouTube thumbnail, and the site flat-out rejects it for being the wrong
-        dimensions. Our Image Resizer lets you take total control of your image's exact height and width in pixels...
+        dimensions...
     </p>
     <a href="/blog/resizer" class="secondary-btn"
         style="background: transparent; color: var(--primary); border: 1px solid var(--primary); text-decoration: none; display: inline-block; padding: 0.75rem 1.5rem;">
