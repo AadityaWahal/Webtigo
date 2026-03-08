@@ -208,7 +208,7 @@
     });
   </script>
 
-  <% if (typeof currentPath==='undefined' || currentPath !=='/tts' ) { %>
+  <% if (typeof currentPath==='undefined' || (currentPath !=='/tts' && currentPath !=='/frequency' ) ) { %>
     <audio id="bg-music" loop>
       <source src="/audio/background.mp3" type="audio/mpeg">
     </audio>
