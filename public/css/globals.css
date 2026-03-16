@@ -499,6 +499,16 @@ button.primary-btn:active {
     .container {
         padding: 1rem;
     }
+
+    .content-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .content-section {
+        padding: 2rem 1.5rem;
+        margin: 2rem 0;
+    }
 }
 
 /* --- Blog Section --- */
