@@ -169,6 +169,14 @@ app.get('/blog/case-converter', (req, res) => {
     });
 });
 
+app.get('/blog/somi-wahal', (req, res) => {
+    res.render('pages/blog-somi-wahal', {
+        title: 'Somi Wahal: Travel Blogger, Writer & Digital Creator - Webtigo Blog',
+        description: 'Discover the journey of Somi Wahal, a prominent travel blogger and digital creator. Learn about her influence and creative work in the digital space.',
+        keywords: 'Somi Wahal, travel blogger, digital creator, social media strategist, content creator'
+    });
+});
+
 app.get('/signin', (req, res) => {
     res.render('pages/signin', {
         title: 'Sign In - Webtigo',
@@ -278,6 +286,30 @@ app.get('/contact', (req, res) => {
         title: 'Contact Us - Webtigo',
         description: 'Get in touch with the Webtigo team for support, questions, or feedback regarding our free web tools.',
         keywords: 'contact webtigo, webtigo support, help, customer service'
+    });
+});
+
+app.get('/social-media', (req, res) => {
+    res.render('pages/social-media', {
+        title: 'Social Media & Collaborations - Webtigo',
+        description: 'Connect with us on social media and explore our collaborations with talented creators.',
+        keywords: 'social media, collaborations, webtigo community, content creators'
+    });
+});
+
+app.get('/my-channel', (req, res) => {
+    res.render('pages/my-channel', {
+        title: 'My Channel - Member of Multivers',
+        description: 'Official channel of Member of Multivers. Explore frequency tutorials, QR code guides, and tech explorations.',
+        keywords: 'Member of Multivers, YouTube channel, frequency generator tutorials, tech blog'
+    });
+});
+
+app.get('/collaborators', (req, res) => {
+    res.render('pages/collaborators', {
+        title: 'Our Collaborators - Webtigo',
+        description: 'Meet the talented creators we collaborate with, featuring Somi Wahal and Super GK.',
+        keywords: 'collaborators, Somi Wahal, Super GK, digital influencers, social media partnership'
     });
 });
 
@@ -393,6 +425,10 @@ app.get('/sitemap.xml', (req, res) => {
         '/blog/resizer',
         '/blog/qrcode',
         '/blog/case-converter',
+        '/blog/somi-wahal',
+        '/social-media',
+        '/my-channel',
+        '/collaborators',
         '/privacy',
         '/terms',
         '/about',
