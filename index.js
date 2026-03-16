@@ -187,73 +187,73 @@ app.get('/signin', (req, res) => {
 
 app.get('/tts', (req, res) => {
     res.render('pages/tts', {
-        title: 'Free Text to Speech Converter - Download MP3 Audio',
+        title: 'Free Text to Speech Converter - Download MP3 Audio | Webtigo',
         description: 'Convert text into natural-sounding speech instantly. Support for multiple accents and speeds. Download your audio as an MP3 file for free.',
-        keywords: 'text to speech, tts converter, text to mp3, read aloud online, free voice generator, natural sounding tts'
+        keywords: 'webtigo, webtigo tts, text to speech, tts converter, text to mp3, read aloud online, free voice generator, natural sounding tts'
     });
 });
 
 app.get('/compressor', (req, res) => {
     res.render('pages/compressor', {
-        title: 'Image Compressor - Reduce JPG & PNG Size Online',
+        title: 'Image Compressor - Reduce JPG & PNG Size Online | Webtigo',
         description: 'Compress JPG and PNG images online without losing quality. Reduce file size for faster websites and easier sharing. Free and secure.',
-        keywords: 'image compressor, compress jpeg, compress png, reduce image size, online image optimizer, shrink image file'
+        keywords: 'webtigo, webtigo image compressor, image compressor, compress jpeg, compress png, reduce image size, online image optimizer, shrink image file'
     });
 });
 
 app.get('/qrcode', (req, res) => {
     res.render('pages/qrcode', {
-        title: 'Free QR Code Generator - Create & Download Custom QRs',
+        title: 'Free QR Code Generator - Create & Download Custom QRs | Webtigo',
         description: 'Generate high-quality QR codes for URLs, text, Wi-Fi, and email. Instant creation with no expiration. Download as PNG.',
-        keywords: 'qr code generator, create qr code, free qr maker, custom qr code, url to qr, wifi qr code'
+        keywords: 'webtigo, webtigo qr code, qr code generator, create qr code, free qr maker, custom qr code, url to qr, wifi qr code'
     });
 });
 
 app.get('/resizer', (req, res) => {
     res.render('pages/resizer', {
-        title: 'Image Resizer - Change JPG & PNG Dimensions Online',
+        title: 'Image Resizer - Change JPG & PNG Dimensions Online | Webtigo',
         description: 'Resize images to exact pixel dimensions (width & height). Perfect for social media, passports, and web content. Fast and free.',
-        keywords: 'image resizer, resize jpg, resize png, change photo size, online photo editor, pixel resizer'
+        keywords: 'webtigo, webtigo image resizer, image resizer, resize jpg, resize png, change photo size, online photo editor, pixel resizer'
     });
 });
 
 app.get('/frequency', (req, res) => {
     res.render('pages/frequency', {
-        title: 'Online Tone Generator - Generate Pure Sine & Square Waves',
+        title: 'Online Tone Generator - Generate Pure Sine & Square Waves | Webtigo',
         description: 'Free online frequency generator. Create pure Sine, Square, Sawtooth, and Triangle waves from 20Hz to 20kHz. Test audio equipment and hearing.',
-        keywords: 'frequency generator, tone generator, online hz generator, sound test, audio oscillator, sine wave generator'
+        keywords: 'webtigo, webtigo frequency generator, frequency generator, tone generator, online hz generator, sound test, audio oscillator, sine wave generator'
     });
 });
 
 app.get('/frequency-detector', (req, res) => {
     res.render('pages/frequency-detector', {
-        title: 'Frequency Detector - Analyze Pitch & Tones Online',
+        title: 'Frequency Detector - Analyze Pitch & Tones Online | Webtigo',
         description: 'Free online frequency and pitch detector. Detect real-time frequencies from your microphone or find constant sustained tones. Test your voice or instruments.',
-        keywords: 'frequency detector, pitch detector, find frequency, detect tone, online tuner, microphone frequency analyzer'
+        keywords: 'webtigo, webtigo frequency detector, frequency detector, pitch detector, find frequency, detect tone, online tuner, microphone frequency analyzer'
     });
 });
 
 app.get('/case-converter', (req, res) => {
     res.render('pages/case-converter', {
-        title: 'Case Converter Tool - Uppercase, Lowercase & Title Case',
+        title: 'Case Converter Tool - Uppercase, Lowercase & Title Case | Webtigo',
         description: 'Instantly convert text between Uppercase, Lowercase, Title Case, and Sentence Case. Copy to clipboard with one click.',
-        keywords: 'case converter, uppercase to lowercase, title case generator, text capitalization, sentence case tool'
+        keywords: 'webtigo, webtigo case converter, case converter, uppercase to lowercase, title case generator, text capitalization, sentence case tool'
     });
 });
 
 app.get('/images-to-pdf', (req, res) => {
     res.render('pages/images-to-pdf', {
-        title: 'JPG to PDF Converter - Merge Images into One PDF',
+        title: 'JPG to PDF Converter - Merge Images into One PDF | Webtigo',
         description: 'Convert and merge JPG or PNG images into a single PDF document. Drag and drop, reorder pages, and download instantly.',
-        keywords: 'images to pdf, jpg to pdf, png to pdf, combine photos to pdf, free pdf converter, merge images'
+        keywords: 'webtigo, webtigo images to pdf, images to pdf, jpg to pdf, png to pdf, combine photos to pdf, free pdf converter, merge images'
     });
 });
 
 app.get('/pdf-to-images', (req, res) => {
     res.render('pages/pdf-to-images', {
-        title: 'PDF to JPG Converter - Extract Pages as Images',
+        title: 'PDF to JPG Converter - Extract Pages as Images | Webtigo',
         description: 'Extract every page from a PDF file as a high-quality JPG image. Download all pages as a ZIP file. Fast, free, and private.',
-        keywords: 'pdf to images, pdf to jpg, extract pdf pages, convert pdf to image, pdf to zip, free pdf tool'
+        keywords: 'webtigo, webtigo pdf to images, pdf to images, pdf to jpg, extract pdf pages, convert pdf to image, pdf to zip, free pdf tool'
     });
 });
 
