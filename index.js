@@ -114,11 +114,28 @@ const upload = multer({
     limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit per file
 });
 
+// Helper to extract Clerk Frontend API domain from publishable key
+function getClerkFrontendApi(publishableKey) {
+    if (!publishableKey) return null;
+    const parts = publishableKey.split('_');
+    if (parts.length < 3) return null;
+    const encoded = parts[2];
+    try {
+        const base64 = encoded.replace(/-/g, '+').replace(/_/g, '/');
+        const decoded = Buffer.from(base64, 'base64').toString('utf-8');
+        return decoded.replace(/\$$/, '');
+    } catch (e) {
+        console.error("Error decoding Clerk publishable key:", e);
+        return null;
+    }
+}
+
 // --- LEGACY REDIRECTS (SEO) ---
 // Global View Variables
 app.use((req, res, next) => {
     res.locals.currentPath = req.path;
-    res.locals.clerkPublishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+    res.locals.clerkPublishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || process.env.CLERK_PUBLISHABLE_KEY;
+    res.locals.clerkFrontendApi = getClerkFrontendApi(res.locals.clerkPublishableKey);
     res.locals.auth = req.auth; // Available from clerkMiddleware
 
     // Determine protocol and host dynamically for canonical URLs
