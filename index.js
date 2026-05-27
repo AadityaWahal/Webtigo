@@ -39,7 +39,7 @@ app.use(express.json());
 // Dynamic SEO Sitemap and Robots endpoints (registered before static files so they intercept them)
 app.get('/robots.txt', async (req, res) => {
     try {
-        const robotsPath = path.join(__dirname, 'public', 'robots.txt');
+        const robotsPath = path.join(__dirname, 'seo', 'robots.txt');
         let content = await fs.readFile(robotsPath, 'utf8');
         const host = req.headers.host;
         content = content.replace(/webtigo\.vercel\.app/g, host);
@@ -53,7 +53,7 @@ app.get('/robots.txt', async (req, res) => {
 
 app.get('/sitemap.xml', async (req, res) => {
     try {
-        const sitemapPath = path.join(__dirname, 'public', 'sitemap.xml');
+        const sitemapPath = path.join(__dirname, 'seo', 'sitemap.xml');
         let content = await fs.readFile(sitemapPath, 'utf8');
         const host = req.headers.host;
         content = content.replace(/webtigo\.vercel\.app/g, host);
@@ -67,7 +67,7 @@ app.get('/sitemap.xml', async (req, res) => {
 
 app.get('/sitemap1.xml', async (req, res) => {
     try {
-        const sitemapPath = path.join(__dirname, 'public', 'sitemap1.xml');
+        const sitemapPath = path.join(__dirname, 'seo', 'sitemap1.xml');
         let content = await fs.readFile(sitemapPath, 'utf8');
         const host = req.headers.host;
         content = content.replace(/webtigo\.vercel\.app/g, host);
@@ -83,10 +83,22 @@ app.get('/sitemap1.xml', async (req, res) => {
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Clerk Middleware (MUST be before routes that need auth)
-app.use(clerkMiddleware({
-    publishableKey: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || process.env.CLERK_PUBLISHABLE_KEY,
-    secretKey: process.env.CLERK_SECRET_KEY
-}));
+// Wrap in a key check to prevent server errors (500) if environment variables are not configured in Vercel.
+const hasClerkKeys = !!(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || process.env.CLERK_PUBLISHABLE_KEY) && !!process.env.CLERK_SECRET_KEY;
+
+if (hasClerkKeys) {
+    app.use(clerkMiddleware({
+        publishableKey: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || process.env.CLERK_PUBLISHABLE_KEY,
+        secretKey: process.env.CLERK_SECRET_KEY
+    }));
+} else {
+    console.warn("⚠️ WARNING: Clerk Keys are missing. Auth middleware is disabled, and users will not be able to sign in.");
+    // Fallback middleware to mock auth object so templates don't crash
+    app.use((req, res, next) => {
+        req.auth = { userId: null };
+        next();
+    });
+}
 
 // Templating Engine (Next.js-style)
 app.use(expressLayouts);
