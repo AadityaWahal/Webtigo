@@ -35,6 +35,50 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+// Dynamic SEO Sitemap and Robots endpoints (registered before static files so they intercept them)
+app.get('/robots.txt', async (req, res) => {
+    try {
+        const robotsPath = path.join(__dirname, 'public', 'robots.txt');
+        let content = await fs.readFile(robotsPath, 'utf8');
+        const host = req.headers.host;
+        content = content.replace(/webtigo\.vercel\.app/g, host);
+        res.header('Content-Type', 'text/plain');
+        res.send(content);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error loading robots.txt');
+    }
+});
+
+app.get('/sitemap.xml', async (req, res) => {
+    try {
+        const sitemapPath = path.join(__dirname, 'public', 'sitemap.xml');
+        let content = await fs.readFile(sitemapPath, 'utf8');
+        const host = req.headers.host;
+        content = content.replace(/webtigo\.vercel\.app/g, host);
+        res.header('Content-Type', 'application/xml');
+        res.send(content);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error loading sitemap.xml');
+    }
+});
+
+app.get('/sitemap1.xml', async (req, res) => {
+    try {
+        const sitemapPath = path.join(__dirname, 'public', 'sitemap1.xml');
+        let content = await fs.readFile(sitemapPath, 'utf8');
+        const host = req.headers.host;
+        content = content.replace(/webtigo\.vercel\.app/g, host);
+        res.header('Content-Type', 'application/xml');
+        res.send(content);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error loading sitemap1.xml');
+    }
+});
+
 // Explicit absolute path for static files
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -64,6 +108,11 @@ app.use((req, res, next) => {
     res.locals.currentPath = req.path;
     res.locals.clerkPublishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
     res.locals.auth = req.auth; // Available from clerkMiddleware
+
+    // Determine protocol and host dynamically for canonical URLs
+    const protocol = req.headers['x-forwarded-proto'] || req.protocol || 'https';
+    const host = req.headers.host;
+    res.locals.siteUrl = `${protocol}://${host}`;
 
     const redirects = {
         '/tts.html': '/tts',

@@ -14,15 +14,15 @@
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://webtigo.vercel.app/">
+  <meta property="og:url" content="<%= typeof siteUrl !== 'undefined' ? siteUrl : 'https://webtigo.vercel.app' %>/<%= typeof currentPath !== 'undefined' ? currentPath.replace(/^\//, '') : '' %>">
   <meta property="og:title" content="<%= title %>">
   <meta property="og:description"
     content="<%= typeof description !== 'undefined' ? description : 'Free premium web tools for everyday tasks. PDF, Images, Audio, and Text utilities.' %>">
-  <meta property="og:image" content="https://webtigo.vercel.app/og-image.jpg">
+  <meta property="og:image" content="<%= typeof siteUrl !== 'undefined' ? siteUrl : 'https://webtigo.vercel.app' %>/og-image.jpg">
 
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="https://webtigo.vercel.app/">
+  <meta property="twitter:url" content="<%= typeof siteUrl !== 'undefined' ? siteUrl : 'https://webtigo.vercel.app' %>/<%= typeof currentPath !== 'undefined' ? currentPath.replace(/^\//, '') : '' %>">
   <meta property="twitter:title" content="<%= title %>">
   <meta property="twitter:description"
     content="<%= typeof description !== 'undefined' ? description : 'Free premium web tools for everyday tasks.' %>">
@@ -31,11 +31,11 @@
   <meta name="theme-color" content="#0f172a">
   <meta name="application-name" content="Webtigo">
   <meta name="apple-mobile-web-app-title" content="Webtigo">
-  <link rel="canonical" href="https://webtigo.vercel.app<%= typeof currentPath !== 'undefined' ? currentPath : '' %>">
+  <link rel="canonical" href="<%= typeof siteUrl !== 'undefined' ? siteUrl : 'https://webtigo.vercel.app' %><%= typeof currentPath !== 'undefined' ? currentPath : '' %>">
 
   <meta property="og:site_name" content="Webtigo">
   <meta name="twitter:creator" content="@webtigo">
-  <meta name="twitter:image" content="https://webtigo.vercel.app/og-image.jpg">
+  <meta name="twitter:image" content="<%= typeof siteUrl !== 'undefined' ? siteUrl : 'https://webtigo.vercel.app' %>/og-image.jpg">
 
   <!-- Schema.org JSON-LD for Sitelinks -->
   <script type="application/ld+json">
